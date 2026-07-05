@@ -9,7 +9,7 @@ export default function Navbar() {
     <nav className="w-full bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-black/5">
       <div className="flex items-center justify-between h-[56px] px-5 md:px-10">
         <span className="text-[18px] font-bold text-[#111] shrink-0 md:ml-6">
-          hunda
+          hunda.
         </span>
 
         {/* Menú desktop */}
