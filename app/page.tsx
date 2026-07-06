@@ -68,87 +68,59 @@ export default function LandingPage() {
           variants={stagger}
           initial="hidden"
           animate="visible"
-          className="max-w-7xl mx-auto w-full grid lg:grid-cols-[1.1fr_0.9fr] gap-14 lg:gap-20 items-center"
+          className="max-w-4xl mx-auto lg:mx-0 w-full"
         >
-          <div>
-            <motion.p
-              variants={fadeUp}
-              className="text-xs uppercase tracking-[0.28em] text-black/50 mb-5"
-            >
-              Prótesis caninas personalizadas
-            </motion.p>
+          <motion.h1
+            variants={fadeUp}
+            className="text-[clamp(2.2rem,5.5vw,4.8rem)] leading-[1] tracking-[-0.05em] font-medium max-w-3xl"
+          >
+            Tecnología para devolver{" "}
+            <span className="text-[#41C086]">movimiento.</span>
+          </motion.h1>
 
-            <motion.h1
-              variants={fadeUp}
-              className="text-[clamp(2.7rem,7vw,6.5rem)] leading-[0.95] tracking-[-0.06em] font-medium max-w-4xl"
-            >
-              Tecnología para devolver movimiento.
-            </motion.h1>
-
-            <motion.p
-              variants={fadeUp}
-              className="mt-7 max-w-xl text-base sm:text-lg leading-8 text-black/60"
-            >
-              Diseñá prótesis caninas personalizadas a través de una plataforma
-              digital simple, precisa y preparada para fabricación 3D.
-            </motion.p>
-
-            <motion.div
-              variants={fadeUp}
-              className="mt-10 flex flex-col sm:flex-row gap-4"
-            >
-              <button className="group bg-[#4F8F58] text-white rounded-full px-7 py-3.5 text-sm font-medium transition hover:bg-[#427849]">
-                Crear prótesis
-                <span className="ml-2 inline-block transition group-hover:translate-x-1">
-                  →
-                </span>
-              </button>
-
-              <button className="border border-black/15 rounded-full px-7 py-3.5 text-sm font-medium transition hover:border-black hover:bg-black hover:text-white">
-                Ver demo
-              </button>
-            </motion.div>
-
-            <motion.div
-              variants={fadeUp}
-              className="mt-12 flex flex-wrap gap-3"
-            >
-              {["Personalizadas", "Rápidas", "Accesibles"].map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-black/10 bg-white/50 px-4 py-2 text-sm text-black/60"
-                >
-                  {tag}
-                </span>
-              ))}
-            </motion.div>
-          </div>
+          <motion.p
+            variants={fadeUp}
+            className="mt-8 max-w-xl text-base sm:text-lg leading-8 text-black/60"
+          >
+            Diseñá prótesis personalizadas a través de nuestra plataforma
+            digital y fabricación 3D.
+          </motion.p>
 
           <motion.div
             variants={fadeUp}
-            className="relative w-full max-w-md lg:max-w-none mx-auto"
+            className="mt-12 flex flex-col sm:flex-row gap-4"
           >
-            <div className="absolute -inset-6 rounded-[3rem] bg-[#DCE8D6] blur-3xl opacity-70" />
+            <button className="group w-full sm:w-auto bg-[#4F8F58] text-white rounded-full px-7 py-3.5 text-sm font-medium transition hover:bg-[#41C086]">
+              Crear mi prótesis
+              <span className="ml-2 inline-block transition group-hover:translate-x-1">
+                →
+              </span>
+            </button>
 
-            <div className="relative rounded-[2rem] bg-white border border-black/5 shadow-sm p-5 sm:p-6">
-              <div className="aspect-[4/5] rounded-[1.5rem] bg-[#E8E4DC] flex items-center justify-center overflow-hidden">
-                <div className="text-center px-8">
-                  <div className="mx-auto mb-6 h-24 w-24 rounded-full bg-[#4F8F58]/15 flex items-center justify-center">
-                    <span className="text-4xl">🐾</span>
-                  </div>
-                  <p className="text-sm uppercase tracking-[0.2em] text-black/40 mb-3">
-                    Modelo 3D
-                  </p>
-                  <h3 className="text-2xl font-medium tracking-[-0.04em]">
-                    Prótesis lista para adaptar
-                  </h3>
-                  <p className="mt-4 text-sm leading-6 text-black/50">
-                    Acá podés reemplazar por una imagen, render o demo de la
-                    prótesis.
-                  </p>
-                </div>
-              </div>
-            </div>
+            <button className="w-full sm:w-auto border border-black/15 rounded-full px-7 py-3.5 text-sm font-medium transition hover:border-black hover:bg-black hover:text-white">
+              Ver demo
+            </button>
+          </motion.div>
+
+          <motion.div
+            variants={fadeUp}
+            className="mt-14 flex flex-wrap items-center gap-x-8 gap-y-4"
+          >
+            {[
+              { label: "Personalizadas", icon: "♥" },
+              { label: "Precisas", icon: "◎" },
+              { label: "Accesibles", icon: "$" },
+            ].map((item) => (
+              <span
+                key={item.label}
+                className="flex items-center gap-2.5 text-sm text-black/60"
+              >
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#4F8F58]/15 text-[#4F8F58] text-base">
+                  {item.icon}
+                </span>
+                {item.label}
+              </span>
+            ))}
           </motion.div>
         </motion.div>
       </section>
@@ -184,7 +156,7 @@ export default function LandingPage() {
                 key={step.num}
                 variants={fadeUp}
                 transition={{ duration: 0.5 }}
-                className="group rounded-[1.8rem] bg-[#F7F6F1] border border-black/5 p-7 min-h-[280px] flex flex-col justify-between transition hover:-translate-y-1 hover:shadow-sm"
+                className="group rounded-[1.8rem] bg-[#F7F6F1] border border-black/5 p-6 sm:p-7 min-h-[220px] sm:min-h-[280px] flex flex-col justify-between transition hover:-translate-y-1 hover:shadow-sm"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-black/35">{step.num}</span>
@@ -233,7 +205,7 @@ export default function LandingPage() {
             <div className="mt-9 space-y-4">
               {features.map((item) => (
                 <div key={item} className="flex items-center gap-3">
-                  <span className="h-2.5 w-2.5 rounded-full bg-[#4F8F58]" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#41C086]" />
                   <span className="text-sm sm:text-base text-black/70">
                     {item}
                   </span>
@@ -241,7 +213,7 @@ export default function LandingPage() {
               ))}
             </div>
 
-            <button className="mt-10 group bg-[#171717] text-white rounded-full px-7 py-3.5 text-sm font-medium transition hover:bg-[#4F8F58]">
+            <button className="mt-10 group w-full sm:w-auto bg-[#171717] text-white rounded-full px-7 py-3.5 text-sm font-medium transition hover:bg-[#41C086]">
               Ir a la plataforma
               <span className="ml-2 inline-block transition group-hover:translate-x-1">
                 →
@@ -264,7 +236,7 @@ export default function LandingPage() {
                 <span className="h-3 w-3 rounded-full bg-black/20" />
               </div>
 
-              <div className="grid grid-cols-3 gap-3 mb-4">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-4">
                 <div className="h-20 rounded-2xl bg-white/70" />
                 <div className="h-20 rounded-2xl bg-white/70" />
                 <div className="h-20 rounded-2xl bg-white/70" />
@@ -312,7 +284,7 @@ export default function LandingPage() {
                 key={card.title}
                 variants={fadeUp}
                 transition={{ duration: 0.5 }}
-                className="rounded-[1.8rem] bg-[#F7F6F1] border border-black/5 p-7 min-h-[230px]"
+                className="rounded-[1.8rem] bg-[#F7F6F1] border border-black/5 p-6 sm:p-7 min-h-[200px] sm:min-h-[230px]"
               >
                 <div className="h-12 w-12 rounded-2xl bg-white border border-black/5 flex items-center justify-center mb-10">
                   <span>◎</span>
@@ -386,7 +358,7 @@ export default function LandingPage() {
                 personalizadas para mejorar la calidad de vida de las mascotas.
               </p>
 
-              <button className="border border-black/15 rounded-full px-7 py-3.5 text-sm font-medium transition hover:border-black hover:bg-black hover:text-white">
+              <button className="w-full sm:w-auto border border-black/15 rounded-full px-7 py-3.5 text-sm font-medium transition hover:border-black hover:bg-black hover:text-white">
                 Conocé más →
               </button>
             </motion.div>
@@ -426,11 +398,11 @@ export default function LandingPage() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
-              <button className="bg-white text-black rounded-full px-8 py-3.5 text-sm font-medium transition hover:bg-[#DCE8D6]">
+              <button className="w-full sm:w-auto bg-white text-black rounded-full px-8 py-3.5 text-sm font-medium transition hover:bg-[#DCE8D6]">
                 Registrate →
               </button>
 
-              <button className="text-sm text-white/60 underline underline-offset-4 hover:text-white transition">
+              <button className="text-sm text-white/60 underline underline-offset-4 hover:text-white transition text-center sm:text-left">
                 Ya tengo cuenta
               </button>
             </div>
