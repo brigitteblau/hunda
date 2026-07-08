@@ -76,8 +76,8 @@ export default function LandingPage() {
     <main className="w-full min-h-screen bg-[#F7F6F1] text-[#171717] font-sans overflow-hidden">
       <Navbar />
 
-{/* HERO */}
-<section className="relative min-h-[calc(100vh-60px)] flex items-center px-6 lg:px-16">
+{/* Inicio */}
+<section id="inicio" className="relative min-h-[calc(100vh-60px)] flex items-center px-6 lg:px-16">
   <motion.div
     variants={stagger}
     initial="hidden"
@@ -145,7 +145,7 @@ export default function LandingPage() {
   </motion.div>
 </section>
       {/* COMO FUNCIONA */}
-      <section className="px-5 sm:px-8 lg:px-16 py-28 sm:py-36 bg-white">
+      <section id="como-funciona" className="px-5 sm:px-8 lg:px-16 py-28 sm:py-36 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
           variants={fadeUp}
@@ -202,7 +202,7 @@ export default function LandingPage() {
       </section>
 
       {/* PLATAFORMA */}
-      <section className="px-5 sm:px-8 lg:px-16 py-28 sm:py-36 bg-[#F7F6F1]">
+      <section id="plataforma" className="px-5 sm:px-8 lg:px-16 py-28 sm:py-36 bg-[#F7F6F1]">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           <motion.div
             variants={fadeUp}
@@ -266,7 +266,7 @@ export default function LandingPage() {
       </section>
 
       {/* IMPRESIÓN 3D */}
-      <section className="px-5 sm:px-8 lg:px-16 py-20 sm:py-28 bg-white">
+      <section id="impresion-3d" className="px-5 sm:px-8 lg:px-16 py-20 sm:py-28 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
             variants={fadeUp}
