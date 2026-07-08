@@ -1,11 +1,12 @@
 "use client";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
-import {  FiDollarSign, FiSliders, FiCrosshair } from "react-icons/fi";
+import {  FiDollarSign} from "react-icons/fi";
 import { FaRuler, FaHeart } from "react-icons/fa";
 import { ImTarget } from "react-icons/im";
 import { IoCubeOutline } from "react-icons/io5";
 import { MdLocalPrintshop } from "react-icons/md";
+import { IoSettingsOutline } from "react-icons/io5";
 
 
 
@@ -55,12 +56,12 @@ const printingCards = [
   {
     title: "Personalizada",
     sub: "Cada prótesis se adapta a la anatomía y necesidad del perro.",
-    icon: FiSliders,
+    icon: IoSettingsOutline,
   },
   {
     title: "Precisa",
     sub: "Utilizamos modelos digitales preparados para impresión 3D.",
-    icon: FiCrosshair,
+    icon: ImTarget,
   },
   {
     title: "Accesible",
@@ -143,7 +144,7 @@ export default function LandingPage() {
   </motion.div>
 </section>
       {/* PROCESO */}
-      <section className="px-5 sm:px-8 lg:px-16 py-20 sm:py-28 bg-white">
+      <section className="px-5 sm:px-8 lg:px-16 py-28 sm:py-36 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
           variants={fadeUp}
@@ -151,16 +152,14 @@ export default function LandingPage() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.6 }}
-          className="max-w-[620px] mx-auto text-center mb-24"
+          className="text-center mb-16 pb-16"
 >
-          <p className="text-[11px] uppercase tracking-[0.3em] text-black/40 mb-3">
+          <p className="text-[11px] uppercase tracking-[0.3em] text-black/40 mb-4">
             Cómo funciona
           </p>
 
-          <h2 className="mx-auto max-w-[560px] text-[clamp(2.1rem,3.5vw,3.6rem)] leading-[0.95] tracking-[-0.05em] font-medium">
-            Un proceso simple
-            <br />
-            en 3 pasos.
+          <h2 className="text-[clamp(2.1rem,3.6vw,3.2rem)] leading-tight tracking-[-0.04em] font-medium whitespace-nowrap">
+            Un proceso simple en 3 pasos.
           </h2>
           </motion.div>
 
@@ -169,34 +168,30 @@ export default function LandingPage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.25 }}
-            className="grid md:grid-cols-3 gap-8 lg:gap-10"
+            className="grid md:grid-cols-3 gap-12"
           >
             {steps.map((step) => (
               <motion.article
                 key={step.num}
                 variants={fadeUp}
                 transition={{ duration: 0.5 }}
-                className="group rounded-[1.8rem] bg-[#F7F6F1] border border-black/5 px-8 pt-8 pb-8 min-h-[280px] flex flex-col transition hover:-translate-y-1 hover:shadow-sm"
+                className="group rounded-[1.6rem] bg-[#F7F6F1] border border-black/5 px-9 pt-10 pb-11 min-h-[330px] flex flex-col items-center text-center transition hover:-translate-y-1 hover:shadow-sm"
               >
-                <div className="flex justify-center mb-12">
-                <div className="w-[64px] h-[64px] rounded-[18px] bg-[#171717] flex items-center justify-center shadow-md">
-                  <step.icon size={28} className="text-white" />
-                </div>
+                <div className="w-16 h-16 rounded-[18px] bg-[#171717] flex items-center justify-center shadow-md mb-9 mx-auto">
+                  <step.icon size={26} className="text-white" />
                 </div>
 
-              <div className="text-center">
-                <span className="text-[34px] leading-none font-medium text-[#41C086]">
-                {step.num}
+                <span className="self-start text-[18px] leading-none font-semibold text-[#41C086]">
+                  {step.num}
                 </span>
 
-                <h3 className="mt-3 text-[38px] leading-none tracking-[-0.04em] font-medium">
-                {step.title}
+                <h3 className="mt-5 text-[28px] leading-none tracking-[-0.02em] font-medium">
+                  {step.title}
                 </h3>
 
-                <p className="mt-3 text-[16px] leading-7 text-black/60 max-w-[260px] mx-auto">
+                <p className="mt-5 text-[16px] leading-6 text-black/60 max-w-[260px]">
                   {step.desc}
-                  </p>
-                </div>
+                </p>
               </motion.article>
             ))}
           </motion.div>
@@ -204,8 +199,8 @@ export default function LandingPage() {
       </section>
 
       {/* PLATAFORMA */}
-      <section className="px-5 sm:px-8 lg:px-16 py-20 sm:py-28 bg-[#F7F6F1]">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+      <section className="px-5 sm:px-8 lg:px-16 py-28 sm:py-36 bg-[#F7F6F1]">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           <motion.div
             variants={fadeUp}
             initial="hidden"
@@ -217,18 +212,21 @@ export default function LandingPage() {
               La plataforma
             </p>
 
-            <h2 className="text-[clamp(2.1rem,5vw,4.8rem)] leading-none tracking-[-0.06em] font-medium max-w-xl">
-              Controlá todo desde un único lugar.
+            <h2 className="text-[clamp(2.1rem,5vw,4.8rem)] leading-none tracking-[-0.06em] font-medium pb-[40px]">
+              <span className="whitespace-nowrap">Controlá todo desde</span>
+              <br />
+              <span className="whitespace-nowrap">un único lugar.</span>
             </h2>
+            <div className="pt-[8px]">
+              <p className="text-base sm:text-lg leading-8 text-black/60 max-w-lg pb-[48px]">
+                Diseñá, guardá y hacé seguimiento de todas las prótesis desde tu
+                dashboard personal.
+              </p>
+            </div>
 
-            <p className="mt-7 text-base sm:text-lg leading-8 text-black/60 max-w-lg">
-              Diseñá, guardá y hacé seguimiento de todas las prótesis desde tu
-              dashboard personal.
-            </p>
-
-            <div className="mt-9 space-y-4">
+            <div className="pt-[8px] pb-[64px]">
               {features.map((item) => (
-                <div key={item} className="flex items-center gap-3">
+                <div key={item} className="flex items-center gap-3 pb-[18px]">
                   <span className="h-2.5 w-2.5 rounded-full bg-[#41C086]" />
                   <span className="text-sm sm:text-base text-black/70">
                     {item}
@@ -237,12 +235,14 @@ export default function LandingPage() {
               ))}
             </div>
 
-            <button className="mt-10 group w-full sm:w-auto bg-[#171717] text-white rounded-full px-7 py-3.5 text-sm font-medium transition hover:bg-[#41C086]">
-              Ir a la plataforma
-              <span className="ml-2 inline-block transition group-hover:translate-x-1">
-                →
-              </span>
-            </button>
+            <div className="pt-[8px]">
+              <button className="group w-full sm:w-auto bg-[#171717] text-white rounded-full px-7 py-3.5 text-sm font-medium transition hover:bg-[#41C086]">
+                Ir a la plataforma
+                <span className="ml-2 inline-block transition group-hover:translate-x-1">
+                  →
+                </span>
+              </button>
+            </div>
           </motion.div>
 
           <motion.div
@@ -277,7 +277,7 @@ export default function LandingPage() {
               Fabricación 3D
             </p>
 
-            <h2 className="text-[clamp(2rem,5vw,4.5rem)] leading-none tracking-[-0.06em] font-medium">
+            <h2 className="text-[clamp(2rem,5vw,4.5rem)] leading-none tracking-[-0.06em] font-medium m-12 flex flex-col items-center">
               Impresión 3D al servicio del bienestar.
             </h2>
           </motion.div>
@@ -296,8 +296,10 @@ export default function LandingPage() {
                 transition={{ duration: 0.5 }}
                 className="rounded-[1.8rem] bg-[#F7F6F1] border border-black/5 p-6 sm:p-7 min-h-[200px] sm:min-h-[230px]"
               >
-                <div className="h-12 w-12 rounded-2xl bg-[#171717] flex items-center justify-center mb-10">
-                  <card.icon size={20} className="text-white" />
+                <div className="w-full flex justify-center mb-10">
+                  <div className="h-12 w-12 rounded-2xl bg-[#171717] flex items-center justify-center">
+                    <card.icon size={20} className="text-white" />
+                  </div>
                 </div>
 
                 <h3 className="text-2xl tracking-[-0.04em] font-medium mb-3">
