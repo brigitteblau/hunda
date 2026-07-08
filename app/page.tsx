@@ -143,7 +143,7 @@ export default function LandingPage() {
     </motion.div>
   </motion.div>
 </section>
-      {/* PROCESO */}
+      {/* COMO FUNCIONA */}
       <section className="px-5 sm:px-8 lg:px-16 py-28 sm:py-36 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -271,13 +271,13 @@ export default function LandingPage() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.6 }}
-            className="max-w-3xl mb-12"
+            className="text-center mb-16 pb-16"
           >
-            <p className="text-xs uppercase tracking-[0.28em] text-black/40 mb-4">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-black/40 mb-4">
               Fabricación 3D
             </p>
 
-            <h2 className="text-[clamp(2rem,5vw,4.5rem)] leading-none tracking-[-0.06em] font-medium m-12 flex flex-col items-center">
+            <h2 className="text-[clamp(2.1rem,3.6vw,3.2rem)] leading-tight tracking-[-0.04em] font-medium whitespace-nowrap">
               Impresión 3D al servicio del bienestar.
             </h2>
           </motion.div>
@@ -287,22 +287,22 @@ export default function LandingPage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.25 }}
-            className="grid md:grid-cols-3 gap-4"
+            className="grid md:grid-cols-3 gap-12"
           >
             {printingCards.map((card) => (
               <motion.article
                 key={card.title}
                 variants={fadeUp}
                 transition={{ duration: 0.5 }}
-                className="rounded-[1.8rem] bg-[#F7F6F1] border border-black/5 p-6 sm:p-7 min-h-[200px] sm:min-h-[230px]"
+                className="group rounded-[1.6rem] bg-[#F7F6F1] border border-black/5 px-9 pt-10 pb-11 min-h-[300px] flex flex-col items-center text-center transition hover:-translate-y-1 hover:shadow-sm"
               >
-                <div className="w-full flex justify-center mb-10">
+                <div className="w-full flex justify-center mb-12">
                   <div className="h-12 w-12 rounded-2xl bg-[#171717] flex items-center justify-center">
                     <card.icon size={20} className="text-white" />
                   </div>
                 </div>
 
-                <h3 className="text-2xl tracking-[-0.04em] font-medium mb-3">
+                <h3 className="text-2xl tracking-[-0.04em] font-medium mb-6">
                   {card.title}
                 </h3>
 
