@@ -1,3 +1,6 @@
+import { FaRegCircleQuestion } from "react-icons/fa6";
+import { CiBellOn } from "react-icons/ci";
+import { FaCircleUser } from "react-icons/fa6";
 export default function HelpPage() {
   const faqs = [
     "¿Qué es HUNDA?",
@@ -35,17 +38,11 @@ export default function HelpPage() {
 
         {/* Derecha */}
   <div className="flex items-center gap-5">
-    <img
-      src="/camapana.ico"
-      alt="Notificaciones"
-      className="w-5 h-5"
-    />
+  
 
-    <img
-      src="/pregunta.ico"
-      alt="Carrito"
-      className="w-5 h-5"
-    />
+    <FaRegCircleQuestion className="w-5 h-5" />
+
+    <CiBellOn className="w-5 h-5" />
 
     <div className="text-right leading-none">
       <p className="text-[13px] text-black">
@@ -57,11 +54,8 @@ export default function HelpPage() {
       </p>
     </div>
 
-    <img
-      src="/user.ico"
-      alt="Usuario"
-      className="w-8 h-8"
-    />
+    
+    <FaCircleUser className="w-8 h-8" />
   </div>
 </header>
       {/* HERO */}

@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { FcGoogle } from "react-icons/fc";
 
 export function LoginForm() {
   const supabase = useMemo(() => createSupabaseBrowserClient(), []);
@@ -59,25 +60,26 @@ export function LoginForm() {
   }
 
   return (
-    <div className="mx-auto w-[80%] max-w-[420px]">
+    <div className="mx-auto flex w-[80%] max-w-[420px] flex-col gap-8">
       <button
         type="button"
         onClick={handleGoogle}
         disabled={busy}
-        className="mb-8 h-11 w-full rounded-full bg-black text-base font-semibold text-white transition hover:bg-zinc-800 disabled:opacity-50"
+        className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-black text-base font-semibold text-white transition hover:bg-zinc-800 disabled:opacity-50"
       >
+        <FcGoogle size={26} />
         Continuar con Google
       </button>
 
-      <div className="mb-8 flex items-center gap-4">
+      <div className="flex items-center gap-4">
         <div className="h-px flex-1 bg-zinc-300" />
         <span className="text-sm text-zinc-500">o</span>
         <div className="h-px flex-1 bg-zinc-300" />
       </div>
 
-      <form onSubmit={handleEmail} className="space-y-5">
+      <form onSubmit={handleEmail} className="flex flex-col gap-6">
         <div>
-          <label className="mb-2 block text-sm font-medium text-black">
+          <label className="mb-3 block text-sm font-medium text-black">
             Email
           </label>
 
@@ -93,7 +95,7 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={busy || !email}
-          className="mt-6 h-11 w-full rounded-full bg-black text-base font-semibold text-white transition hover:bg-zinc-800 disabled:opacity-50"
+          className="h-11 w-full rounded-full bg-black text-base font-semibold text-white transition hover:bg-zinc-800 disabled:opacity-50"
         >
           Iniciar sesión
         </button>

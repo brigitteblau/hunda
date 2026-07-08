@@ -24,20 +24,8 @@ export default async function LoginPage({
     <main className="flex min-h-screen items-center justify-center bg-[#D9D9D9] px-6 py-6">
 
       <section
-  className="
-    relative
-    mx-auto
-    flex
-    w-full
-    max-w-[520px]
-    flex-col
-    rounded-[28px]
-    bg-white
-    px-10
-    py-8
-    shadow-[0_4px_20px_rgba(0,0,0,0.18)]
-  "
->
+        className="relative mx-auto flex w-full max-w-[520px] min-h-[400px] flex-col rounded-[28px] bg-white px-10 py-8 shadow-[0_4px_20px_rgba(0,0,0,0.18)]"
+      >
         <h2 className="absolute right-8 top-6 text-lg font-bold">
           hunda.
         </h2>
@@ -48,7 +36,7 @@ export default async function LoginPage({
 
         {typeof sp.error === "string" && <ErrorAlert />}
 
-        <div className="mt-10 flex justify-center">
+        <div className="mt-14 flex justify-center">
           <LoginForm />
         </div>
 

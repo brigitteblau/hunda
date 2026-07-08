@@ -404,7 +404,7 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
+           <div className="flex flex-col gap-4 items-center sm:items-start">
 
               <Link href="/login">
                 <button className="w-full sm:w-auto min-w-[160px] bg-white text-black rounded-full px-8 py-3.5 text-sm font-medium whitespace-nowrap transition hover:bg-[#41C086]">
@@ -412,7 +412,7 @@ export default function LandingPage() {
                 </button>
               </Link>
 
-              <span className="text-sm text-white/60 text-center sm:text-left">
+              <span className="text-sm text-white/60 whitespace-nowrap">
                 ¿Ya tenés cuenta?{" "}
                 <Link href="/login" className="text-[#41C086] underline underline-offset-4 hover:text-white transition">
                   Iniciá sesión
