@@ -1,6 +1,7 @@
 "use client";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import {  FiDollarSign} from "react-icons/fi";
 import { FaRuler, FaHeart } from "react-icons/fa";
 import { ImTarget } from "react-icons/im";
@@ -175,11 +176,13 @@ export default function LandingPage() {
                 key={step.num}
                 variants={fadeUp}
                 transition={{ duration: 0.5 }}
-                className="group rounded-[1.6rem] bg-[#F7F6F1] border border-black/5 px-9 pt-10 pb-11 min-h-[330px] flex flex-col items-center text-center transition hover:-translate-y-1 hover:shadow-sm"
+                className="group rounded-[1.6rem] bg-[#F7F6F1] border border-black/5 px-9 pt-10 pb-11 min-h-[300px] flex flex-col items-center text-center justify-between transition hover:-translate-y-1 hover:shadow-sm"
               >
-                <div className="w-16 h-16 rounded-[18px] bg-[#171717] flex items-center justify-center shadow-md mb-9 mx-auto">
+                <div className="w-full flex justify-center"></div>
+                  <div className="w-16 h-16 rounded-[18px] bg-[#171717] flex items-center justify-center shadow-md mb-9 mx-auto">
                   <step.icon size={26} className="text-white" />
-                </div>
+                  </div>
+                  
 
                 <span className="self-start text-[18px] leading-none font-semibold text-[#41C086]">
                   {step.num}
@@ -255,7 +258,7 @@ export default function LandingPage() {
           >
             <div className="rounded-[1.5rem] bg-[#E8E4DC] aspect-[16/11] flex items-center justify-center p-5 sm:p-7">
               <p className="text-sm text-black/40 text-center">
-                Foto del inventario (cuando lo termine)
+                Foto del inventario
               </p>
             </div>
           </motion.div>
@@ -294,9 +297,9 @@ export default function LandingPage() {
                 key={card.title}
                 variants={fadeUp}
                 transition={{ duration: 0.5 }}
-                className="group rounded-[1.6rem] bg-[#F7F6F1] border border-black/5 px-9 pt-10 pb-11 min-h-[300px] flex flex-col items-center text-center transition hover:-translate-y-1 hover:shadow-sm"
+                className="group rounded-[1.6rem] bg-[#F7F6F1] border border-black/5 px-9 pt-10 pb-11 min-h-[300px] flex flex-col items-center text-center justify-between transition hover:-translate-y-1 hover:shadow-sm"
               >
-                <div className="w-full flex justify-center mb-12">
+                <div className="w-full flex justify-center">
                   <div className="h-12 w-12 rounded-2xl bg-[#171717] flex items-center justify-center">
                     <card.icon size={20} className="text-white" />
                   </div>
@@ -321,13 +324,13 @@ export default function LandingPage() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.6 }}
-          className="max-w-5xl mx-auto text-center"
+          className="text-center mb-16 pb-16"
         >
-          <p className="text-xs uppercase tracking-[0.28em] text-black/40 mb-4">
+          <p className="text-[11px] uppercase tracking-[0.3em] text-black/40 mb-4">
             Nos acompañan
           </p>
 
-          <h2 className="text-[clamp(1.8rem,4vw,3.6rem)] leading-tight tracking-[-0.05em] font-medium max-w-3xl mx-auto mb-10">
+          <h2 className="text-[clamp(2.1rem,3.6vw,3.2rem)] leading-tight tracking-[-0.04em] font-medium whitespace-nowrap">
             Gracias a quienes confían en nuestro proyecto.
           </h2>
         </motion.div>
@@ -342,29 +345,36 @@ export default function LandingPage() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
-            className="max-w-2xl"
+            className="text-left mb-16 pb-16"
           >
-            <p className="text-xs uppercase tracking-[0.28em] text-black/40 mb-4">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-black/40 mb-4">
               Sobre nosotros
             </p>
 
-            <h2 className="text-[clamp(2.2rem,5vw,4.8rem)] leading-none tracking-[-0.06em] font-medium mb-7">
+            <h2 className="text-[clamp(2.1rem,3.6vw,3.2rem)] leading-tight tracking-[-0.04em] font-medium whitespace-nowrap pb-[40px]">
               Somos<span className="text-[#41C086]"> Benja, Brigitte y Maite</span>
             </h2>
 
-            <p className="text-base leading-8 text-black/60 mb-10">
+            <div className="pt-[8px]">
+            <p className="text-base leading-8 text-black/60 mb-6">
               Estudiantes de ORT TIC apasionados por la tecnología, el
               diseño y el bienestar animal.
             </p>
+            </div>
 
-            <p className="text-base leading-8 text-black/60 mb-9">
-              Nuestro objetivo es hacer más accesibles las prótesis
-              personalizadas para mejorar la calidad de vida de los perros.
-            </p>
+            <div className="pt-[8px]">
+              <p className="text-base leading-8 text-black/60 pb-[24px]">
+                Estudiantes de ORT TIC apasionados por la tecnología, el diseño
+                <br />
+                y el bienestar animal.
+              </p>
+            </div>
 
+            <div className="pt-[8px]">
             <button className="w-full sm:w-auto border border-[#41C086]/40 rounded-full px-7 py-3.5 text-sm font-medium transition hover:border-black hover:bg-black hover:text-white">
               Conocé más sobre nosotros
             </button>
+            </div>
           </motion.div>
 
           {/* CTA */}
@@ -396,15 +406,17 @@ export default function LandingPage() {
 
             <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
 
-              <button className="w-full sm:w-auto bg-white text-black rounded-full px-8 py-3.5 text-sm font-medium transition hover:bg-[#41C086]">
-                Crear cuenta
-              </button>
+              <Link href="/login">
+                <button className="w-full sm:w-auto min-w-[160px] bg-white text-black rounded-full px-8 py-3.5 text-sm font-medium whitespace-nowrap transition hover:bg-[#41C086]">
+                  Crear cuenta
+                </button>
+              </Link>
 
               <span className="text-sm text-white/60 text-center sm:text-left">
                 ¿Ya tenés cuenta?{" "}
-                <button className="text-[#41C086] underline underline-offset-4 hover:text-white transition">
+                <Link href="/login" className="text-[#41C086] underline underline-offset-4 hover:text-white transition">
                   Iniciá sesión
-                </button>
+                </Link>
               </span>
             </div>
           </motion.div>
