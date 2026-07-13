@@ -40,7 +40,7 @@ export default function LandingNavbar() {
         <Link href="/login" className="text-sm text-white/90 hover:text-white transition">
           Iniciar Sesion
         </Link>
-        <Link href="/signup">
+        <Link href="/login">
           <button className="flex items-center gap-1 bg-white text-black rounded-full px-4 py-2 text-sm font-medium hover:bg-[#41C086] hover:text-white transition">
             Crear usuario
             <span>→</span>

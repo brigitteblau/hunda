@@ -1,5 +1,5 @@
 "use client";
-import Navbar from "@/components/Navbar";
+import LandingNavbar from "@/components/landingnavbar";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {  FiDollarSign} from "react-icons/fi";
@@ -74,10 +74,10 @@ const printingCards = [
 export default function LandingPage() {
   return (
     <main className="w-full min-h-screen bg-[#F7F6F1] text-[#171717] font-sans overflow-hidden">
-      <Navbar />
+      <LandingNavbar />
 
 {/* Inicio */}
-<section id="inicio" className="relative min-h-[calc(100vh-60px)] flex items-center px-6 lg:px-16">
+<section id="inicio" className="relative min-h-[calc(100vh-60px)] flex items-center px-6 lg:px-16 pt-24">
   <motion.div
     variants={stagger}
     initial="hidden"
