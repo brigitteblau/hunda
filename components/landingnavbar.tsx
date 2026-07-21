@@ -13,17 +13,24 @@ const navLinks = [
 export default function LandingNavbar() {
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    setScrolled(latest > 30);
-  });
+  setScrolled(latest > 30);
 
+  const previous = scrollY.getPrevious() ?? 0;
+  if (latest > previous && latest > 80) {
+    setHidden(true);
+  } else {
+    setHidden(false);
+  }
+});
   return (
     <motion.nav
   initial={{ opacity: 0, y: -20 }}
   animate={{
     opacity: 1,
-    y: 0,
+    y: hidden ? -120 : 0,
     paddingTop: scrolled ? 8 : 12,
     paddingBottom: scrolled ? 8 : 12,
     marginTop: scrolled ? 8 : 16,
