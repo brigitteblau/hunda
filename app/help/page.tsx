@@ -53,8 +53,6 @@ export default function HelpPage() {
         Profile Setting
       </p>
     </div>
-
-    
     <FaCircleUser className="w-8 h-8" />
   </div>
 </header>
