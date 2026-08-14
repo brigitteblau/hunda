@@ -58,9 +58,9 @@ export default function Sidebar({
     <aside className="flex h-screen w-64 flex-col justify-between bg-[#2b2233] px-3 py-4 text-white">
       <div className="flex flex-col gap-6">
         {/* Logo */}
-        <div className="flex items-center gap-2 px-2">
-          <Image src="/logo2.svg" alt="hunda" width={40} height={40} />
-          <span className="text-lg font-semibold">hunda.</span>
+        <div className="flex items-center gap-8 px-2">
+          <Image src="/logo2.svg" alt="hunda" width={70} height={70} />
+          <Image src="/favicon.ico" alt="favicon" width={80} height={80} />
         </div>
 
         {/* Search */}
