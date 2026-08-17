@@ -55,12 +55,12 @@ export default function Sidebar({
     pathname === href || pathname?.startsWith(href + "/");
 
   return (
-    <aside className="flex h-screen w-64 flex-col justify-between bg-[#2b2233] px-3 py-4 text-white">
-      <div className="flex flex-col gap-6">
+    <aside className="flex min-h-screen w-64 flex-col justify-between bg-[#2b2233] px-4 py-6 text-white">
+      <div className="flex flex-col gap-8">
         {/* Logo */}
-        <div className="flex items-center gap-8 px-2">
-          <Image src="/logo2.svg" alt="hunda" width={70} height={70} />
-          <Image src="/favicon.ico" alt="favicon" width={80} height={80} />
+        <div className="flex items-center gap-2 px-2">
+          <Image src="/logo2.svg" alt="hunda" width={28} height={28} />
+          <span className="text-lg font-semibold">hunda.</span>
         </div>
 
         {/* Search */}
@@ -83,7 +83,7 @@ export default function Sidebar({
           ))}
           <button
             onClick={onSignOut}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-white/70 transition-colors hover:bg-white/5 hover:text-white"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-white/70 transition-colors hover:bg-white/5 hover:text-white"
           >
             <LogOut className="h-4 w-4" />
             Cerrar Sesión
@@ -105,11 +105,11 @@ function NavSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-2">
       <span className="px-3 text-xs font-medium uppercase tracking-wider text-white/30">
         {label}
       </span>
-      {children}
+      <div className="flex flex-col gap-1.5">{children}</div>
     </div>
   );
 }
@@ -119,7 +119,7 @@ function NavLink({ item, active }: { item: NavItem; active: boolean }) {
   return (
     <Link
       href={item.href}
-      className={`relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
+      className={`relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
         active
           ? "bg-white/10 font-medium text-white"
           : "text-white/70 hover:bg-white/5 hover:text-white"
@@ -133,6 +133,7 @@ function NavLink({ item, active }: { item: NavItem; active: boolean }) {
     </Link>
   );
 }
+
 
 function UserCard({ user }: { user: SidebarUser }) {
   const initials = user.name

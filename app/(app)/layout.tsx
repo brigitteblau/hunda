@@ -24,7 +24,7 @@ export default async function AppLayout({
   };
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen">
       <Sidebar user={user} />
       <main className="flex-1">{children}</main>
     </div>
