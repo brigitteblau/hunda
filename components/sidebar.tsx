@@ -55,12 +55,12 @@ export default function Sidebar({
     pathname === href || pathname?.startsWith(href + "/");
 
   return (
-    <aside className="flex min-h-screen w-64 flex-col justify-between bg-[#2b2233] px-4 py-6 text-white">
-      <div className="flex flex-col gap-8">
+    <aside className="flex min-h-screen w-64 flex-col bg-[#2b2233] px-4 py-6 text-white">
+      <div className="flex flex-1 flex-col gap-10">
         {/* Logo */}
         <div className="flex items-center gap-2 px-2">
-          <Image src="/logo2.svg" alt="hunda" width={28} height={28} />
-          <span className="text-lg font-semibold">hunda.</span>
+          <Image src="/logo2.svg" alt="hunda" width={40} height={40} />
+          <span className="text-2xl font-semibold">hunda.</span>
         </div>
 
         {/* Search */}
@@ -89,6 +89,9 @@ export default function Sidebar({
             Cerrar Sesión
           </button>
         </NavSection>
+
+        {/* Empuja el user card al fondo, y con flex-1 arriba, el gap-10 entre bloques ya reparte el espacio en vez de amontonarse arriba */}
+        <div className="flex-1" />
       </div>
 
       {/* User card */}
