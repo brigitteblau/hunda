@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client"; // TODO Maite: confirmar nombre real de esta función
 import {
   LayoutDashboard,
   PlusSquare,
@@ -42,21 +43,23 @@ const otrosItems: NavItem[] = [
   { label: "Configuración", href: "/configuracion", icon: Settings },
 ];
 
-export default function Sidebar({
-  user,
-  onSignOut,
-}: {
-  user: SidebarUser | null;
-  onSignOut?: () => void;
-}) {
+export default function Sidebar({ user }: { user: SidebarUser | null }) {
   const pathname = usePathname();
+  const router = useRouter();
 
   const isActive = (href: string) =>
     pathname === href || pathname?.startsWith(href + "/");
 
+  const handleSignOut = async () => {
+    const supabase = createSupabaseBrowserClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+    router.refresh();
+  };
+
   return (
     <aside className="flex min-h-screen w-64 flex-col bg-[#2b2233] px-4 py-6 text-white">
-      <div className="flex flex-1 flex-col gap-10">
+      <div className="flex flex-col gap-12">
         {/* Logo */}
         <div className="flex items-center gap-2 px-2">
           <Image src="/logo2.svg" alt="hunda" width={40} height={40} />
@@ -82,7 +85,7 @@ export default function Sidebar({
             <NavLink key={item.href} item={item} active={isActive(item.href)} />
           ))}
           <button
-            onClick={onSignOut}
+            onClick={handleSignOut}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-white/70 transition-colors hover:bg-white/5 hover:text-white"
           >
             <LogOut className="h-4 w-4" />
@@ -90,12 +93,9 @@ export default function Sidebar({
           </button>
         </NavSection>
 
-        {/* Empuja el user card al fondo, y con flex-1 arriba, el gap-10 entre bloques ya reparte el espacio en vez de amontonarse arriba */}
-        <div className="flex-1" />
+        {/* User card */}
+        {user ? <UserCard user={user} /> : <UserCardSkeleton />}
       </div>
-
-      {/* User card */}
-      {user ? <UserCard user={user} /> : <UserCardSkeleton />}
     </aside>
   );
 }

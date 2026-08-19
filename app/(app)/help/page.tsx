@@ -72,35 +72,32 @@ export default function HelpPage() {
   ];
 
   return (
-    <div className="flex min-h-screen bg-[#B8B0B0]">
-      {/* ESPACIO RESERVADO PARA SIDEBAR */}
-      <aside className="w-64 shrink-0" />
+    <div className="min-h-screen bg-[#B8B0B0]">
+      {/* NAVBAR */}
+      <header className="w-full h-[88px] flex items-center justify-end px-12">
+        <UserNav />
+      </header>
 
-      <main className="flex-1 min-h-screen">
-        {/* NAVBAR */}
-        <header className="w-full h-[88px] flex items-center justify-end px-12">
-          <UserNav />
-        </header>
+      {/* HERO */}
+      <section className="max-w-7xl mx-auto px-16 pt-16 pb-32">
+        {/* Texto */}
+        <div className="flex flex-col gap-8 pb-24">
+          <h1 className="text-[40px] font-light leading-tight text-black whitespace-nowrap">
+            Ayudarte es nuestra{" "}
+            <span className="text-[#41C086]">prioridad</span>
+          </h1>
 
-        {/* HERO */}
-        <section className="max-w-7xl px-16 pt-12 pb-24">
-          {/* Texto */}
-          <div className="mb-20">
-            <h1 className="text-[40px] font-light leading-tight text-black whitespace-nowrap">
-              Ayudarte es nuestra{" "}
-              <span className="text-[#41C086]">prioridad</span>
-            </h1>
+          <p className="text-[16px] leading-7 text-[#4A4A4A] max-w-[620px]">
+            Te dejamos una serie de preguntas frecuentes para poder
+            ayudarte. En caso de no necesitar ayuda personalizada,
+            contáctanos a través de las redes o de este formulario.
+          </p>
+        </div>
 
-            <p className="mt-8 text-[16px] leading-7 text-[#4A4A4A] max-w-[620px]">
-              Te dejamos una serie de preguntas frecuentes para poder
-              ayudarte. En caso de no necesitar ayuda personalizada,
-              contáctanos a través de las redes o de este formulario.
-            </p>
-          </div>
-
-          {/* Formulario */}
-          <div className="w-full bg-[#D9D9D9] rounded-[28px] p-10">
-            <div className="flex items-center gap-3 mb-2">
+        {/* Formulario */}
+        <div className="w-full bg-[#D9D9D9] rounded-[28px] p-12">
+          <div className="flex flex-col gap-4 pb-14">
+            <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-[#41C086] flex items-center justify-center shrink-0">
                 <IoChatbubbleEllipsesOutline className="w-5 h-5 text-white" />
               </div>
@@ -108,12 +105,14 @@ export default function HelpPage() {
                 Envíanos un mensaje
               </h2>
             </div>
-            <p className="text-[12px] text-[#5A5A5A] mb-10 ml-12">
+            <p className="text-[12px] text-[#5A5A5A] ml-12">
               Trataremos de contestarte lo antes posible. Las respuestas
               tardan hasta 72 horas.
             </p>
+          </div>
 
-            <div className="grid grid-cols-2 gap-8 mb-6">
+          <div className="flex flex-col gap-10">
+            <div className="grid grid-cols-2 gap-10">
               <div>
                 <label className="block text-[14px] mb-3">Nombre</label>
                 <input
@@ -132,7 +131,7 @@ export default function HelpPage() {
               </div>
             </div>
 
-            <div className="mb-6">
+            <div>
               <label className="block text-[14px] mb-3">Asunto</label>
               <input
                 type="text"
@@ -140,7 +139,7 @@ export default function HelpPage() {
               />
             </div>
 
-            <div className="mb-8">
+            <div>
               <label className="block text-[14px] mb-3">Mensaje</label>
               <textarea className="w-full h-40 bg-white border border-[#BEBEBE] resize-none p-3 outline-none rounded" />
             </div>
@@ -151,42 +150,42 @@ export default function HelpPage() {
               </button>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* FAQ */}
-        <section className="max-w-7xl px-16 pt-4 pb-32">
-          <div className="flex items-center gap-3 mb-10">
-            <div className="w-9 h-9 rounded-full bg-[#41C086] flex items-center justify-center shrink-0">
-              <FaRegCircleQuestion className="w-5 h-5 text-white" />
-            </div>
-            <h2 className="text-[22px] font-semibold text-black">
-              Preguntas frecuentes
-            </h2>
+      {/* FAQ */}
+      <section className="max-w-7xl mx-auto px-16 pt-4 pb-32">
+        <div className="flex items-center gap-3 pb-14">
+          <div className="w-9 h-9 rounded-full bg-[#41C086] flex items-center justify-center shrink-0">
+            <FaRegCircleQuestion className="w-5 h-5 text-white" />
           </div>
+          <h2 className="text-[22px] font-semibold text-black">
+            Preguntas frecuentes
+          </h2>
+        </div>
 
-          <div className="space-y-5">
-            {faqs.map((faq, index) => (
-              <details
-                key={index}
-                className="group rounded-[18px] border border-[#8D8D8D] bg-[#D9D9D9]"
-              >
-                <summary className="flex cursor-pointer list-none items-center justify-between px-7 py-5 text-[15px]">
-                  {faq.question}
-                  <span className="text-xl transition-transform group-open:rotate-180">
-                    ⌄
-                  </span>
-                </summary>
+        <div className="flex flex-col gap-7">
+          {faqs.map((faq, index) => (
+            <details
+              key={index}
+              className="group rounded-[18px] border border-[#8D8D8D] bg-[#D9D9D9]"
+            >
+              <summary className="flex cursor-pointer list-none items-center justify-between px-7 py-5 text-[15px]">
+                {faq.question}
+                <span className="text-xl transition-transform group-open:rotate-180">
+                  ⌄
+                </span>
+              </summary>
 
-                <div className="mx-7 mb-6 pt-5 border-t border-[#BEBEBE]">
-                  <p className="text-[14px] leading-6 text-[#444]">
-                    {faq.answer}
-                  </p>
-                </div>
-              </details>
-            ))}
-          </div>
-        </section>
-      </main>
+              <div className="mx-7 mb-6 pt-5 border-t border-[#BEBEBE]">
+                <p className="text-[14px] leading-6 text-[#444]">
+                  {faq.answer}
+                </p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
