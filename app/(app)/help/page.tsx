@@ -1,6 +1,5 @@
 import { FaRegCircleQuestion } from "react-icons/fa6";
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
-import UserNav from "@/components/usernav";
 
 export default function HelpPage() {
   const faqs = [
@@ -73,11 +72,6 @@ export default function HelpPage() {
 
   return (
     <div className="min-h-screen bg-[#B8B0B0]">
-      {/* NAVBAR */}
-      <header className="w-full h-[88px] flex items-center justify-end px-12">
-        <UserNav />
-      </header>
-
       {/* HERO */}
       <section className="max-w-7xl mx-auto px-16 pt-16 pb-32">
         {/* Texto */}
@@ -154,7 +148,7 @@ export default function HelpPage() {
       </section>
 
       {/* FAQ */}
-      <section className="max-w-7xl mx-auto px-16 pt-4 pb-32">
+      <section className="w-full px-16 pt-4 pb-32">
         <div className="flex items-center gap-3 pb-14">
           <div className="w-9 h-9 rounded-full bg-[#41C086] flex items-center justify-center shrink-0">
             <FaRegCircleQuestion className="w-5 h-5 text-white" />
@@ -177,7 +171,7 @@ export default function HelpPage() {
                 </span>
               </summary>
 
-              <div className="mx-7 mb-6 pt-5 border-t border-[#BEBEBE]">
+              <div className="mx-5 mb-6 pt-5 border-t border-[#BEBEBE]">
                 <p className="text-[14px] leading-6 text-[#444]">
                   {faq.answer}
                 </p>

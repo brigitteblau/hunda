@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import Sidebar, { SidebarUser } from "@/components/sidebar";
+import UserNav from "@/components/usernav";
 
 export default async function AppLayout({
   children,
@@ -26,7 +27,14 @@ export default async function AppLayout({
   return (
     <div className="flex min-h-screen">
       <Sidebar user={user} />
-      <main className="flex-1">{children}</main>
+
+      <div className="flex-1 flex flex-col">
+        <header className="w-full h-[88px] flex items-center justify-end px-12 bg-[#B8B0B0]">
+          <UserNav user={user} />
+        </header>
+
+        <main className="flex-1">{children}</main>
+      </div>
     </div>
   );
 }
