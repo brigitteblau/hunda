@@ -33,8 +33,8 @@ type NavItem = {
 
 const mainItems: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Nueva Prótesis", href: "/protesis/nueva", icon: PlusSquare },
-  { label: "Mis perros", href: "/perros", icon: PawPrint },
+  { label: "Nueva Prótesis", href: "/form", icon: PlusSquare },
+  { label: "Mis perros", href: "/mis/perros", icon: PawPrint },
   { label: "Help", href: "/help", icon: HelpCircle },
 ];
 
@@ -58,19 +58,14 @@ export default function Sidebar({ user }: { user: SidebarUser | null }) {
   };
 
   return (
-    <aside className="flex min-h-screen w-64 flex-col bg-[#2b2233] px-4 py-6 text-white">
-      <div className="flex flex-col gap-12">
+    <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col bg-[#2b2233] px-4 py-6 text-white">
+      <div className="flex flex-col gap-8">
         {/* Logo */}
         <div className="flex items-center gap-2 px-2">
           <Image src="/logo2.svg" alt="hunda" width={40} height={40} />
           <span className="text-2xl font-semibold">hunda.</span>
         </div>
 
-        {/* Search */}
-        <div className="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2 text-sm text-white/50">
-          <Search className="h-4 w-4" />
-          <span>Search or type a command</span>
-        </div>
 
         {/* MAIN */}
         <NavSection label="Main">
