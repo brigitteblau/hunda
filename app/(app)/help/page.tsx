@@ -71,7 +71,7 @@ export default function HelpPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#B8B0B0]">
+    <div className="min-h-screen bg-white">
       {/* HERO */}
       <section className="max-w-7xl mx-auto px-16 pt-16 pb-32">
         {/* Texto */}

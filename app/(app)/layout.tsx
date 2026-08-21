@@ -29,7 +29,7 @@ export default async function AppLayout({
       <Sidebar user={user} />
 
       <div className="flex-1 flex flex-col">
-        <header className="w-full h-[88px] flex items-center justify-end px-12 bg-[#B8B0B0]">
+        <header className="w-full h-[88px] flex items-center justify-end px-12 bg-white">
           <UserNav user={user} />
         </header>
 
