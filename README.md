@@ -5,6 +5,7 @@ SUPABASE_SERVICE_ROLE_KEY=
 BBM_SERVER_URL=https://bbm-server-hfq1.onrender.com
 NEXT_PUBLIC_API_URL=https://bbm-server-hfq1.onrender.com
 
+.env.develop.ment: NODE_TLS_REJECT_UNAUTHORIZED=0
 
 todo con animacion de fluidez 
 todo responsive 
