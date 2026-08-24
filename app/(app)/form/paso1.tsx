@@ -13,6 +13,8 @@ interface Paso1InfoPerroProps {
 const inputClass =
   "w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-gray-400 transition-colors";
 
+const fieldLabelClass = "text-xs font-semibold text-gray-500 uppercase tracking-wide";
+
 export default function Paso1InfoPerro({ data, onChange, onContinue }: Paso1InfoPerroProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -35,15 +37,15 @@ export default function Paso1InfoPerro({ data, onChange, onContinue }: Paso1Info
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex-1 bg-white border border-gray-200 rounded-2xl p-8"
+      className="flex-1 flex flex-col gap-6 bg-white border border-gray-200 rounded-2xl p-8"
     >
-      <h2 className="text-xl font-bold text-gray-900 mb-1">Información del perro</h2>
-      <p className="text-gray-500 text-sm mb-6">Completá los datos básicos de tu paciente</p>
+      <div className="flex flex-col gap-1">
+        <h2 className="text-xl font-bold text-gray-900">Información del perro</h2>
+        <p className="text-gray-500 text-sm">Completá los datos básicos de tu paciente</p>
+      </div>
 
-      <div className="mb-6">
-        <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">
-          Foto del perro (opcional)
-        </label>
+      <div className="flex flex-col gap-2">
+        <label className={fieldLabelClass}>Foto del perro (opcional)</label>
         <div className="border border-dashed border-gray-300 rounded-xl p-6 flex flex-col items-center justify-center text-center gap-2">
           {data.photoPreviewUrl ? (
             <img src={data.photoPreviewUrl} alt="Vista previa" className="h-24 w-24 rounded-lg object-cover" />
@@ -56,7 +58,7 @@ export default function Paso1InfoPerro({ data, onChange, onContinue }: Paso1Info
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="mt-1 text-xs bg-gray-100 hover:bg-gray-200 transition-colors px-4 py-2 rounded-lg font-medium text-gray-700"
+            className="text-xs bg-gray-100 hover:bg-gray-200 transition-colors px-4 py-2 rounded-lg font-medium text-gray-700"
           >
             Seleccionar archivo
           </button>
@@ -64,11 +66,9 @@ export default function Paso1InfoPerro({ data, onChange, onContinue }: Paso1Info
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">
-            Nombre del perro
-          </label>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-2">
+          <label className={fieldLabelClass}>Nombre del perro</label>
           <input
             className={inputClass}
             placeholder="Escribí acá..."
@@ -77,8 +77,8 @@ export default function Paso1InfoPerro({ data, onChange, onContinue }: Paso1Info
             required
           />
         </div>
-        <div>
-          <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Raza</label>
+        <div className="flex flex-col gap-2">
+          <label className={fieldLabelClass}>Raza</label>
           <input
             className={inputClass}
             placeholder="Escribí acá..."
@@ -88,9 +88,9 @@ export default function Paso1InfoPerro({ data, onChange, onContinue }: Paso1Info
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Edad</label>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-2">
+          <label className={fieldLabelClass}>Edad</label>
           <input
             type="number"
             min={0}
@@ -100,8 +100,8 @@ export default function Paso1InfoPerro({ data, onChange, onContinue }: Paso1Info
             onChange={(e) => update("age", e.target.value)}
           />
         </div>
-        <div>
-          <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Peso</label>
+        <div className="flex flex-col gap-2">
+          <label className={fieldLabelClass}>Peso</label>
           <input
             type="number"
             min={0}
@@ -115,8 +115,8 @@ export default function Paso1InfoPerro({ data, onChange, onContinue }: Paso1Info
         </div>
       </div>
 
-      <div className="mb-4">
-        <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Sexo</label>
+      <div className="flex flex-col gap-2">
+        <label className={fieldLabelClass}>Sexo</label>
         <div className="flex gap-6">
           {(["macho", "hembra"] as const).map((option) => (
             <label key={option} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
@@ -134,10 +134,8 @@ export default function Paso1InfoPerro({ data, onChange, onContinue }: Paso1Info
         </div>
       </div>
 
-      <div className="mb-4">
-        <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">
-          Estado de salud
-        </label>
+      <div className="flex flex-col gap-2">
+        <label className={fieldLabelClass}>Estado de salud</label>
         <select
           className={inputClass}
           value={data.healthStatus}
@@ -150,10 +148,8 @@ export default function Paso1InfoPerro({ data, onChange, onContinue }: Paso1Info
         </select>
       </div>
 
-      <div className="mb-6">
-        <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">
-          Observaciones (opcional)
-        </label>
+      <div className="flex flex-col gap-2">
+        <label className={fieldLabelClass}>Observaciones (opcional)</label>
         <textarea
           className={`${inputClass} min-h-[90px] resize-none`}
           placeholder="Notas útiles para la generación de la prótesis..."

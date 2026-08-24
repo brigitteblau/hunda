@@ -13,6 +13,8 @@ interface Paso2MiembroAfectadoProps {
 const inputClass =
   "w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-gray-400 transition-colors";
 
+const fieldLabelClass = "text-xs font-semibold text-gray-500 uppercase tracking-wide";
+
 function OptionButton({
   selected,
   onClick,
@@ -57,16 +59,16 @@ export default function Paso2MiembroAfectado({ data, onChange, onContinue, onBac
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex-1 bg-white border border-gray-200 rounded-2xl p-8"
+      className="flex-1 flex flex-col gap-6 bg-white border border-gray-200 rounded-2xl p-8"
     >
-      <h2 className="text-xl font-bold text-gray-900 mb-1">Miembro afectado</h2>
-      <p className="text-gray-500 text-sm mb-6">
-        Completá los datos técnicos para la generación de la prótesis
-      </p>
+      <div className="flex flex-col gap-1">
+        <h2 className="text-xl font-bold text-gray-900">Miembro afectado</h2>
+        <p className="text-gray-500 text-sm">Completá los datos técnicos para la generación de la prótesis</p>
+      </div>
 
-      <div className="grid grid-cols-2 gap-8 mb-6">
-        <div>
-          <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Lado</label>
+      <div className="grid grid-cols-2 gap-8">
+        <div className="flex flex-col gap-2">
+          <label className={fieldLabelClass}>Lado</label>
           <div className="grid grid-cols-2 gap-3">
             <OptionButton
               selected={data.side === "izquierda"}
@@ -84,8 +86,8 @@ export default function Paso2MiembroAfectado({ data, onChange, onContinue, onBac
           </div>
         </div>
 
-        <div>
-          <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Tipo</label>
+        <div className="flex flex-col gap-2">
+          <label className={fieldLabelClass}>Tipo</label>
           <div className="grid grid-cols-2 gap-3">
             <OptionButton
               selected={data.position === "delantera"}
@@ -103,16 +105,18 @@ export default function Paso2MiembroAfectado({ data, onChange, onContinue, onBac
         </div>
       </div>
 
-      <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6">
-        <div className="flex items-center gap-2 mb-1">
-          <Pencil size={14} className="text-gray-500" />
-          <h3 className="text-sm font-semibold text-gray-900">Medidas del muñón</h3>
+      <div className="flex flex-col gap-6 bg-gray-50 border border-gray-200 rounded-xl p-6">
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <Pencil size={14} className="text-gray-500" />
+            <h3 className="text-sm font-semibold text-gray-900">Medidas del muñón</h3>
+          </div>
+          <p className="text-xs text-gray-500">Ingresá los valores en centímetros (cm)</p>
         </div>
-        <p className="text-xs text-gray-500 mb-4">Ingresá los valores en centímetros (cm)</p>
 
         <div className="grid grid-cols-3 gap-4">
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Longitud</label>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-gray-600">Longitud</label>
             <input
               type="number"
               min={0}
@@ -123,10 +127,10 @@ export default function Paso2MiembroAfectado({ data, onChange, onContinue, onBac
               onChange={(e) => update("stumpLengthCm", e.target.value)}
               required
             />
-            <p className="text-[11px] text-gray-400 mt-1">Largo total del muñón.</p>
+            <p className="text-[11px] text-gray-400">Largo total del muñón.</p>
           </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Circunferencia distal</label>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-gray-600">Circunferencia distal</label>
             <input
               type="number"
               min={0}
@@ -137,10 +141,10 @@ export default function Paso2MiembroAfectado({ data, onChange, onContinue, onBac
               onChange={(e) => update("distalCircumferenceCm", e.target.value)}
               required
             />
-            <p className="text-[11px] text-gray-400 mt-1">Parte inferior del muñón.</p>
+            <p className="text-[11px] text-gray-400">Parte inferior del muñón.</p>
           </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Circunferencia proximal</label>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-gray-600">Circunferencia proximal</label>
             <input
               type="number"
               min={0}
@@ -151,7 +155,7 @@ export default function Paso2MiembroAfectado({ data, onChange, onContinue, onBac
               onChange={(e) => update("proximalCircumferenceCm", e.target.value)}
               required
             />
-            <p className="text-[11px] text-gray-400 mt-1">Parte superior del muñón.</p>
+            <p className="text-[11px] text-gray-400">Parte superior del muñón.</p>
           </div>
         </div>
       </div>
