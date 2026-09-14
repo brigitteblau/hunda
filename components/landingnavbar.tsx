@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { useState } from "react";
+import { Menu, X } from "lucide-react";
+
 const navLinks = [
   { label: "Inicio", href: "#inicio" },
   { label: "Cómo funciona", href: "#como-funciona" },
@@ -13,66 +15,116 @@ const navLinks = [
 export default function LandingNavbar() {
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-  setScrolled(latest > 30);
+    setScrolled(latest > 20);
+  });
 
-  const previous = scrollY.getPrevious() ?? 0;
-  if (latest > previous && latest > 80) {
-    setHidden(true);
-  } else {
-    setHidden(false);
-  }
-});
   return (
     <motion.nav
-  initial={{ opacity: 0, y: -20 }}
-  animate={{
-    opacity: 1,
-    y: hidden ? -120 : 0,
-    paddingTop: scrolled ? 8 : 12,
-    paddingBottom: scrolled ? 8 : 12,
-    marginTop: scrolled ? 8 : 16,
-    backgroundColor: scrolled ? "rgba(47,74,62,0.98)" : "rgba(47,74,62,0.9)",
-  }}
-  transition={{ duration: 0.3, ease: "easeOut" }}
-  className="fixed top-0 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl flex items-center justify-between px-6 rounded-full backdrop-blur-md text-white">
-      <span className="text-xl font-semibold">hunda.</span>
+      initial={{ opacity: 0, y: -16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className={`fixed top-0 left-0 right-0 z-50 border-b transition-colors duration-300 ${
+        scrolled
+          ? "bg-[#0B0F0D]/90 backdrop-blur-md border-white/10"
+          : "bg-transparent border-transparent"
+      }`}
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-10 h-16">
+        <Link href="/" className="text-[17px] font-extrabold tracking-[-0.02em] text-white">
+          hunda<span className="text-[#41C086]">.</span>
+        </Link>
 
-      <div className="hidden md:flex items-center gap-8 px-6 py-2 rounded-full bg-white/10">
-        {navLinks.map((item) =>
-          item.href.startsWith("/") ? (
+        <div className="hidden md:flex items-center gap-1 rounded-full border border-white/10 bg-white/3 px-1.5 py-1.5">
+          {navLinks.map((item) =>
+            item.href.startsWith("/") ? (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="rounded-full px-4 py-1.5 text-[13px] text-white/60 transition-colors hover:text-white hover:bg-white/5"
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <a
+                key={item.label}
+                href={item.href}
+                className="rounded-full px-4 py-1.5 text-[13px] text-white/60 transition-colors hover:text-white hover:bg-white/5"
+              >
+                {item.label}
+              </a>
+            )
+          )}
+        </div>
+
+        <div className="hidden md:flex items-center gap-3">
+          <Link
+            href="/login"
+            className="text-[13px] font-medium text-white/70 hover:text-white transition-colors"
+          >
+            Iniciar sesión
+          </Link>
+          <Link
+            href="/login"
+            className="flex items-center gap-1.5 rounded-full bg-[#41C086] px-4 py-2 text-[13px] font-semibold text-[#0B0F0D] transition-colors hover:bg-white"
+          >
+            Crear cuenta
+            <span aria-hidden>→</span>
+          </Link>
+        </div>
+
+        <button
+          onClick={() => setMobileOpen((v) => !v)}
+          className="md:hidden flex h-9 w-9 items-center justify-center rounded-full text-white/70 hover:bg-white/5"
+          aria-label="Abrir menú"
+        >
+          {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+        </button>
+      </div>
+
+      {mobileOpen && (
+        <div className="md:hidden border-t border-white/10 bg-[#0B0F0D] px-6 py-5 flex flex-col gap-4">
+          {navLinks.map((item) =>
+            item.href.startsWith("/") ? (
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                className="text-sm text-white/70 hover:text-white"
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <a
+                key={item.label}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                className="text-sm text-white/70 hover:text-white"
+              >
+                {item.label}
+              </a>
+            )
+          )}
+          <div className="flex flex-col gap-3 pt-2 border-t border-white/10">
             <Link
-              key={item.label}
-              href={item.href}
-              className="relative text-sm text-white/90 hover:text-white transition after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
+              href="/login"
+              onClick={() => setMobileOpen(false)}
+              className="text-sm font-medium text-white/70 hover:text-white"
             >
-              {item.label}
+              Iniciar sesión
             </Link>
-          ) : (
-            <a
-              key={item.label}
-              href={item.href}
-              className="relative text-sm text-white/90 hover:text-white transition after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
+            <Link
+              href="/login"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center justify-center gap-1.5 rounded-full bg-[#41C086] px-4 py-2.5 text-sm font-semibold text-[#0B0F0D]"
             >
-              {item.label}
-            </a>
-          )
-        )}
-      </div>
-
-      <div className="flex items-center gap-4">
-        <Link href="/login" className="text-sm text-white/90 hover:text-white transition">
-          Iniciar Sesion
-        </Link>
-        <Link href="/login">
-          <button className="flex items-center gap-1 bg-white text-black rounded-full px-4 py-2 text-sm font-medium hover:bg-[#41C086] hover:text-white transition">
-            Crear usuario
-            <span>→</span>
-          </button>
-        </Link>
-      </div>
+              Crear cuenta →
+            </Link>
+          </div>
+        </div>
+      )}
     </motion.nav>
   );
 }

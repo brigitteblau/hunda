@@ -1,4 +1,5 @@
 export type DogSex = "macho" | "hembra";
+export type DogSize = "pequeño" | "mediano" | "grande" | "muy grande";
 
 export interface DogInfoData {
   photoFile: File | null;
@@ -7,6 +8,7 @@ export interface DogInfoData {
   breed: string;
   age: string;
   weightKg: string;
+  size: DogSize | "";
   sex: DogSex | "";
   healthStatus: string;
   notes: string;

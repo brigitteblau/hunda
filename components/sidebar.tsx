@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client"; 
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import {
   LayoutDashboard,
   PlusSquare,
@@ -12,7 +12,7 @@ import {
   Bell,
   Settings,
   LogOut,
-  Search,
+  X,
 } from "lucide-react";
 
 // -----------------------------------------------------------------------
@@ -43,7 +43,15 @@ const otrosItems: NavItem[] = [
   { label: "Configuración", href: "/configuracion", icon: Settings },
 ];
 
-export default function Sidebar({ user }: { user: SidebarUser | null }) {
+export default function Sidebar({
+  user,
+  open = false,
+  onClose,
+}: {
+  user: SidebarUser | null;
+  open?: boolean;
+  onClose?: () => void;
+}) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -58,40 +66,63 @@ export default function Sidebar({ user }: { user: SidebarUser | null }) {
   };
 
   return (
-    <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col bg-[#2b2233] px-4 py-6 text-white">
-      <div className="flex flex-col gap-8">
-        {/* Logo */}
-        <div className="flex items-center gap-2 px-2">
-          <Image src="/logo2.svg" alt="hunda" width={40} height={40} />
-          <span className="text-2xl font-semibold">hunda.</span>
+    <>
+      {open && (
+        <div
+          onClick={onClose}
+          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+        />
+      )}
+
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex h-screen w-64 shrink-0 flex-col overflow-y-auto border-r border-white/5 bg-[#0B0F0D] px-4 py-6 text-white transition-transform duration-200 ease-out lg:sticky lg:top-0 lg:translate-x-0 ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex flex-col gap-8">
+          {/* Logo */}
+          <div className="flex items-center justify-between px-2">
+            <div className="flex items-center gap-2">
+              <Image src="/logo2.svg" alt="hunda" width={32} height={32} />
+              <span className="text-xl font-extrabold tracking-[-0.02em]">
+                hunda<span className="text-[#41C086]">.</span>
+              </span>
+            </div>
+
+            <button
+              onClick={onClose}
+              className="rounded-lg p-1.5 text-white/60 hover:bg-white/5 hover:text-white lg:hidden"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
+          {/* MAIN */}
+          <NavSection label="Main">
+            {mainItems.map((item) => (
+              <NavLink key={item.href} item={item} active={isActive(item.href)} onNavigate={onClose} />
+            ))}
+          </NavSection>
+
+          {/* OTROS */}
+          <NavSection label="Otros">
+            {otrosItems.map((item) => (
+              <NavLink key={item.href} item={item} active={isActive(item.href)} onNavigate={onClose} />
+            ))}
+            <button
+              onClick={handleSignOut}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-white/70 transition-colors hover:bg-white/5 hover:text-white"
+            >
+              <LogOut className="h-4 w-4" />
+              Cerrar Sesión
+            </button>
+          </NavSection>
+
+          {/* User card */}
+          {user ? <UserCard user={user} /> : <UserCardSkeleton />}
         </div>
-
-
-        {/* MAIN */}
-        <NavSection label="Main">
-          {mainItems.map((item) => (
-            <NavLink key={item.href} item={item} active={isActive(item.href)} />
-          ))}
-        </NavSection>
-
-        {/* OTROS */}
-        <NavSection label="Otros">
-          {otrosItems.map((item) => (
-            <NavLink key={item.href} item={item} active={isActive(item.href)} />
-          ))}
-          <button
-            onClick={handleSignOut}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-white/70 transition-colors hover:bg-white/5 hover:text-white"
-          >
-            <LogOut className="h-4 w-4" />
-            Cerrar Sesión
-          </button>
-        </NavSection>
-
-        {/* User card */}
-        {user ? <UserCard user={user} /> : <UserCardSkeleton />}
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }
 
@@ -112,11 +143,20 @@ function NavSection({
   );
 }
 
-function NavLink({ item, active }: { item: NavItem; active: boolean }) {
+function NavLink({
+  item,
+  active,
+  onNavigate,
+}: {
+  item: NavItem;
+  active: boolean;
+  onNavigate?: () => void;
+}) {
   const Icon = item.icon;
   return (
     <Link
       href={item.href}
+      onClick={onNavigate}
       className={`relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
         active
           ? "bg-white/10 font-medium text-white"
@@ -124,7 +164,7 @@ function NavLink({ item, active }: { item: NavItem; active: boolean }) {
       }`}
     >
       {active && (
-        <span className="absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r bg-emerald-400" />
+        <span className="absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r bg-[#41C086]" />
       )}
       <Icon className="h-4 w-4" />
       {item.label}
@@ -151,7 +191,7 @@ function UserCard({ user }: { user: SidebarUser }) {
           className="h-9 w-9 rounded-full object-cover"
         />
       ) : (
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-400 text-sm font-semibold text-[#2b2233]">
+        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#41C086] text-sm font-semibold text-[#0B0F0D]">
           {initials}
         </div>
       )}

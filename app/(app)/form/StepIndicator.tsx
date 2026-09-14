@@ -1,18 +1,19 @@
 "use client";
 
 interface StepIndicatorProps {
-  currentStep: 1 | 2 | 3;
+  currentStep: 1 | 2 | 3 | 4;
 }
 
 const steps = [
   { number: 1, title: "Información", subtitle: "del perro" },
   { number: 2, title: "Miembro afectado", subtitle: "medidas del muñón" },
   { number: 3, title: "Generar", subtitle: "prótesis" },
+  { number: 4, title: "Resultado", subtitle: "modelo 3D" },
 ] as const;
 
 export default function StepIndicator({ currentStep }: StepIndicatorProps) {
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl px-8 py-6 flex items-center">
+    <div className="rounded-2xl border border-white/8 bg-white/3 px-8 py-6 flex items-center">
       {steps.map((step, idx) => {
         const isActive = step.number === currentStep;
         const isDone = step.number < currentStep;
@@ -22,22 +23,22 @@ export default function StepIndicator({ currentStep }: StepIndicatorProps) {
               <div
                 className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-sm font-semibold transition-colors ${
                   isActive
-                    ? "bg-gray-900 text-white border-gray-900"
+                    ? "bg-[#41C086] text-[#0B0F0D] border-[#41C086]"
                     : isDone
-                    ? "bg-gray-100 text-gray-700 border-gray-300"
-                    : "border-gray-200 text-gray-400"
+                    ? "bg-white/10 text-white border-white/20"
+                    : "border-white/10 text-white/30"
                 }`}
               >
                 {step.number}
               </div>
               <div className="hidden sm:block leading-tight">
-                <p className={`text-sm font-semibold ${isActive ? "text-gray-900" : "text-gray-400"}`}>
+                <p className={`text-sm font-semibold ${isActive ? "text-white" : "text-white/35"}`}>
                   {step.title}
                 </p>
-                <p className="text-xs text-gray-400">{step.subtitle}</p>
+                <p className="text-xs text-white/30">{step.subtitle}</p>
               </div>
             </div>
-            {idx < steps.length - 1 && <div className="mx-4 h-px flex-1 bg-gray-200" />}
+            {idx < steps.length - 1 && <div className="mx-4 h-px flex-1 bg-white/8" />}
           </div>
         );
       })}

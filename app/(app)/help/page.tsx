@@ -70,18 +70,21 @@ export default function HelpPage() {
     },
   ];
 
+  const fieldClass =
+    "w-full h-11 bg-white/5 border border-white/10 px-3.5 text-sm text-white placeholder:text-white/30 outline-none rounded-lg focus:border-[#41C086] focus:ring-2 focus:ring-[#41C086]/20 transition-colors";
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#0B0F0D]">
       {/* HERO */}
-      <section className="max-w-7xl mx-auto px-16 pt-16 pb-32">
+      <section className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-16 pb-32">
         {/* Texto */}
         <div className="flex flex-col gap-8 pb-24">
-          <h1 className="text-[40px] font-light leading-tight text-black whitespace-nowrap">
+          <h1 className="text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold tracking-[-0.03em] leading-tight text-white">
             Ayudarte es nuestra{" "}
-            <span className="text-[#41C086]">prioridad</span>
+            <span className="text-[#41C086]">prioridad.</span>
           </h1>
 
-          <p className="text-[16px] leading-7 text-[#4A4A4A] max-w-[620px]">
+          <p className="text-[16px] leading-7 text-white/50 max-w-155">
             Te dejamos una serie de preguntas frecuentes para poder
             ayudarte. En caso de no necesitar ayuda personalizada,
             contáctanos a través de las redes o de este formulario.
@@ -89,57 +92,48 @@ export default function HelpPage() {
         </div>
 
         {/* Formulario */}
-        <div className="w-full bg-[#D9D9D9] rounded-[28px] p-12">
+        <div className="w-full rounded-[28px] border border-white/8 bg-white/3 p-6 sm:p-12">
           <div className="flex flex-col gap-4 pb-14">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-[#41C086] flex items-center justify-center shrink-0">
-                <IoChatbubbleEllipsesOutline className="w-5 h-5 text-white" />
+                <IoChatbubbleEllipsesOutline className="w-5 h-5 text-[#0B0F0D]" />
               </div>
-              <h2 className="text-[20px] font-semibold text-black">
+              <h2 className="text-[20px] font-semibold text-white">
                 Envíanos un mensaje
               </h2>
             </div>
-            <p className="text-[12px] text-[#5A5A5A] ml-12">
+            <p className="text-[12px] text-white/40 ml-12">
               Trataremos de contestarte lo antes posible. Las respuestas
               tardan hasta 72 horas.
             </p>
           </div>
 
           <div className="flex flex-col gap-10">
-            <div className="grid grid-cols-2 gap-10">
+            <div className="grid sm:grid-cols-2 gap-6 sm:gap-10">
               <div>
-                <label className="block text-[14px] mb-3">Nombre</label>
-                <input
-                  type="text"
-                  className="w-full h-11 bg-white border border-[#BEBEBE] px-3 outline-none rounded"
-                />
+                <label className="block text-[14px] mb-3 text-white/60">Nombre</label>
+                <input type="text" className={fieldClass} />
               </div>
               <div>
-                <label className="block text-[14px] mb-3">
+                <label className="block text-[14px] mb-3 text-white/60">
                   Correo electrónico
                 </label>
-                <input
-                  type="email"
-                  className="w-full h-11 bg-white border border-[#BEBEBE] px-3 outline-none rounded"
-                />
+                <input type="email" className={fieldClass} />
               </div>
             </div>
 
             <div>
-              <label className="block text-[14px] mb-3">Asunto</label>
-              <input
-                type="text"
-                className="w-full h-11 bg-white border border-[#BEBEBE] px-3 outline-none rounded"
-              />
+              <label className="block text-[14px] mb-3 text-white/60">Asunto</label>
+              <input type="text" className={fieldClass} />
             </div>
 
             <div>
-              <label className="block text-[14px] mb-3">Mensaje</label>
-              <textarea className="w-full h-40 bg-white border border-[#BEBEBE] resize-none p-3 outline-none rounded" />
+              <label className="block text-[14px] mb-3 text-white/60">Mensaje</label>
+              <textarea className={`${fieldClass} h-40 resize-none py-3`} />
             </div>
 
             <div className="flex justify-end">
-              <button className="rounded-full bg-[#46D95F] px-6 py-2 text-[13px] font-semibold text-white">
+              <button className="rounded-full bg-[#41C086] hover:bg-white transition-colors px-6 py-2.5 text-[13px] font-semibold text-[#0B0F0D]">
                 Enviar mensaje
               </button>
             </div>
@@ -148,31 +142,31 @@ export default function HelpPage() {
       </section>
 
       {/* FAQ */}
-      <section className="w-full px-16 pt-4 pb-32">
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-4 pb-32">
         <div className="flex items-center gap-3 pb-14">
           <div className="w-9 h-9 rounded-full bg-[#41C086] flex items-center justify-center shrink-0">
-            <FaRegCircleQuestion className="w-5 h-5 text-white" />
+            <FaRegCircleQuestion className="w-5 h-5 text-[#0B0F0D]" />
           </div>
-          <h2 className="text-[22px] font-semibold text-black">
+          <h2 className="text-[22px] font-bold text-white">
             Preguntas frecuentes
           </h2>
         </div>
 
-        <div className="flex flex-col gap-7">
+        <div className="flex flex-col gap-4">
           {faqs.map((faq, index) => (
             <details
               key={index}
-              className="group rounded-[18px] border border-[#8D8D8D] bg-[#D9D9D9]"
+              className="group rounded-[18px] border border-white/8 bg-white/3 open:border-[#41C086]/30"
             >
-              <summary className="flex cursor-pointer list-none items-center justify-between px-7 py-5 text-[15px]">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-7 py-5 text-[15px] text-white">
                 {faq.question}
-                <span className="text-xl transition-transform group-open:rotate-180">
+                <span className="shrink-0 text-white/40 transition-transform group-open:rotate-180">
                   ⌄
                 </span>
               </summary>
 
-              <div className="mx-5 mb-6 pt-5 border-t border-[#BEBEBE]">
-                <p className="text-[14px] leading-6 text-[#444]">
+              <div className="mx-5 mb-6 pt-5 border-t border-white/8">
+                <p className="text-[14px] leading-6 text-white/50">
                   {faq.answer}
                 </p>
               </div>

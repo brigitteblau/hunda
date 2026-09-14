@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Poppins } from "next/font/google";
+import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Footer from "@/components/footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-inter",
 });
 
 const geistMono = Geist_Mono({
@@ -13,15 +13,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-poppins",
-});
-
 export const metadata: Metadata = {
-  title: "BBM",
-  description: "Better Balance for Movility",
+  title: "hunda.",
+  description: "Prótesis caninas personalizadas, diseñadas e impresas en 3D.",
 };
 
 export default function RootLayout({
@@ -30,14 +24,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable}`}
-    >
-      <body className="min-h-screen flex flex-col font-sans antialiased">
-        
+    <html lang="es" className={`${inter.variable} ${geistMono.variable}`}>
+      <body className="min-h-screen flex flex-col font-sans antialiased bg-white text-[#171717]">
         {children}
-        <Footer />
       </body>
     </html>
   );
