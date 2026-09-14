@@ -9,3 +9,12 @@ NEXT_PUBLIC_API_URL=https://bbm-server-hfq1.onrender.com
 
 todo con animacion de fluidez 
 todo responsive 
+
+
+to do 
+recorrer todo 
+mejorar la landing 
+ver porq no anda la conexion 
+subir un callback correcto aca 
+
+
