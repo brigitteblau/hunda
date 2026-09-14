@@ -9,6 +9,7 @@ import { IoCubeOutline } from "react-icons/io5";
 import { MdLocalPrintshop } from "react-icons/md";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FiDollarSign } from "react-icons/fi";
+import HeroDogPhoto from "@/components/hero-dog-photo";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -74,74 +75,84 @@ export default function LandingPage() {
       {/* Inicio */}
       <section
         id="inicio"
-        className="relative min-h-[calc(100vh-64px)] flex items-center px-6 lg:px-16 pt-24"
+        className="relative min-h-[calc(100vh-64px)] flex items-center px-6 lg:px-16 pt-24 pb-16"
       >
         <div
-          className="pointer-events-none absolute top-1/2 left-1/2 h-[560px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.12] blur-[120px]"
+          className="pointer-events-none absolute top-1/2 left-1/4 h-[560px] w-175 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.1] blur-[120px]"
           style={{ background: "radial-gradient(circle, #41C086, transparent 70%)" }}
         />
 
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          animate="visible"
-          className="relative max-w-[780px] w-full flex flex-col gap-10"
-        >
-          <motion.span
-            variants={fadeUp}
-            className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/3 px-3.5 py-1.5 text-xs text-white/60"
+        <div className="relative grid lg:grid-cols-[1.05fr_0.95fr] gap-14 lg:gap-10 items-center w-full max-w-7xl mx-auto">
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col gap-10"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#41C086]" />
-            Hecho en Uruguay, para perros de todo el mundo
-          </motion.span>
-
-          <motion.h1
-            variants={fadeUp}
-            className="text-[clamp(2.8rem,5.2vw,5rem)] leading-[1.02] tracking-[-0.04em] font-extrabold max-w-[760px]"
-          >
-            Tecnología para devolver
-            <br />
-            <span className="text-[#41C086]">movimiento.</span>
-          </motion.h1>
-
-          <motion.p
-            variants={fadeUp}
-            className="max-w-[460px] text-[17px] leading-7 text-white/55"
-          >
-            Diseñá prótesis caninas personalizadas desde un formulario simple,
-            generá el modelo 3D al instante y encontrá dónde imprimirlo.
-          </motion.p>
-
-          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3">
-            <Link
-              href="/login"
-              className="group flex items-center justify-center gap-2 rounded-full bg-[#41C086] text-[#0B0F0D] px-7 py-3.5 text-sm font-semibold transition hover:bg-white"
+            <motion.span
+              variants={fadeUp}
+              className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/3 px-3.5 py-1.5 text-xs text-white/60"
             >
-              Crear mi prótesis
-              <ArrowRight size={15} className="transition group-hover:translate-x-1" />
-            </Link>
+              <span className="h-1.5 w-1.5 rounded-full bg-[#41C086]" />
+              Hecho en Uruguay, para perros de todo el mundo
+            </motion.span>
 
-            <a
-              href="#como-funciona"
-              className="flex items-center justify-center rounded-full border border-white/15 px-7 py-3.5 text-sm font-medium text-white/80 transition hover:border-white/40 hover:text-white"
+            <motion.h1
+              variants={fadeUp}
+              className="text-[clamp(2.6rem,4.6vw,4.4rem)] leading-[1.02] tracking-[-0.04em] font-extrabold"
             >
-              Ver cómo funciona
-            </a>
+              Tecnología para devolver
+              <br />
+              <span className="text-[#41C086]">movimiento.</span>
+            </motion.h1>
+
+            <motion.p
+              variants={fadeUp}
+              className="max-w-115 text-[17px] leading-7 text-white/55"
+            >
+              Diseñá prótesis caninas personalizadas desde un formulario simple,
+              generá el modelo 3D al instante y encontrá dónde imprimirlo.
+            </motion.p>
+
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3">
+              <Link
+                href="/login"
+                className="group flex items-center justify-center gap-2 rounded-full bg-[#41C086] text-[#0B0F0D] px-7 py-3.5 text-sm font-semibold transition hover:bg-white"
+              >
+                Crear mi prótesis
+                <ArrowRight size={15} className="transition group-hover:translate-x-1" />
+              </Link>
+
+              <a
+                href="#como-funciona"
+                className="flex items-center justify-center rounded-full border border-white/15 px-7 py-3.5 text-sm font-medium text-white/80 transition hover:border-white/40 hover:text-white"
+              >
+                Ver cómo funciona
+              </a>
+            </motion.div>
+
+            <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-x-8 gap-y-3 pt-2">
+              {[
+                { label: "Personalizadas", icon: FaHeart },
+                { label: "Precisas", icon: ImTarget },
+                { label: "Accesibles", icon: FiDollarSign },
+              ].map((item) => (
+                <span key={item.label} className="flex items-center gap-2 text-[14px] text-white/50">
+                  <item.icon size={13} className="text-[#41C086]" />
+                  {item.label}
+                </span>
+              ))}
+            </motion.div>
           </motion.div>
 
-          <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-x-8 gap-y-3 pt-2">
-            {[
-              { label: "Personalizadas", icon: FaHeart },
-              { label: "Precisas", icon: ImTarget },
-              { label: "Accesibles", icon: FiDollarSign },
-            ].map((item) => (
-              <span key={item.label} className="flex items-center gap-2 text-[14px] text-white/50">
-                <item.icon size={13} className="text-[#41C086]" />
-                {item.label}
-              </span>
-            ))}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+          >
+            <HeroDogPhoto />
           </motion.div>
-        </motion.div>
+        </div>
       </section>
 
       {/* COMO FUNCIONA */}

@@ -82,12 +82,12 @@ export default function Sidebar({
         <div className="flex flex-col gap-8">
           {/* Logo */}
           <div className="flex items-center justify-between px-2">
-            <div className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <Image src="/logo2.svg" alt="hunda" width={32} height={32} />
               <span className="text-xl font-extrabold tracking-[-0.02em]">
                 hunda<span className="text-[#41C086]">.</span>
               </span>
-            </div>
+            </Link>
 
             <button
               onClick={onClose}

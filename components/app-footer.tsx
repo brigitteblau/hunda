@@ -9,6 +9,9 @@ export default function AppFooter() {
           <Link href="/help" className="hover:text-white/70 transition-colors">
             Ayuda
           </Link>
+          <Link href="/blog" className="hover:text-white/70 transition-colors">
+            Blog
+          </Link>
           <Link href="/terminos" className="hover:text-white/70 transition-colors">
             Términos
           </Link>

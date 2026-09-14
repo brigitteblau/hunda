@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import StepIndicator from "./StepIndicator";
 import InfoPerroPreview from "./infoperro";
@@ -38,13 +38,79 @@ const initialData: ProtesisFormData = {
   },
 };
 
+const STORAGE_KEY = "hunda:nueva-protesis";
+
+interface SavedProgress {
+  step: 1 | 2 | 3;
+  formData: ProtesisFormData;
+}
+
+function loadSavedProgress(): SavedProgress | null {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+
+    const saved = JSON.parse(raw) as {
+      step?: 1 | 2 | 3;
+      formData?: Partial<ProtesisFormData>;
+    };
+
+    if (!saved.step || saved.step < 1 || saved.step > 3) return null;
+
+    return {
+      step: saved.step,
+      formData: {
+        dogInfo: { ...initialData.dogInfo, ...saved.formData?.dogInfo },
+        limb: { ...initialData.limb, ...saved.formData?.limb },
+      },
+    };
+  } catch {
+    return null;
+  }
+}
+
 export default function NuevaProtesisPage() {
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
-  const [formData, setFormData] = useState<ProtesisFormData>(initialData);
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(() => loadSavedProgress()?.step ?? 1);
+  const [formData, setFormData] = useState<ProtesisFormData>(
+    () => loadSavedProgress()?.formData ?? initialData
+  );
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<GenerateResult | null>(null);
   const [usedFallback, setUsedFallback] = useState(false);
   const [genError, setGenError] = useState<string | null>(null);
+
+  // Guarda el progreso en cada cambio, mientras estemos en los pasos del
+  // formulario (el resultado del paso 4 no se persiste), así un refresh
+  // accidental no borra lo que ya cargaste.
+  useEffect(() => {
+    if (step === 4) return;
+
+    try {
+      const { dogName, breed, age, weightKg, size, sex, healthStatus, notes } = formData.dogInfo;
+      sessionStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          step,
+          formData: {
+            dogInfo: { dogName, breed, age, weightKg, size, sex, healthStatus, notes },
+            limb: formData.limb,
+          },
+        })
+      );
+    } catch {
+      // sessionStorage no disponible (modo privado, etc.) - no pasa nada
+    }
+  }, [step, formData]);
+
+  function clearSavedProgress() {
+    try {
+      sessionStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // no-op
+    }
+  }
 
   const handleConfirmarPedido = async () => {
     setError(null);
@@ -91,6 +157,7 @@ export default function NuevaProtesisPage() {
       setUsedFallback(false);
       setGenError(null);
       setStep(4);
+      clearSavedProgress();
     } catch (err) {
       console.error(err);
 
@@ -108,6 +175,7 @@ export default function NuevaProtesisPage() {
       setUsedFallback(true);
       setGenError(err instanceof Error ? err.message : "Error desconocido");
       setStep(4);
+      clearSavedProgress();
     }
   };
 
