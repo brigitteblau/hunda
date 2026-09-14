@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client"; // TODO Maite: confirmar nombre real de esta función
+import { createSupabaseBrowserClient } from "@/lib/supabase/client"; 
 import {
   LayoutDashboard,
   PlusSquare,
