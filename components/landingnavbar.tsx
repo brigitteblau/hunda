@@ -1,25 +1,59 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
+// Los links de sección apuntan a "/#id" (no solo "#id") para que funcionen
+// también desde otras páginas del sitio (blog, contacto, legales), no solo
+// desde la landing.
 const navLinks = [
-  { label: "Inicio", href: "#inicio" },
-  { label: "Cómo funciona", href: "#como-funciona" },
-  { label: "Plataforma", href: "#plataforma" },
-  { label: "FAQ", href: "#impresion-3d" },
+  { label: "Inicio", href: "/#inicio" },
+  { label: "Cómo funciona", href: "/#como-funciona" },
+  { label: "Plataforma", href: "/#plataforma" },
+  { label: "FAQ", href: "/#impresion-3d" },
   { label: "Contacto", href: "/contact" },
 ];
 
+const sectionIds = navLinks
+  .filter((item) => item.href.startsWith("/#"))
+  .map((item) => item.href.slice(2));
+
 export default function LandingNavbar() {
+  const pathname = usePathname();
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("inicio");
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 20);
   });
+
+  useEffect(() => {
+    if (pathname !== "/") return;
+
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => Boolean(el));
+
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (visible) setActiveSection(visible.target.id);
+      },
+      { rootMargin: "-40% 0px -50% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, [pathname]);
 
   return (
     <motion.nav
@@ -38,25 +72,20 @@ export default function LandingNavbar() {
         </Link>
 
         <div className="hidden md:flex items-center gap-1 rounded-full border border-white/10 bg-white/3 px-1.5 py-1.5">
-          {navLinks.map((item) =>
-            item.href.startsWith("/") ? (
+          {navLinks.map((item) => {
+            const isActive = pathname === "/" && item.href === `/#${activeSection}`;
+            return (
               <Link
                 key={item.label}
                 href={item.href}
-                className="rounded-full px-4 py-1.5 text-[13px] text-white/60 transition-colors hover:text-white hover:bg-white/5"
+                className={`rounded-full px-4 py-1.5 text-[13px] transition-colors hover:text-white hover:bg-white/5 ${
+                  isActive ? "text-white bg-white/8" : "text-white/60"
+                }`}
               >
                 {item.label}
               </Link>
-            ) : (
-              <a
-                key={item.label}
-                href={item.href}
-                className="rounded-full px-4 py-1.5 text-[13px] text-white/60 transition-colors hover:text-white hover:bg-white/5"
-              >
-                {item.label}
-              </a>
-            )
-          )}
+            );
+          })}
         </div>
 
         <div className="hidden md:flex items-center gap-3">
@@ -86,27 +115,16 @@ export default function LandingNavbar() {
 
       {mobileOpen && (
         <div className="md:hidden border-t border-white/10 bg-[#0B0F0D] px-6 py-5 flex flex-col gap-4">
-          {navLinks.map((item) =>
-            item.href.startsWith("/") ? (
-              <Link
-                key={item.label}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className="text-sm text-white/70 hover:text-white"
-              >
-                {item.label}
-              </Link>
-            ) : (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className="text-sm text-white/70 hover:text-white"
-              >
-                {item.label}
-              </a>
-            )
-          )}
+          {navLinks.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              onClick={() => setMobileOpen(false)}
+              className="text-sm text-white/70 hover:text-white"
+            >
+              {item.label}
+            </Link>
+          ))}
           <div className="flex flex-col gap-3 pt-2 border-t border-white/10">
             <Link
               href="/login"

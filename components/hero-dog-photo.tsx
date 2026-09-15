@@ -25,7 +25,7 @@ export default function HeroDogPhoto() {
           src={HERO_IMAGE_SRC}
           alt="Perro corriendo felizmente con su prótesis hunda."
           onError={() => setFailed(true)}
-          className="relative h-full w-full object-cover"
+          className="animate-kenburns relative h-full w-full object-cover"
         />
       ) : (
         <div className="relative flex h-full w-full flex-col items-center justify-center gap-3 text-center px-8">
@@ -36,7 +36,7 @@ export default function HeroDogPhoto() {
         </div>
       )}
 
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
 
       <div className="absolute bottom-6 left-6 flex items-center gap-2">
         <span

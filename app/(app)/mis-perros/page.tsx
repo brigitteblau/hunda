@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { PawPrint, Plus, MoreVertical } from "lucide-react";
 import Image from "next/image";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 interface Perro {
-    id: string;
-    nombre: string;
-    raza: string;
-    fotoUrl: string | null;
-    protesisAsociada: string | null;
+  id: string;
+  nombre: string;
+  raza: string | null;
+  fotoUrl: string | null;
+  protesisAsociada: string | null;
 }
 
 const estadoBadge = (protesis: string | null) =>
@@ -16,12 +17,26 @@ const estadoBadge = (protesis: string | null) =>
     : "rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-white/40";
 
 export default async function MisPerrosPage() {
-  // TODO: reemplazar por fetch real cuando esté la tabla de perros
-  // const { data: perros } = await supabase
-  //   .from("perros")
-  //   .select("id, nombre, raza, foto_url, protesis_asociada")
-  //   .eq("user_id", user?.id);
-  const perros: Perro[] = [];
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { data } = user
+    ? await supabase
+        .from("perros")
+        .select("id, nombre, raza, foto_url, protesis_generada")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+    : { data: null };
+
+  const perros: Perro[] = (data ?? []).map((row) => ({
+    id: row.id,
+    nombre: row.nombre,
+    raza: row.raza,
+    fotoUrl: row.foto_url,
+    protesisAsociada: row.protesis_generada ? "Prótesis lista" : null,
+  }));
 
   return (
     <div className="flex flex-col gap-8 p-4 sm:p-6 lg:p-12">
@@ -90,7 +105,7 @@ export default async function MisPerrosPage() {
                 )}
                 <div className="flex flex-col gap-1">
                   <span className="font-medium text-white">{perro.nombre}</span>
-                  <span className="text-sm text-white/45">{perro.raza}</span>
+                  <span className="text-sm text-white/45">{perro.raza || "Raza sin especificar"}</span>
                 </div>
               </div>
 

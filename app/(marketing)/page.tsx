@@ -10,6 +10,8 @@ import { MdLocalPrintshop } from "react-icons/md";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FiDollarSign } from "react-icons/fi";
 import HeroDogPhoto from "@/components/hero-dog-photo";
+import ShaderBackground from "@/components/shader-background";
+import BackToTop from "@/components/back-to-top";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -69,7 +71,13 @@ const printingCards = [
 
 export default function LandingPage() {
   return (
-    <main className="w-full min-h-screen bg-[#0B0F0D] text-white font-sans overflow-hidden">
+    <main className="relative w-full min-h-screen bg-[#0B0F0D] text-white font-sans overflow-hidden">
+      <div className="fixed inset-0 z-0 opacity-70">
+        <ShaderBackground />
+      </div>
+      <div className="pointer-events-none fixed inset-0 z-0 bg-linear-to-b from-[#0B0F0D]/40 via-[#0B0F0D]/70 to-[#0B0F0D]" />
+
+      <div className="relative z-10">
       <LandingNavbar />
 
       {/* Inicio */}
@@ -156,7 +164,7 @@ export default function LandingPage() {
       </section>
 
       {/* COMO FUNCIONA */}
-      <section id="como-funciona" className="px-5 sm:px-8 lg:px-16 py-28 sm:py-36 border-t border-white/5">
+      <section id="como-funciona" className="scroll-mt-20 px-5 sm:px-8 lg:px-16 py-28 sm:py-36 border-t border-white/5">
         <div className="max-w-6xl mx-auto">
           <motion.div
             variants={fadeUp}
@@ -205,7 +213,7 @@ export default function LandingPage() {
       </section>
 
       {/* PLATAFORMA */}
-      <section id="plataforma" className="px-5 sm:px-8 lg:px-16 py-28 sm:py-36 border-t border-white/5">
+      <section id="plataforma" className="scroll-mt-20 px-5 sm:px-8 lg:px-16 py-28 sm:py-36 border-t border-white/5">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           <motion.div
             variants={fadeUp}
@@ -271,7 +279,7 @@ export default function LandingPage() {
       </section>
 
       {/* IMPRESIÓN 3D */}
-      <section id="impresion-3d" className="px-5 sm:px-8 lg:px-16 py-20 sm:py-28 border-t border-white/5">
+      <section id="impresion-3d" className="scroll-mt-20 px-5 sm:px-8 lg:px-16 py-20 sm:py-28 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <motion.div
             variants={fadeUp}
@@ -391,6 +399,9 @@ export default function LandingPage() {
           </motion.div>
         </div>
       </section>
+
+      <BackToTop />
+      </div>
     </main>
   );
 }

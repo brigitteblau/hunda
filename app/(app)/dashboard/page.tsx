@@ -17,7 +17,6 @@ interface ActividadItem {
   fecha: string;
 }
 
-// TODO: reemplazar por fetch real a Supabase cuando tengan las tablas listas
 const impresionesPendientes: ImpresionPendiente[] = [];
 
 const actividadReciente: ActividadItem[] = [];
@@ -39,10 +38,17 @@ export default async function DashboardPage() {
   user?.email?.split("@")[0] ??
   "Usuario";
 
+  const { data: perros } = user
+    ? await supabase.from("perros").select("protesis_generada").eq("user_id", user.id)
+    : { data: null };
+
+  const mascotasRegistradas = perros?.length ?? 0;
+  const protesisEntregadas = perros?.filter((p) => p.protesis_generada).length ?? 0;
+
   const stats = [
-  { label: "Mascotas registradas", value: 0 },
+  { label: "Mascotas registradas", value: mascotasRegistradas },
   { label: "Impresiones en curso", value: impresionesPendientes.length },
-  { label: "Prótesis entregadas", value: 0 },
+  { label: "Prótesis entregadas", value: protesisEntregadas },
 ];
 
   return (

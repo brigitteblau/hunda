@@ -8,6 +8,7 @@ import Paso1InfoPerro from "./paso1";
 import Paso2MiembroAfectado from "./paso2";
 import Paso3Confirmar from "./paso3";
 import ResultadoPaso from "./resultado";
+import SnakeLoader from "@/components/snake-loader";
 import type { ProtesisFormData } from "./types";
 import {
   createProsthesisRequest,
@@ -80,6 +81,7 @@ export default function NuevaProtesisPage() {
   const [result, setResult] = useState<GenerateResult | null>(null);
   const [usedFallback, setUsedFallback] = useState(false);
   const [genError, setGenError] = useState<string | null>(null);
+  const [generating, setGenerating] = useState(false);
 
   // Guarda el progreso en cada cambio, mientras estemos en los pasos del
   // formulario (el resultado del paso 4 no se persiste), así un refresh
@@ -112,6 +114,28 @@ export default function NuevaProtesisPage() {
     }
   }
 
+  async function saveDog(
+    supabase: ReturnType<typeof createSupabaseBrowserClient>,
+    userId: string,
+    dogInfo: ProtesisFormData["dogInfo"],
+    extra: { requestId?: string; protesisGenerada: boolean; downloadUrl?: string }
+  ) {
+    try {
+      await supabase.from("perros").insert({
+        user_id: userId,
+        nombre: dogInfo.dogName,
+        raza: dogInfo.breed || null,
+        peso_kg: Number(dogInfo.weightKg) || null,
+        request_id: extra.requestId ?? null,
+        protesis_generada: extra.protesisGenerada,
+        protesis_download_url: extra.downloadUrl ?? null,
+      });
+    } catch (err) {
+      // Guardar el perro es un plus, no debería tumbar el flujo de generación.
+      console.error("No se pudo guardar el perro:", err);
+    }
+  }
+
   const handleConfirmarPedido = async () => {
     setError(null);
 
@@ -137,6 +161,8 @@ export default function NuevaProtesisPage() {
       return;
     }
 
+    setGenerating(true);
+    let requestId: string | undefined;
     try {
       const { request_id } = await createProsthesisRequest({
         user_id: user.id,
@@ -150,6 +176,7 @@ export default function NuevaProtesisPage() {
         proximal_circumference_cm: Number(limb.proximalCircumferenceCm),
         distal_circumference_cm: Number(limb.distalCircumferenceCm),
       });
+      requestId = request_id;
 
       const generated = await generateProsthesis(request_id);
 
@@ -158,6 +185,12 @@ export default function NuevaProtesisPage() {
       setGenError(null);
       setStep(4);
       clearSavedProgress();
+
+      await saveDog(supabase, user.id, dogInfo, {
+        requestId: request_id,
+        protesisGenerada: true,
+        downloadUrl: generated.download_url,
+      });
     } catch (err) {
       console.error(err);
 
@@ -176,6 +209,13 @@ export default function NuevaProtesisPage() {
       setGenError(err instanceof Error ? err.message : "Error desconocido");
       setStep(4);
       clearSavedProgress();
+
+      await saveDog(supabase, user.id, dogInfo, {
+        requestId,
+        protesisGenerada: false,
+      });
+    } finally {
+      setGenerating(false);
     }
   };
 
@@ -187,6 +227,8 @@ export default function NuevaProtesisPage() {
           {step === 4 ? "Tu prótesis está lista." : "Creá tu prótesis en 3 simples pasos!"}
         </p>
       </div>
+
+      {generating && <SnakeLoader />}
 
       <StepIndicator currentStep={step} />
 
