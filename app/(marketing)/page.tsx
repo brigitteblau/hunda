@@ -1,184 +1,275 @@
 "use client";
+
 import LandingNavbar from "@/components/landingnavbar";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Check, ArrowRight } from "lucide-react";
-import { FaRuler, FaHeart } from "react-icons/fa";
+import {
+  ArrowRight,
+  Check,
+  Heart,
+  MapPin,
+  Sparkles,
+} from "lucide-react";
+import { FaRuler } from "react-icons/fa";
 import { ImTarget } from "react-icons/im";
-import { IoCubeOutline } from "react-icons/io5";
+import { IoCubeOutline, IoSettingsOutline } from "react-icons/io5";
 import { MdLocalPrintshop } from "react-icons/md";
-import { IoSettingsOutline } from "react-icons/io5";
 import { FiDollarSign } from "react-icons/fi";
-import HeroDogPhoto from "@/components/hero-dog-photo";
-import ShaderBackground from "@/components/shader-background";
 import BackToTop from "@/components/back-to-top";
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0 },
 };
 
 const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.1 } },
+  visible: {
+    transition: { staggerChildren: 0.09 },
+  },
 };
 
 const steps = [
   {
     num: "01",
     title: "Medí",
-    desc: "Cargá las medidas del muñón de tu perro en un formulario guiado, paso a paso.",
+    desc: "Cargá las medidas necesarias en un formulario guiado, pensado para acompañarte paso a paso.",
     icon: FaRuler,
   },
   {
     num: "02",
     title: "Generá",
-    desc: "Nuestro motor calcula la geometría del socket y arma el modelo 3D al instante.",
+    desc: "La plataforma utiliza los datos cargados para adaptar un modelo 3D parametrizado al caso.",
     icon: IoCubeOutline,
   },
   {
     num: "03",
     title: "Imprimí",
-    desc: "Descargá el STL y llevalo a uno de los puntos de impresión 3D aliados.",
+    desc: "Obtené el archivo STL y encontrá un punto de impresión 3D para llevar el modelo al mundo físico.",
     icon: MdLocalPrintshop,
   },
 ];
 
 const features = [
-  "Generación automática del modelo 3D",
+  "Generación de modelos 3D parametrizados",
   "Historial de casos por mascota",
-  "Mapa de puntos de impresión aliados",
+  "Información organizada en un solo lugar",
   "Descarga directa en formato STL",
 ];
 
-const printingCards = [
+const values = [
   {
     title: "Personalizada",
-    sub: "Cada prótesis se adapta a la anatomía y necesidad puntual del perro.",
+    sub: "Cada caso parte de las medidas y características particulares de cada perro.",
     icon: IoSettingsOutline,
   },
   {
     title: "Precisa",
-    sub: "El modelo se calcula a partir de medidas reales, listo para imprimir.",
+    sub: "Transformamos datos reales en parámetros para construir un modelo 3D adaptado.",
     icon: ImTarget,
   },
   {
     title: "Accesible",
-    sub: "Buscamos bajar el costo de una prótesis a fracción de lo tradicional.",
+    sub: "Usamos fabricación digital para explorar alternativas más simples y accesibles.",
     icon: FiDollarSign,
   },
 ];
 
 export default function LandingPage() {
   return (
-    <main className="relative w-full min-h-screen bg-[#0B0F0D] text-white font-sans overflow-hidden">
-      <div className="fixed inset-0 z-0 opacity-70">
-        <ShaderBackground />
+    <main className="relative min-h-screen overflow-hidden bg-[#0B0F0D] font-sans text-white selection:bg-[#41C086] selection:text-[#07100B]">
+
+      {/* NAV */}
+      <div className="absolute left-0 top-0 z-50 w-full">
+        <LandingNavbar />
       </div>
-      <div className="pointer-events-none fixed inset-0 z-0 bg-linear-to-b from-[#0B0F0D]/40 via-[#0B0F0D]/70 to-[#0B0F0D]" />
 
-      <div className="relative z-10">
-      <LandingNavbar />
-
-      {/* Inicio */}
+      {/* =========================================================
+          HERO — FOTO FULL SCREEN
+      ========================================================= */}
       <section
         id="inicio"
-        className="relative min-h-[calc(100vh-64px)] flex items-center px-6 lg:px-16 pt-24 pb-16"
+        className="relative h-[100svh] min-h-[720px] w-full overflow-hidden"
       >
-        <div
-          className="pointer-events-none absolute top-1/2 left-1/4 h-[560px] w-175 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.1] blur-[120px]"
-          style={{ background: "radial-gradient(circle, #41C086, transparent 70%)" }}
+        {/* FOTO — OCUPA ABSOLUTAMENTE TODO */}
+        <img
+          src="/hero-dog.jpg"
+          alt="Perro con prótesis Hunda"
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
 
-        <div className="relative grid lg:grid-cols-[1.05fr_0.95fr] gap-14 lg:gap-10 items-center w-full max-w-7xl mx-auto">
+        {/* OSCURECIMIENTO GENERAL MUY SUAVE */}
+        <div className="pointer-events-none absolute inset-0 bg-black/15" />
+
+        {/* DEGRADADO IZQUIERDO PARA EL TEXTO */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#07100B]/95 via-[#07100B]/65 via-45% to-transparent" />
+
+        {/* DEGRADADO INFERIOR */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0B0F0D]/85 via-transparent to-black/20" />
+
+        {/* GLOW VERDE */}
+        <div
+          className="pointer-events-none absolute -left-40 top-[25%] h-[650px] w-[650px] rounded-full opacity-[0.10] blur-[140px]"
+          style={{
+            background:
+              "radial-gradient(circle, #41C086 0%, transparent 68%)",
+          }}
+        />
+
+        {/* CONTENIDO SOBRE LA FOTO */}
+        <div className="relative z-10 mx-auto flex h-full w-full max-w-[1440px] items-center px-6 pt-20 sm:px-10 lg:px-16 xl:px-20">
           <motion.div
             variants={stagger}
             initial="hidden"
             animate="visible"
-            className="flex flex-col gap-10"
+            className="max-w-[830px]"
           >
-            <motion.span
+            <motion.div
               variants={fadeUp}
-              className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/3 px-3.5 py-1.5 text-xs text-white/60"
+              transition={{ duration: 0.5 }}
+              className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-black/20 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.18em] text-white/80 backdrop-blur-md"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-[#41C086]" />
-              Hecho en Uruguay, para perros de todo el mundo
-            </motion.span>
+              Tecnología desarrollada en Argentina
+            </motion.div>
 
             <motion.h1
               variants={fadeUp}
-              className="text-[clamp(2.6rem,4.6vw,4.4rem)] leading-[1.02] tracking-[-0.04em] font-extrabold"
+              transition={{ duration: 0.65 }}
+              className="text-[clamp(3.6rem,7vw,7.2rem)] font-extrabold leading-[0.9] tracking-[-0.065em]"
             >
-              Tecnología para devolver
+              Por una vida
               <br />
-              <span className="text-[#41C086]">movimiento.</span>
+              animal{" "}
+              <span className="text-[#41C086]">
+                sin límites.
+              </span>
             </motion.h1>
 
             <motion.p
               variants={fadeUp}
-              className="max-w-115 text-[17px] leading-7 text-white/55"
+              transition={{ duration: 0.6 }}
+              className="mt-8 max-w-[570px] text-[17px] leading-8 text-white/70 sm:text-[19px]"
             >
-              Diseñá prótesis caninas personalizadas desde un formulario simple,
-              generá el modelo 3D al instante y encontrá dónde imprimirlo.
+              Tecnología y diseño 3D para crear soluciones personalizadas
+              pensadas alrededor de cada animal.
             </motion.p>
 
-            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3">
+            <motion.div
+              variants={fadeUp}
+              transition={{ duration: 0.6 }}
+              className="mt-9 flex flex-col gap-3 sm:flex-row"
+            >
               <Link
                 href="/login"
-                className="group flex items-center justify-center gap-2 rounded-full bg-[#41C086] text-[#0B0F0D] px-7 py-3.5 text-sm font-semibold transition hover:bg-white"
+                className="group inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-full bg-[#41C086] px-8 text-sm font-semibold text-[#07100B] transition-all duration-300 hover:bg-white"
               >
-                Crear mi prótesis
-                <ArrowRight size={15} className="transition group-hover:translate-x-1" />
+                Crear un caso
+                <ArrowRight
+                  size={16}
+                  className="transition-transform group-hover:translate-x-1"
+                />
               </Link>
 
               <a
                 href="#como-funciona"
-                className="flex items-center justify-center rounded-full border border-white/15 px-7 py-3.5 text-sm font-medium text-white/80 transition hover:border-white/40 hover:text-white"
+                className="inline-flex min-h-[54px] items-center justify-center rounded-full border border-white/25 bg-black/10 px-8 text-sm font-medium text-white backdrop-blur-md transition hover:bg-white/10"
               >
-                Ver cómo funciona
+                Descubrir Hunda
               </a>
             </motion.div>
 
-            <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-x-8 gap-y-3 pt-2">
-              {[
-                { label: "Personalizadas", icon: FaHeart },
-                { label: "Precisas", icon: ImTarget },
-                { label: "Accesibles", icon: FiDollarSign },
-              ].map((item) => (
-                <span key={item.label} className="flex items-center gap-2 text-[14px] text-white/50">
-                  <item.icon size={13} className="text-[#41C086]" />
-                  {item.label}
-                </span>
-              ))}
+            <motion.div
+              variants={fadeUp}
+              transition={{ duration: 0.6 }}
+              className="mt-10 flex flex-wrap gap-x-7 gap-y-3 border-t border-white/15 pt-6 text-[13px] text-white/60"
+            >
+              <span className="flex items-center gap-2">
+                <Sparkles size={14} className="text-[#41C086]" />
+                Diseño parametrizado
+              </span>
+
+              <span className="flex items-center gap-2">
+                <IoCubeOutline size={15} className="text-[#41C086]" />
+                Tecnología 3D
+              </span>
+
+              <span className="flex items-center gap-2">
+                <Heart size={14} className="text-[#41C086]" />
+                Bienestar animal
+              </span>
             </motion.div>
           </motion.div>
+        </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.97 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-          >
-            <HeroDogPhoto />
-          </motion.div>
+        {/* SCROLL */}
+        <div className="absolute bottom-8 right-8 z-20 hidden items-center gap-3 lg:flex">
+          <span className="text-[10px] uppercase tracking-[0.22em] text-white/45">
+            Descubrí Hunda
+          </span>
+          <div className="h-[1px] w-12 bg-white/30" />
         </div>
       </section>
 
-      {/* COMO FUNCIONA */}
-      <section id="como-funciona" className="scroll-mt-20 px-5 sm:px-8 lg:px-16 py-28 sm:py-36 border-t border-white/5">
-        <div className="max-w-6xl mx-auto">
+      {/* =========================================================
+          INTRO
+      ========================================================= */}
+      <section className="relative border-t border-white/[0.06] px-5 py-28 sm:px-8 sm:py-36 lg:px-16 lg:py-44">
+        <div
+          className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[800px] -translate-x-1/2 opacity-[0.07] blur-[130px]"
+          style={{
+            background:
+              "radial-gradient(circle, #41C086 0%, transparent 65%)",
+          }}
+        />
+
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{ duration: 0.7 }}
+          className="relative mx-auto max-w-5xl text-center"
+        >
+          <p className="mb-6 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#41C086]">
+            Tecnología con propósito
+          </p>
+
+          <h2 className="text-[clamp(2.3rem,5vw,4.8rem)] font-bold leading-[1.02] tracking-[-0.05em]">
+            Cuando tecnología, diseño y amor por los animales
+            <span className="text-white/35"> trabajan juntos.</span>
+          </h2>
+
+          <p className="mx-auto mt-8 max-w-2xl text-[16px] leading-8 text-white/50 sm:text-[18px]">
+            Hunda conecta herramientas digitales, modelado 3D y fabricación
+            para simplificar el proceso de creación de soluciones
+            personalizadas para perros.
+          </p>
+        </motion.div>
+      </section>
+
+      {/* =========================================================
+          CÓMO FUNCIONA
+      ========================================================= */}
+      <section
+        id="como-funciona"
+        className="scroll-mt-20 border-t border-white/[0.06] px-5 py-24 sm:px-8 sm:py-32 lg:px-16 lg:py-36"
+      >
+        <div className="mx-auto max-w-7xl">
           <motion.div
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.6 }}
+            viewport={{ once: true, amount: 0.3 }}
             className="mb-20"
           >
-            <p className="text-[11px] uppercase tracking-[0.3em] text-white/35 mb-4">
+            <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#41C086]">
               Cómo funciona
             </p>
-            <h2 className="text-[clamp(2rem,3.6vw,3rem)] leading-tight tracking-[-0.03em] font-extrabold max-w-lg">
-              Un proceso simple, en tres pasos.
+
+            <h2 className="text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-none tracking-[-0.05em]">
+              De las medidas
+              <span className="block text-white/35">al modelo 3D.</span>
             </h2>
           </motion.div>
 
@@ -186,23 +277,31 @@ export default function LandingPage() {
             variants={stagger}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            className="grid md:grid-cols-3"
+            viewport={{ once: true, amount: 0.15 }}
+            className="grid gap-px overflow-hidden rounded-[28px] border border-white/[0.08] bg-white/[0.08] md:grid-cols-3"
           >
-            {steps.map((step, i) => (
+            {steps.map((step) => (
               <motion.article
                 key={step.num}
                 variants={fadeUp}
-                transition={{ duration: 0.5 }}
-                className={`flex flex-col gap-6 py-8 md:py-2 px-0 md:px-8 border-t md:border-t-0 md:border-l border-white/10 ${
-                  i === 0 ? "md:border-l-0 md:pl-0" : ""
-                }`}
+                className="group relative min-h-[340px] bg-[#0D1210] p-9 transition hover:bg-[#101713]"
               >
-                <span className="text-sm font-mono text-[#41C086]">{step.num}</span>
-                <step.icon size={22} className="text-white/70" />
-                <div>
-                  <h3 className="text-xl font-bold tracking-[-0.01em]">{step.title}</h3>
-                  <p className="mt-2 text-[14.5px] leading-6 text-white/50 max-w-[240px]">
+                <div className="flex items-start justify-between">
+                  <span className="font-mono text-xs tracking-[0.15em] text-[#41C086]">
+                    {step.num}
+                  </span>
+
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white/70 group-hover:text-[#41C086]">
+                    <step.icon size={18} />
+                  </div>
+                </div>
+
+                <div className="absolute bottom-9 left-9 right-9">
+                  <h3 className="text-2xl font-bold tracking-[-0.03em]">
+                    {step.title}
+                  </h3>
+
+                  <p className="mt-4 text-sm leading-6 text-white/45">
                     {step.desc}
                   </p>
                 </div>
@@ -212,46 +311,56 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* PLATAFORMA */}
-      <section id="plataforma" className="scroll-mt-20 px-5 sm:px-8 lg:px-16 py-28 sm:py-36 border-t border-white/5">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      {/* =========================================================
+          PLATAFORMA
+      ========================================================= */}
+      <section
+        id="plataforma"
+        className="border-t border-white/[0.06] px-5 py-28 sm:px-8 sm:py-36 lg:px-16 lg:py-40"
+      >
+        <div className="mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[0.85fr_1.15fr] lg:gap-24">
           <motion.div
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
           >
-            <p className="text-xs uppercase tracking-[0.28em] text-white/35 mb-4">
+            <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#41C086]">
               La plataforma
             </p>
 
-            <h2 className="text-[clamp(2rem,4.6vw,4rem)] leading-[1.05] tracking-[-0.04em] font-extrabold pb-10">
-              Controlá todo desde un único lugar.
+            <h2 className="text-[clamp(2.5rem,4.5vw,4rem)] font-bold leading-none tracking-[-0.05em]">
+              Todo el proceso.
+              <span className="block text-white/35">
+                En un solo lugar.
+              </span>
             </h2>
 
-            <p className="text-base sm:text-lg leading-8 text-white/55 max-w-lg pb-10">
-              Diseñá, guardá y hacé seguimiento de todas las prótesis desde tu
-              dashboard personal.
+            <p className="mt-7 max-w-md text-base leading-8 text-white/50">
+              Creá casos, cargá información y mantené organizados los modelos
+              de cada mascota desde un único espacio digital.
             </p>
 
-            <div className="flex flex-col gap-3.5 pb-12">
+            <div className="mt-9 flex flex-col gap-4">
               {features.map((item) => (
-                <div key={item} className="flex items-center gap-3">
-                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#41C086]/15">
-                    <Check size={11} className="text-[#41C086]" />
+                <div
+                  key={item}
+                  className="flex items-center gap-3 text-sm text-white/70"
+                >
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#41C086]/10">
+                    <Check size={12} className="text-[#41C086]" />
                   </span>
-                  <span className="text-sm sm:text-base text-white/70">{item}</span>
+                  {item}
                 </div>
               ))}
             </div>
 
             <Link
               href="/login"
-              className="group inline-flex items-center gap-2 rounded-full bg-white text-[#0B0F0D] px-7 py-3.5 text-sm font-semibold transition hover:bg-[#41C086]"
+              className="group mt-10 inline-flex min-h-[50px] items-center gap-2 rounded-full bg-white px-7 text-sm font-semibold text-[#0B0F0D] hover:bg-[#41C086]"
             >
-              Ir a la plataforma
-              <ArrowRight size={15} className="transition group-hover:translate-x-1" />
+              Explorar la plataforma
+              <ArrowRight size={15} />
             </Link>
           </motion.div>
 
@@ -259,149 +368,157 @@ export default function LandingPage() {
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6 }}
-            className="rounded-[2rem] bg-white/3 border border-white/10 p-4 sm:p-5"
+            viewport={{ once: true }}
+            className="overflow-hidden rounded-[30px] border border-white/10 bg-[#101713] p-2"
           >
-            <div
-              className="rounded-[1.5rem] aspect-[16/11] flex items-center justify-center p-5 sm:p-7"
-              style={{
-                backgroundImage:
-                  "linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)",
-                backgroundSize: "28px 28px",
-                backgroundColor: "#0d130f",
-              }}
-            >
-              <p className="text-sm text-white/25 text-center">Preview del dashboard</p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* IMPRESIÓN 3D */}
-      <section id="impresion-3d" className="scroll-mt-20 px-5 sm:px-8 lg:px-16 py-20 sm:py-28 border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.6 }}
-            className="mb-16"
-          >
-            <p className="text-[11px] uppercase tracking-[0.3em] text-white/35 mb-4">
-              Fabricación 3D
-            </p>
-            <h2 className="text-[clamp(2rem,3.6vw,3rem)] leading-tight tracking-[-0.03em] font-extrabold max-w-lg">
-              Impresión 3D al servicio del bienestar.
-            </h2>
-          </motion.div>
-
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.25 }}
-            className="grid md:grid-cols-3 gap-6"
-          >
-            {printingCards.map((card) => (
-              <motion.article
-                key={card.title}
-                variants={fadeUp}
-                transition={{ duration: 0.5 }}
-                className="group rounded-[1.6rem] border border-white/10 bg-white/3 px-8 pt-9 pb-10 flex flex-col gap-6 transition hover:border-[#41C086]/40"
-              >
-                <card.icon size={22} className="text-[#41C086]" />
-                <div>
-                  <h3 className="text-xl tracking-[-0.02em] font-bold mb-2">{card.title}</h3>
-                  <p className="text-sm leading-6 text-white/50">{card.sub}</p>
-                </div>
-              </motion.article>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* SOBRE NOSOTROS */}
-      <section className="px-5 sm:px-8 lg:px-16 py-20 sm:py-28 border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6 }}
-            className="mb-20 max-w-2xl"
-          >
-            <p className="text-[11px] uppercase tracking-[0.3em] text-white/35 mb-4">
-              Sobre nosotros
-            </p>
-
-            <h2 className="text-[clamp(2rem,3.6vw,3rem)] leading-tight tracking-[-0.03em] font-extrabold pb-8">
-              Somos <span className="text-[#41C086]">Benja, Brigitte y Maite.</span>
-            </h2>
-
-            <p className="text-base leading-8 text-white/55 pb-8">
-              Estudiantes de ORT TIC apasionados por la tecnología, el diseño
-              y el bienestar animal. hunda. nació como proyecto de fin de
-              carrera con la idea de acercar la impresión 3D a algo que
-              realmente cambia la vida de un perro.
-            </p>
-
-            <a
-              href="/contact"
-              className="inline-flex items-center rounded-full border border-white/15 px-7 py-3.5 text-sm font-medium text-white/80 transition hover:border-[#41C086]/50 hover:text-white"
-            >
-              Conocé más sobre nosotros
-            </a>
-          </motion.div>
-
-          {/* CTA */}
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6 }}
-            className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/3 px-6 sm:px-10 py-10 sm:py-12 flex flex-col lg:flex-row gap-8 lg:items-center lg:justify-between"
-          >
-            <div
-              className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full opacity-20 blur-[100px]"
-              style={{ background: "radial-gradient(circle, #41C086, transparent 70%)" }}
-            />
-
-            <div className="relative">
-              <h3 className="text-[clamp(1.9rem,3.6vw,3.2rem)] leading-none tracking-[-0.04em] font-extrabold">
-                ¿Listo para <span className="text-[#41C086]">comenzar?</span>
-              </h3>
-
-              <p className="mt-4 max-w-xl text-sm sm:text-base leading-7 text-white/55">
-                Creá tu cuenta gratis y empezá a diseñar la prótesis que tu
-                perro necesita.
-              </p>
-            </div>
-
-            <div className="relative flex flex-col gap-4 items-center sm:items-start shrink-0">
-              <Link
-                href="/login"
-                className="w-full sm:w-auto min-w-[160px] flex items-center justify-center bg-[#41C086] text-[#0B0F0D] rounded-full px-8 py-3.5 text-sm font-semibold whitespace-nowrap transition hover:bg-white"
-              >
-                Crear cuenta
-              </Link>
-
-              <span className="text-sm text-white/45 whitespace-nowrap">
-                ¿Ya tenés cuenta?{" "}
-                <Link href="/login" className="text-[#41C086] underline underline-offset-4 hover:text-white transition">
-                  Iniciá sesión
-                </Link>
+            <div className="flex items-center gap-2 border-b border-white/[0.07] px-5 py-4">
+              <span className="h-2 w-2 rounded-full bg-white/15" />
+              <span className="h-2 w-2 rounded-full bg-white/15" />
+              <span className="h-2 w-2 rounded-full bg-white/15" />
+              <span className="ml-3 text-[10px] uppercase tracking-[0.18em] text-white/20">
+                Hunda platform
               </span>
             </div>
+
+            <div
+              className="flex aspect-[16/10] items-center justify-center"
+              style={{
+                backgroundImage:
+                  "linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)",
+                backgroundSize: "32px 32px",
+              }}
+            >
+              <div className="text-center">
+                <IoCubeOutline
+                  size={38}
+                  className="mx-auto mb-4 text-[#41C086]"
+                />
+                <p className="text-sm text-white/45">
+                  Dashboard Hunda
+                </p>
+              </div>
+            </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          VALORES
+      ========================================================= */}
+      <section
+        id="impresion-3d"
+        className="border-t border-white/[0.06] px-5 py-28 sm:px-8 lg:px-16 lg:py-36"
+      >
+        <div className="mx-auto max-w-7xl">
+          <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#41C086]">
+            Diseño + fabricación digital
+          </p>
+
+          <h2 className="max-w-4xl text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-none tracking-[-0.05em]">
+            Tecnología pensada
+            <span className="block text-white/35">
+              alrededor de cada animal.
+            </span>
+          </h2>
+
+          <div className="mt-20 grid gap-5 md:grid-cols-3">
+            {values.map((card) => (
+              <article
+                key={card.title}
+                className="rounded-[26px] border border-white/[0.08] bg-white/[0.025] p-9"
+              >
+                <div className="mb-16 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#41C086]/10 text-[#41C086]">
+                  <card.icon size={20} />
+                </div>
+
+                <h3 className="text-[22px] font-bold">
+                  {card.title}
+                </h3>
+
+                <p className="mt-3 text-sm leading-6 text-white/45">
+                  {card.sub}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          SOBRE NOSOTROS
+      ========================================================= */}
+      <section className="border-t border-white/[0.06] px-5 py-28 sm:px-8 lg:px-16 lg:py-40">
+        <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-2 lg:gap-24">
+          <div>
+            <div className="mb-6 flex items-center gap-2 text-[#41C086]">
+              <MapPin size={15} />
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em]">
+                Buenos Aires · Argentina
+              </span>
+            </div>
+
+            <h2 className="text-[clamp(2.5rem,5vw,4.7rem)] font-bold leading-none tracking-[-0.05em]">
+              Hunda nació de una
+              <span className="block text-white/35">
+                pregunta simple.
+              </span>
+            </h2>
+          </div>
+
+          <div>
+            <p className="text-[21px] font-medium leading-9 text-white/80">
+              ¿Cómo podemos usar la tecnología que aprendemos para mejorar la
+              vida de un animal?
+            </p>
+
+            <p className="mt-7 text-[15px] leading-7 text-white/45">
+              Somos Benja, Brigitte y Maite, estudiantes de ORT TIC. Hunda
+              nació como nuestro proyecto de fin de carrera, combinando
+              tecnología, diseño, modelado 3D y bienestar animal.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          CTA
+      ========================================================= */}
+      <section className="px-5 pb-12 sm:px-8 lg:px-16">
+        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[32px] border border-[#41C086]/20 bg-[#101A14] px-7 py-20 sm:px-12 lg:px-16 lg:py-24">
+          <div
+            className="absolute -right-40 -top-40 h-[600px] w-[600px] opacity-[0.15] blur-[120px]"
+            style={{
+              background:
+                "radial-gradient(circle, #41C086, transparent 65%)",
+            }}
+          />
+
+          <div className="relative flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#41C086]">
+                Hunda
+              </p>
+
+              <h2 className="text-[clamp(2.8rem,6vw,5.8rem)] font-extrabold leading-[0.92] tracking-[-0.06em]">
+                Por una vida animal
+                <span className="block text-[#41C086]">
+                  sin límites.
+                </span>
+              </h2>
+            </div>
+
+            <Link
+              href="/login"
+              className="group inline-flex min-h-[54px] items-center justify-center gap-2 rounded-full bg-[#41C086] px-8 text-sm font-semibold text-[#07100B] hover:bg-white"
+            >
+              Crear mi cuenta
+              <ArrowRight size={15} />
+            </Link>
+          </div>
         </div>
       </section>
 
       <BackToTop />
-      </div>
     </main>
   );
 }

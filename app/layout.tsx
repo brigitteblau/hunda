@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "hunda.",
+  title: "hunda",
   description: "Prótesis caninas personalizadas, diseñadas e impresas en 3D.",
 };
 
