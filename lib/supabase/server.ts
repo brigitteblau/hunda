@@ -2,10 +2,23 @@ import { cookies } from "next/headers";
 
 import { createServerClient } from "@supabase/ssr";
 
+function readSupabaseEnv() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+
+  if (!url || !key) {
+    throw new Error(
+      "Faltan NEXT_PUBLIC_SUPABASE_URL y/o NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY. " +
+        "Cargalas en .env.local y en las variables de entorno del hosting.",
+    );
+  }
+
+  return { url, key };
+}
+
 export async function createSupabaseServerClient() {
   const cookieStore = await cookies();
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
+  const { url, key } = readSupabaseEnv();
 
   return createServerClient(url, key, {
     auth: {
