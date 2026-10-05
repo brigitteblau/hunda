@@ -6,10 +6,9 @@ import Link from "next/link";
 import {
   ArrowRight,
   Check,
-  Heart,
   MapPin,
-  Sparkles,
 } from "lucide-react";
+import AnimatedLetters from "@/components/animated-letters";
 import { FaRuler } from "react-icons/fa";
 import { ImTarget } from "react-icons/im";
 import { IoCubeOutline, IoSettingsOutline } from "react-icons/io5";
@@ -91,11 +90,11 @@ export default function LandingPage() {
         id="inicio"
         className="relative h-[100svh] min-h-[720px] w-full overflow-hidden"
       >
-        {/* FOTO — OCUPA ABSOLUTAMENTE TODO */}
+        {/* FOTO — OCUPA ABSOLUTAMENTE TODO, CON MOVIMIENTO LENTO */}
         <img
           src="/hero-dog.jpg"
           alt="Perro con prótesis Hunda"
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          className="animate-kenburns absolute inset-0 h-full w-full object-cover object-center"
         />
 
         {/* OSCURECIMIENTO GENERAL MUY SUAVE */}
@@ -124,15 +123,6 @@ export default function LandingPage() {
             animate="visible"
             className="max-w-[830px]"
           >
-            <motion.div
-              variants={fadeUp}
-              transition={{ duration: 0.5 }}
-              className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-black/20 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.18em] text-white/80 backdrop-blur-md"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-[#41C086]" />
-              Tecnología desarrollada en Argentina
-            </motion.div>
-
             <motion.h1
               variants={fadeUp}
               transition={{ duration: 0.65 }}
@@ -149,20 +139,19 @@ export default function LandingPage() {
             <motion.p
               variants={fadeUp}
               transition={{ duration: 0.6 }}
-              className="mt-8 max-w-[570px] text-[17px] leading-8 text-white/70 sm:text-[19px]"
+              className="mt-8 max-w-[480px] text-[17px] leading-8 text-white/70 sm:text-[19px]"
             >
-              Tecnología y diseño 3D para crear soluciones personalizadas
-              pensadas alrededor de cada animal.
+              Prótesis caninas personalizadas, diseñadas en 3D.
             </motion.p>
 
             <motion.div
               variants={fadeUp}
               transition={{ duration: 0.6 }}
-              className="mt-9 flex flex-col gap-3 sm:flex-row"
+              className="mt-12"
             >
               <Link
                 href="/login"
-                className="group inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-full bg-[#41C086] px-8 text-sm font-semibold text-[#07100B] transition-all duration-300 hover:bg-white"
+                className="group inline-flex min-h-[56px] items-center justify-center gap-2.5 rounded-full bg-[#41C086] px-9 text-sm font-semibold text-[#07100B] transition-all duration-300 hover:bg-white"
               >
                 Crear un caso
                 <ArrowRight
@@ -170,34 +159,6 @@ export default function LandingPage() {
                   className="transition-transform group-hover:translate-x-1"
                 />
               </Link>
-
-              <a
-                href="#como-funciona"
-                className="inline-flex min-h-[54px] items-center justify-center rounded-full border border-white/25 bg-black/10 px-8 text-sm font-medium text-white backdrop-blur-md transition hover:bg-white/10"
-              >
-                Descubrir Hunda
-              </a>
-            </motion.div>
-
-            <motion.div
-              variants={fadeUp}
-              transition={{ duration: 0.6 }}
-              className="mt-10 flex flex-wrap gap-x-7 gap-y-3 border-t border-white/15 pt-6 text-[13px] text-white/60"
-            >
-              <span className="flex items-center gap-2">
-                <Sparkles size={14} className="text-[#41C086]" />
-                Diseño parametrizado
-              </span>
-
-              <span className="flex items-center gap-2">
-                <IoCubeOutline size={15} className="text-[#41C086]" />
-                Tecnología 3D
-              </span>
-
-              <span className="flex items-center gap-2">
-                <Heart size={14} className="text-[#41C086]" />
-                Bienestar animal
-              </span>
             </motion.div>
           </motion.div>
         </div>
@@ -235,10 +196,13 @@ export default function LandingPage() {
             Tecnología con propósito
           </p>
 
-          <h2 className="text-[clamp(2.3rem,5vw,4.8rem)] font-bold leading-[1.02] tracking-[-0.05em]">
-            Cuando tecnología, diseño y amor por los animales
-            <span className="text-white/35"> trabajan juntos.</span>
-          </h2>
+          <AnimatedLetters
+            className="text-balance text-[clamp(2.3rem,5vw,4.8rem)] font-bold leading-[1.08] tracking-[-0.05em]"
+            segments={[
+              { text: "Cuando tecnología, diseño y amor por los animales" },
+              { text: "trabajan juntos.", className: "text-white/35" },
+            ]}
+          />
 
           <p className="mx-auto mt-8 max-w-2xl text-[16px] leading-8 text-white/50 sm:text-[18px]">
             Hunda conecta herramientas digitales, modelado 3D y fabricación
@@ -261,7 +225,7 @@ export default function LandingPage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
-            className="mb-20"
+            className="mb-16 text-center sm:mb-20"
           >
             <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#41C086]">
               Cómo funciona

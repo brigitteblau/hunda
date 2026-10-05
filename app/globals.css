@@ -12,11 +12,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-}
-
 body {
   @apply font-sans;
 }
