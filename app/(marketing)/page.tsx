@@ -1,19 +1,9 @@
 "use client";
 
-import LandingNavbar from "@/components/landingnavbar";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Check,
-  MapPin,
-} from "lucide-react";
+import LandingNavbar from "@/components/landingnavbar";
 import AnimatedLetters from "@/components/animated-letters";
-import { FaRuler } from "react-icons/fa";
-import { ImTarget } from "react-icons/im";
-import { IoCubeOutline, IoSettingsOutline } from "react-icons/io5";
-import { MdLocalPrintshop } from "react-icons/md";
-import { FiDollarSign } from "react-icons/fi";
 import BackToTop from "@/components/back-to-top";
 
 const fadeUp = {
@@ -28,456 +18,565 @@ const stagger = {
   },
 };
 
-const steps = [
-  {
-    num: "01",
-    title: "Medí",
-    desc: "Cargá las medidas necesarias en un formulario guiado, pensado para acompañarte paso a paso.",
-    icon: FaRuler,
-  },
-  {
-    num: "02",
-    title: "Generá",
-    desc: "La plataforma utiliza los datos cargados para adaptar un modelo 3D parametrizado al caso.",
-    icon: IoCubeOutline,
-  },
-  {
-    num: "03",
-    title: "Imprimí",
-    desc: "Obtené el archivo STL y encontrá un punto de impresión 3D para llevar el modelo al mundo físico.",
-    icon: MdLocalPrintshop,
-  },
-];
+// Props reutilizables: el elemento aparece con fade + subida al entrar en pantalla
+const inView = {
+  variants: fadeUp,
+  initial: "hidden",
+  whileInView: "visible",
+  viewport: { once: true, amount: 0.25 },
+  transition: { duration: 0.7 },
+};
 
 const features = [
-  "Generación de modelos 3D parametrizados",
-  "Historial de casos por mascota",
-  "Información organizada en un solo lugar",
-  "Descarga directa en formato STL",
-];
-
-const values = [
-  {
-    title: "Personalizada",
-    sub: "Cada caso parte de las medidas y características particulares de cada perro.",
-    icon: IoSettingsOutline,
-  },
-  {
-    title: "Precisa",
-    sub: "Transformamos datos reales en parámetros para construir un modelo 3D adaptado.",
-    icon: ImTarget,
-  },
-  {
-    title: "Accesible",
-    sub: "Usamos fabricación digital para explorar alternativas más simples y accesibles.",
-    icon: FiDollarSign,
-  },
+  "Crear nuevas prótesis",
+  "Gestionar diseños",
+  "Historial y versiones",
+  "Exportar modelos 3D",
 ];
 
 export default function LandingPage() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#0B0F0D] font-sans text-white selection:bg-[#41C086] selection:text-[#07100B]">
-
-      {/* NAV */}
+    <main className="relative min-h-screen overflow-x-hidden bg-[#2d4741] font-sans text-white selection:bg-[#41C086] selection:text-[#07100B]">
+      {/* NAV (el de siempre: links, sesión, menú mobile) */}
       <div className="absolute left-0 top-0 z-50 w-full">
         <LandingNavbar />
       </div>
 
       {/* =========================================================
-          HERO — FOTO FULL SCREEN
+          HERO
       ========================================================= */}
-      <section
-        id="inicio"
-        className="relative h-[100svh] min-h-[720px] w-full overflow-hidden"
-      >
-        {/* FOTO — OCUPA ABSOLUTAMENTE TODO, CON MOVIMIENTO LENTO */}
+      <section id="inicio" className="relative h-171 overflow-hidden">
+        {/* Foto con movimiento lento (kenburns) */}
         <img
-          src="/hero-dog.jpg"
+          src="/landing/hero.jpg"
           alt="Perro con prótesis Hunda"
           className="animate-kenburns absolute inset-0 h-full w-full object-cover object-center"
         />
 
-        {/* OSCURECIMIENTO GENERAL MUY SUAVE */}
-        <div className="pointer-events-none absolute inset-0 bg-black/15" />
-
-        {/* DEGRADADO IZQUIERDO PARA EL TEXTO */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#07100B]/95 via-[#07100B]/65 via-45% to-transparent" />
-
-        {/* DEGRADADO INFERIOR */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0B0F0D]/85 via-transparent to-black/20" />
-
-        {/* GLOW VERDE */}
-        <div
-          className="pointer-events-none absolute -left-40 top-[25%] h-[650px] w-[650px] rounded-full opacity-[0.10] blur-[140px]"
-          style={{
-            background:
-              "radial-gradient(circle, #41C086 0%, transparent 68%)",
-          }}
-        />
-
-        {/* CONTENIDO SOBRE LA FOTO */}
-        <div className="relative z-10 mx-auto flex h-full w-full max-w-[1440px] items-center px-6 pt-20 sm:px-10 lg:px-16 xl:px-20">
+        <div className="relative z-10 mx-auto h-full max-w-360">
           <motion.div
             variants={stagger}
             initial="hidden"
             animate="visible"
-            className="max-w-[830px]"
+            className="absolute left-23.5 top-41.5"
           >
-            <motion.h1
-              variants={fadeUp}
-              transition={{ duration: 0.65 }}
-              className="text-[clamp(3.6rem,7vw,7.2rem)] font-extrabold leading-[0.9] tracking-[-0.065em]"
-            >
-              Por una vida
-              <br />
-              animal{" "}
-              <span className="text-[#41C086]">
-                sin límites.
-              </span>
-            </motion.h1>
-
             <motion.p
               variants={fadeUp}
               transition={{ duration: 0.6 }}
-              className="mt-8 max-w-[480px] text-[17px] leading-8 text-white/70 sm:text-[19px]"
+              className="text-[15px] font-medium uppercase tracking-[0.34em] text-white/95"
             >
-              Prótesis caninas personalizadas, diseñadas en 3D.
+              Que ninguna huella se detenga
             </motion.p>
-
-            <motion.div
+            <motion.h1
+              variants={fadeUp}
+              transition={{ duration: 0.65 }}
+              className="mt-1.5 font-display text-[55.5px] font-semibold leading-16 tracking-[-0.045em]"
+            >
+              Por una vida
+              <br />
+              animal <span className="text-leaf">sin límites.</span>
+            </motion.h1>
+            <motion.p
               variants={fadeUp}
               transition={{ duration: 0.6 }}
-              className="mt-12"
+              className="mt-3.5 text-[19.5px] leading-6 text-white"
             >
-              <Link
-                href="/login"
-                className="group inline-flex min-h-[56px] items-center justify-center gap-2.5 rounded-full bg-[#41C086] px-9 text-sm font-semibold text-[#07100B] transition-all duration-300 hover:bg-white"
-              >
-                Crear un caso
-                <ArrowRight
-                  size={16}
-                  className="transition-transform group-hover:translate-x-1"
-                />
-              </Link>
-            </motion.div>
+              Diseñá prótesis personalizadas a través
+              <br />
+              de nuestra plataforma digital y fabricación 3D.
+            </motion.p>
           </motion.div>
-        </div>
 
-        {/* SCROLL */}
-        <div className="absolute bottom-8 right-8 z-20 hidden items-center gap-3 lg:flex">
-          <span className="text-[10px] uppercase tracking-[0.22em] text-white/45">
-            Descubrí Hunda
-          </span>
-          <div className="h-[1px] w-12 bg-white/30" />
-        </div>
-      </section>
-
-      {/* =========================================================
-          INTRO
-      ========================================================= */}
-      <section className="relative border-t border-white/[0.06] px-5 py-28 sm:px-8 sm:py-36 lg:px-16 lg:py-44">
-        <div
-          className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[800px] -translate-x-1/2 opacity-[0.07] blur-[130px]"
-          style={{
-            background:
-              "radial-gradient(circle, #41C086 0%, transparent 65%)",
-          }}
-        />
-
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.35 }}
-          transition={{ duration: 0.7 }}
-          className="relative mx-auto max-w-5xl text-center"
-        >
-          <p className="mb-6 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#41C086]">
-            Tecnología con propósito
-          </p>
-
-          <AnimatedLetters
-            className="text-balance text-[clamp(2.3rem,5vw,4.8rem)] font-bold leading-[1.08] tracking-[-0.05em]"
-            segments={[
-              { text: "Cuando tecnología, diseño y amor por los animales" },
-              { text: "trabajan juntos.", className: "text-white/35" },
-            ]}
-          />
-
-          <p className="mx-auto mt-8 max-w-2xl text-[16px] leading-8 text-white/50 sm:text-[18px]">
-            Hunda conecta herramientas digitales, modelado 3D y fabricación
-            para simplificar el proceso de creación de soluciones
-            personalizadas para perros.
-          </p>
-        </motion.div>
-      </section>
-
-      {/* =========================================================
-          CÓMO FUNCIONA
-      ========================================================= */}
-      <section
-        id="como-funciona"
-        className="scroll-mt-20 border-t border-white/[0.06] px-5 py-24 sm:px-8 sm:py-32 lg:px-16 lg:py-36"
-      >
-        <div className="mx-auto max-w-7xl">
           <motion.div
             variants={fadeUp}
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            className="mb-16 text-center sm:mb-20"
+            animate="visible"
+            transition={{ duration: 0.6, delay: 0.35 }}
+            className="absolute left-22 top-120.5 flex gap-5.75"
           >
-            <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#41C086]">
-              Cómo funciona
-            </p>
-
-            <h2 className="text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-none tracking-[-0.05em]">
-              De las medidas
-              <span className="block text-white/35">al modelo 3D.</span>
-            </h2>
+            <Link
+              href="/login"
+              className="flex h-15 w-70.75 items-center justify-center rounded-full bg-mint text-[16px] font-medium text-[#0d2a20] transition-all duration-300 hover:bg-white"
+            >
+              Crear mi prótesis
+            </Link>
+            <a
+              href="#plataforma"
+              className="flex h-15 w-60.75 items-center justify-center rounded-full border border-white/10 bg-[#3d4a2b]/55 text-[16px] text-white/70 backdrop-blur-sm transition-all duration-300 hover:bg-[#3d4a2b]/80 hover:text-white"
+            >
+              Ver demo
+            </a>
           </motion.div>
 
-          <motion.div
-            variants={stagger}
+          <motion.ul
+            variants={fadeUp}
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.15 }}
-            className="grid gap-px overflow-hidden rounded-[28px] border border-white/[0.08] bg-white/[0.08] md:grid-cols-3"
+            animate="visible"
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="absolute left-24.25 top-144 flex items-center gap-10 text-[15.5px] text-white"
           >
-            {steps.map((step) => (
-              <motion.article
-                key={step.num}
-                variants={fadeUp}
-                className="group relative min-h-[340px] bg-[#0D1210] p-9 transition hover:bg-[#101713]"
+            <li className="flex items-center gap-2.5">
+              <svg className="h-6 w-6" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="11" fill="#1fbf7c" opacity=".35" />
+                <path
+                  d="M12 18s-5.5-3.4-5.5-7.1A3 3 0 0 1 12 9.2a3 3 0 0 1 5.5 1.7C17.5 14.6 12 18 12 18z"
+                  fill="#22d88f"
+                />
+                <circle cx="9.5" cy="11.5" r=".9" fill="#0d2a20" />
+                <circle cx="14.5" cy="11.5" r=".9" fill="#0d2a20" />
+              </svg>
+              Personalizadas
+            </li>
+            <li className="flex items-center gap-2.5">
+              <svg
+                className="h-6.5 w-6.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#22d88f"
+                strokeWidth="1.8"
               >
-                <div className="flex items-start justify-between">
-                  <span className="font-mono text-xs tracking-[0.15em] text-[#41C086]">
-                    {step.num}
-                  </span>
-
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white/70 group-hover:text-[#41C086]">
-                    <step.icon size={18} />
-                  </div>
-                </div>
-
-                <div className="absolute bottom-9 left-9 right-9">
-                  <h3 className="text-2xl font-bold tracking-[-0.03em]">
-                    {step.title}
-                  </h3>
-
-                  <p className="mt-4 text-sm leading-6 text-white/45">
-                    {step.desc}
-                  </p>
-                </div>
-              </motion.article>
-            ))}
-          </motion.div>
+                <circle cx="12" cy="12" r="8" />
+                <circle cx="12" cy="12" r="3" fill="#22d88f" opacity=".4" />
+                <path d="M12 2v5M12 17v5M2 12h5M17 12h5" />
+              </svg>
+              Precisas
+            </li>
+            <li className="flex items-center gap-2.5">
+              <svg
+                className="h-6.5 w-6.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#22d88f"
+                strokeWidth="1.6"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M14.8 9.2c-.4-1-1.5-1.7-2.8-1.7-1.6 0-2.8.9-2.8 2.2 0 3 5.6 1.5 5.6 4.5 0 1.3-1.2 2.3-2.8 2.3-1.4 0-2.5-.7-2.9-1.8M12 6v1.5M12 16.5V18" />
+              </svg>
+              Accesibles
+            </li>
+          </motion.ul>
         </div>
       </section>
 
       {/* =========================================================
-          PLATAFORMA
+          NUESTRA MISIÓN
+      ========================================================= */}
+      <section className="relative h-127.5 bg-[linear-gradient(90deg,#2d4741_0%,#334845_55%,#374647_100%)]">
+        <div className="dots absolute inset-0" />
+        <div className="relative mx-auto h-full max-w-360">
+          <motion.img
+            src="/landing/mision-art.png"
+            alt=""
+            {...inView}
+            className="absolute left-0 top-7.5 w-190 select-none mask-[linear-gradient(to_left,transparent,black_3%),linear-gradient(to_bottom,transparent,black_4%,black_96%,transparent)] mask-intersect"
+          />
+
+          <motion.div {...inView} className="absolute left-199.25 top-27">
+            <p className="text-[14px] font-medium uppercase text-white/95">
+              Nuestra misión
+            </p>
+            <h2 className="mt-2.5 font-display text-[40px] font-semibold leading-12.75 tracking-[0.01em]">
+              Tecnología
+              <br />
+              al servicio de <span className="text-leaf">su bienestar.</span>
+            </h2>
+            <p className="mt-1 text-[19.6px] leading-6 text-white">
+              Creemos en un futuro donde todos los animales
+              <br />
+              tengan &nbsp;la oportunidad de moverse, explorar y
+              <br />
+              disfrutar sin limitaciones.
+            </p>
+            <a
+              href="#nosotros"
+              className="mt-8.75 -ml-1.5 flex h-15 w-78.75 items-center justify-center rounded-full bg-mint text-[14.5px] font-semibold text-[#0d2a20] shadow-[0_8px_26px_rgba(0,227,154,0.3)] transition-all duration-300 hover:bg-white"
+            >
+              Conocé más sobre hunda
+            </a>
+          </motion.div>
+
+          <motion.img
+            src="/landing/vidas.png"
+            alt=""
+            {...inView}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="absolute left-308.25 top-88.75 w-46 select-none mask-[linear-gradient(to_right,transparent,black_12px,black_calc(100%-12px),transparent),linear-gradient(to_bottom,transparent,black_12px,black_calc(100%-12px),transparent)] mask-intersect"
+          />
+        </div>
+      </section>
+
+      {/* =========================================================
+          LA PLATAFORMA
       ========================================================= */}
       <section
         id="plataforma"
-        className="border-t border-white/[0.06] px-5 py-28 sm:px-8 sm:py-36 lg:px-16 lg:py-40"
+        className="relative h-165 scroll-mt-20 border-t border-white/10 bg-[linear-gradient(180deg,#545b5d_0%,#625c67_45%,#5f5a64_75%,#57555d_100%)]"
       >
-        <div className="mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[0.85fr_1.15fr] lg:gap-24">
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#41C086]">
+        <div className="dots absolute inset-0 opacity-70" />
+        <div className="relative mx-auto h-full max-w-360">
+          <motion.div {...inView} className="absolute left-23 top-16">
+            <p className="ml-0.75 text-[14px] font-medium uppercase text-white/95">
               La plataforma
             </p>
-
-            <h2 className="text-[clamp(2.5rem,4.5vw,4rem)] font-bold leading-none tracking-[-0.05em]">
-              Todo el proceso.
-              <span className="block text-white/35">
-                En un solo lugar.
-              </span>
+            <h2 className="mt-1.5 font-display text-[39px] font-bold leading-11 tracking-[-0.06em]">
+              Controlá todo
+              <br />
+              desde un <span className="text-leaf">único lugar.</span>
             </h2>
-
-            <p className="mt-7 max-w-md text-base leading-8 text-white/50">
-              Creá casos, cargá información y mantené organizados los modelos
-              de cada mascota desde un único espacio digital.
+            <p className="mt-4.5 ml-0.5 text-[17.6px] leading-5.5">
+              Diseñá, guardá y hacé seguimiento
+              <br />
+              de todas tus prótesis en tu dashboard
+              <br />
+              personal.
             </p>
-
-            <div className="mt-9 flex flex-col gap-4">
-              {features.map((item) => (
-                <div
-                  key={item}
-                  className="flex items-center gap-3 text-sm text-white/70"
+            <motion.ul
+              variants={stagger}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              className="mt-11 ml-2 space-y-3.5 text-[17px]"
+            >
+              {features.map((f) => (
+                <motion.li
+                  key={f}
+                  variants={fadeUp}
+                  className="flex h-6 items-center gap-2.5"
                 >
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#41C086]/10">
-                    <Check size={12} className="text-[#41C086]" />
-                  </span>
-                  {item}
-                </div>
+                  <svg
+                    className="h-5.5 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#22d88f"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M3 12h17M14 6l6 6-6 6" />
+                  </svg>
+                  {f}
+                </motion.li>
               ))}
-            </div>
-
+            </motion.ul>
             <Link
               href="/login"
-              className="group mt-10 inline-flex min-h-[50px] items-center gap-2 rounded-full bg-white px-7 text-sm font-semibold text-[#0B0F0D] hover:bg-[#41C086]"
+              className="mt-10 -ml-1.5 flex h-15 w-70.75 items-center justify-center rounded-full bg-mint text-[15px] font-medium text-[#0d2a20] shadow-[0_8px_26px_rgba(0,227,154,0.35)] transition-all duration-300 hover:bg-white"
             >
-              Explorar la plataforma
-              <ArrowRight size={15} />
+              Ir a la plataforma
             </Link>
           </motion.div>
 
+          {/* Mockup del dashboard */}
           <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="overflow-hidden rounded-[30px] border border-white/10 bg-[#101713] p-2"
+            {...inView}
+            className="absolute left-129.75 top-15.5 h-136.75 w-206.5 overflow-hidden rounded-[10px] border border-white/35 bg-[linear-gradient(180deg,#5e4a5e_0%,#5a5260_45%,#4c5a57_78%,#3e5a50_100%)] shadow-[0_10px_40px_rgba(0,0,0,0.25)]"
           >
-            <div className="flex items-center gap-2 border-b border-white/[0.07] px-5 py-4">
-              <span className="h-2 w-2 rounded-full bg-white/15" />
-              <span className="h-2 w-2 rounded-full bg-white/15" />
-              <span className="h-2 w-2 rounded-full bg-white/15" />
-              <span className="ml-3 text-[10px] uppercase tracking-[0.18em] text-white/20">
-                Hunda platform
-              </span>
-            </div>
+            <div className="dots absolute inset-0 opacity-50" />
+            <div className="relative h-full font-display">
+              <h3 className="absolute left-6.25 top-5.5 text-[20px] font-medium">
+                Mis perros
+              </h3>
+              <p className="absolute left-6 top-13.75 text-[11px] font-medium text-white/90">
+                Administrá a tus compañeros y sus prótesis
+              </p>
+              <Link
+                href="/login"
+                className="absolute left-155.25 top-13.25 flex h-9 w-43.5 items-center justify-center rounded-xs bg-[#00f5a0] text-[11px] font-semibold text-[#0d2a20] shadow-[0_4px_14px_rgba(0,245,160,0.3)] transition-all duration-300 hover:bg-white"
+              >
+                + Agregar perro
+              </Link>
 
-            <div
-              className="flex aspect-[16/10] items-center justify-center"
-              style={{
-                backgroundImage:
-                  "linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)",
-                backgroundSize: "32px 32px",
-              }}
-            >
-              <div className="text-center">
-                <IoCubeOutline
-                  size={38}
-                  className="mx-auto mb-4 text-[#41C086]"
+              {/* Milo */}
+              <div className="absolute left-6.25 top-26.75 h-41.75 w-192.5 rounded-md bg-white/9">
+                <img
+                  src="/landing/milo.jpg"
+                  alt="Milo"
+                  className="absolute left-3 top-3.75 h-34.25 w-34 rounded-[5px] object-cover"
                 />
-                <p className="text-sm text-white/45">
-                  Dashboard Hunda
+                <p className="absolute left-43.25 top-5.75 text-[16px] font-medium">
+                  Milo
                 </p>
+                <p className="absolute left-43 top-13.25 text-[11.5px] text-white/45">
+                  Golden Retriever • 6 años
+                </p>
+                <div className="absolute left-43 top-20.25 h-px w-79.5 bg-white/60" />
+                <span className="absolute left-43.5 top-24.5 h-7.5 w-7.5 rounded-full bg-[#d9d9d9]" />
+                <p className="absolute left-53.75 top-25.25 text-[11px] font-semibold">
+                  Prótesis delantera izquierda
+                </p>
+                <p className="absolute left-53.75 top-29.75 text-[11px] text-white/50">
+                  Tipo: Adaptativa
+                </p>
+                <span className="absolute left-99.25 top-26 flex h-6.5 w-19.5 items-center justify-center rounded-[3px] border border-white/10 bg-[#2a1f1d] text-[9px] font-semibold text-[#f5b52a]">
+                  En proceso
+                </span>
+                <Link
+                  href="/login"
+                  className="absolute left-166 top-18.5 flex items-center gap-5.5 text-[10.5px] font-semibold text-leaf"
+                >
+                  Ver perfil
+                  <svg
+                    className="h-4 w-4 text-white"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
               </div>
+
+              {/* Luna */}
+              <div className="absolute left-6.25 top-73.25 h-41.75 w-192.5 rounded-md bg-white/9">
+                <img
+                  src="/landing/luna.jpg"
+                  alt="Luna"
+                  className="absolute left-3 top-3.75 h-34.25 w-34 rounded-[5px] object-cover"
+                />
+                <p className="absolute left-43.25 top-5.75 text-[16px] font-medium">
+                  Luna
+                </p>
+                <p className="absolute left-43 top-13.25 text-[11.5px] text-white/45">
+                  West Highland White Terrier • &nbsp;4 años
+                </p>
+                <div className="absolute left-43 top-20.25 h-px w-79.5 bg-white/60" />
+                <span className="absolute left-43.5 top-24.5 h-7.5 w-7.5 rounded-full bg-[#d9d9d9]" />
+                <p className="absolute left-53.75 top-25.25 text-[11px] font-semibold">
+                  Sin prótesis activa
+                </p>
+                <p className="absolute left-53.75 top-29.75 text-[11px] text-white/50">
+                  Todo en orden
+                </p>
+                <Link
+                  href="/login"
+                  className="absolute left-166 top-18.5 flex items-center gap-5.5 text-[10.5px] font-semibold text-leaf"
+                >
+                  Ver perfil
+                  <svg
+                    className="h-4 w-4 text-white"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+
+              <p className="absolute inset-x-0 top-128.25 flex items-center justify-center gap-2 text-[11px] text-white/55">
+                <svg
+                  className="h-3.75 w-3.75"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path
+                    d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17.5h.01"
+                    strokeLinecap="round"
+                  />
+                </svg>
+                ¿Tenés dudas sobre las prótesis de tu perro?
+                <Link href="/contact" className="ml-3.5 font-semibold text-leaf">
+                  Contactanos
+                </Link>
+              </p>
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* =========================================================
-          VALORES
+          HISTORIAS REALES
       ========================================================= */}
-      <section
-        id="impresion-3d"
-        className="border-t border-white/[0.06] px-5 py-28 sm:px-8 lg:px-16 lg:py-36"
-      >
-        <div className="mx-auto max-w-7xl">
-          <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#41C086]">
-            Diseño + fabricación digital
-          </p>
-
-          <h2 className="max-w-4xl text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-none tracking-[-0.05em]">
-            Tecnología pensada
-            <span className="block text-white/35">
-              alrededor de cada animal.
-            </span>
-          </h2>
-
-          <div className="mt-20 grid gap-5 md:grid-cols-3">
-            {values.map((card) => (
-              <article
-                key={card.title}
-                className="rounded-[26px] border border-white/[0.08] bg-white/[0.025] p-9"
-              >
-                <div className="mb-16 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#41C086]/10 text-[#41C086]">
-                  <card.icon size={20} />
-                </div>
-
-                <h3 className="text-[22px] font-bold">
-                  {card.title}
-                </h3>
-
-                <p className="mt-3 text-sm leading-6 text-white/45">
-                  {card.sub}
-                </p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================
-          SOBRE NOSOTROS
-      ========================================================= */}
-      <section className="border-t border-white/[0.06] px-5 py-28 sm:px-8 lg:px-16 lg:py-40">
-        <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-2 lg:gap-24">
-          <div>
-            <div className="mb-6 flex items-center gap-2 text-[#41C086]">
-              <MapPin size={15} />
-              <span className="text-[11px] font-semibold uppercase tracking-[0.25em]">
-                Buenos Aires · Argentina
-              </span>
-            </div>
-
-            <h2 className="text-[clamp(2.5rem,5vw,4.7rem)] font-bold leading-none tracking-[-0.05em]">
-              Hunda nació de una
-              <span className="block text-white/35">
-                pregunta simple.
-              </span>
+      <section className="relative h-122.5 border-t border-white/10 bg-[radial-gradient(ellipse_at_75%_15%,#4a3a4d_0%,transparent_55%),linear-gradient(160deg,#3b3a44_0%,#3a3844_40%,#393341_70%,#2f3b3b_100%)]">
+        <div className="absolute inset-0 bg-[linear-gradient(20deg,rgba(55,80,75,0.55)_0%,transparent_45%)]" />
+        <div className="dots absolute inset-0 opacity-80" />
+        <div className="relative mx-auto h-full max-w-360">
+          <motion.div {...inView} className="absolute left-25.25 top-30.5">
+            <p className="text-[15px] font-medium uppercase tracking-[0.14em] text-white/95">
+              Historias reales
+            </p>
+            <h2 className="mt-2 font-display text-[40.5px] font-semibold leading-11.5 tracking-tighter">
+              Ellos ya están
+              <br />
+              viviendo <span className="text-leaf">sin límites.</span>
             </h2>
-          </div>
-
-          <div>
-            <p className="text-[21px] font-medium leading-9 text-white/80">
-              ¿Cómo podemos usar la tecnología que aprendemos para mejorar la
-              vida de un animal?
+            <p className="mt-4.5 text-[17.5px] leading-5.75 tracking-[0.03em] text-white/95">
+              Cada prótesis es una nueva oportunidad
+              <br />
+              para seguir explorando el mundo..
             </p>
+            <Link
+              href="/blog"
+              className="mt-10 flex h-15 w-56.75 items-center justify-center rounded-full border border-leaf text-[16px] font-medium text-leaf transition-all duration-300 hover:bg-leaf hover:text-[#0d2a20]"
+            >
+              Ver más historias
+            </Link>
+          </motion.div>
 
-            <p className="mt-7 text-[15px] leading-7 text-white/45">
-              Somos Benja, Brigitte y Maite, estudiantes de ORT TIC. Hunda
-              nació como nuestro proyecto de fin de carrera, combinando
-              tecnología, diseño, modelado 3D y bienestar animal.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================
-          CTA
-      ========================================================= */}
-      <section className="px-5 pb-12 sm:px-8 lg:px-16">
-        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[32px] border border-[#41C086]/20 bg-[#101A14] px-7 py-20 sm:px-12 lg:px-16 lg:py-24">
-          <div
-            className="absolute -right-40 -top-40 h-[600px] w-[600px] opacity-[0.15] blur-[120px]"
-            style={{
-              background:
-                "radial-gradient(circle, #41C086, transparent 65%)",
-            }}
+          <motion.img
+            src="/landing/historia-milo.jpg"
+            alt="Milo en la playa"
+            {...inView}
+            className="absolute left-136.5 top-25.5 h-81.25 w-60.25 select-none rounded-[14px]"
+          />
+          <motion.img
+            src="/landing/historia-luna.jpg"
+            alt="Luna caminando"
+            {...inView}
+            transition={{ duration: 0.7, delay: 0.12 }}
+            className="absolute left-200.75 top-25.5 h-81.25 w-66.75 select-none rounded-[14px]"
+          />
+          <motion.img
+            src="/landing/historia-rocky.jpg"
+            alt="Rocky en el parque"
+            {...inView}
+            transition={{ duration: 0.7, delay: 0.24 }}
+            className="absolute left-271.5 top-25.5 h-81.25 w-66.5 select-none rounded-[14px]"
           />
 
-          <div className="relative flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#41C086]">
-                Hunda
-              </p>
-
-              <h2 className="text-[clamp(2.8rem,6vw,5.8rem)] font-extrabold leading-[0.92] tracking-[-0.06em]">
-                Por una vida animal
-                <span className="block text-[#41C086]">
-                  sin límites.
-                </span>
-              </h2>
-            </div>
-
-            <Link
-              href="/login"
-              className="group inline-flex min-h-[54px] items-center justify-center gap-2 rounded-full bg-[#41C086] px-8 text-sm font-semibold text-[#07100B] hover:bg-white"
+          <button
+            type="button"
+            className="absolute left-123.5 top-58.75 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-white/15 text-white/85 transition hover:bg-white/25 hover:text-white"
+            aria-label="Anterior"
+          >
+            <svg
+              className="h-4.5 w-4.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              Crear mi cuenta
-              <ArrowRight size={15} />
-            </Link>
+              <path d="M15 5l-7 7 7 7" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            className="absolute left-340.5 top-58.75 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-white/15 text-white/85 transition hover:bg-white/25 hover:text-white"
+            aria-label="Siguiente"
+          >
+            <svg
+              className="h-4.5 w-4.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          <div className="absolute left-228.25 top-110.25 flex items-center gap-0.75">
+            <span className="h-3 w-5.75 rounded-full bg-mint" />
+            <span className="h-3 w-3 rounded-full bg-mint" />
+            <span className="h-3 w-3 rounded-full bg-mint" />
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          SOBRE NOSOTROS + CTA
+      ========================================================= */}
+      <section className="relative bg-[#2c443f]">
+        <div className="dots absolute inset-0" />
+
+        <div
+          id="nosotros"
+          className="relative h-126.25 scroll-mt-20 border-t border-white/10 bg-[linear-gradient(90deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0.04)_40%,rgba(255,255,255,0.02)_100%)]"
+        >
+          <div className="relative mx-auto h-full max-w-360">
+            <motion.img
+              src="/landing/equipo.png"
+              alt="Benja, Brigitte y Maite con un perro con prótesis"
+              {...inView}
+              className="absolute left-192.5 top-2.75 w-130 select-none mask-[linear-gradient(to_right,transparent,black_16px,black_calc(100%-16px),transparent),linear-gradient(to_bottom,transparent,black_16px,black_calc(100%-16px),transparent)] mask-intersect"
+            />
+
+            <motion.div {...inView} className="absolute left-20 top-18.5">
+              <p className="text-[16px] font-medium uppercase text-white/95">
+                Sobre nosotros
+              </p>
+              <h2 className="mt-2 font-display text-[39.5px] font-bold leading-12 tracking-[-0.065em]">
+                Somos <span className="text-leaf">Benja, Brigitte y Maite</span>
+              </h2>
+              <p className="mt-4.5 text-[17.8px] leading-5.5">
+                Estudiantes de ORT TIC apasionados por la
+                <br />
+                tecnología, el diseño y el bienestar animal.
+              </p>
+              <p className="mt-6.25 text-[17.8px] leading-5.5">
+                Nuestro objetivo es hacer más accesibles las
+                <br />
+                prótesis personalizadas para mejorar la calidad
+                <br />
+                de vida de los perros.
+              </p>
+              <div className="mt-12.5 ml-2.5 flex gap-5.5">
+                <Link
+                  href="/contact"
+                  className="flex h-15 w-70.75 items-center justify-center rounded-full bg-mint text-[16px] font-medium text-[#0d2a20] shadow-[0_10px_26px_rgba(0,0,0,0.3)] transition-all duration-300 hover:bg-white"
+                >
+                  Unite al equipo
+                </Link>
+                <Link
+                  href="/blog"
+                  className="flex h-15 w-66.25 items-center justify-center rounded-full border border-leaf text-[15.5px] font-medium text-leaf transition-all duration-300 hover:bg-leaf hover:text-[#0d2a20]"
+                >
+                  ¡Conocé más sobre nosotros!
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        <div className="relative h-110">
+          <div className="relative mx-auto h-full max-w-360">
+            <motion.div
+              {...inView}
+              className="absolute left-5.25 right-4.25 top-28.75 h-60 rounded-lg bg-white/8.5"
+            >
+              <div className="absolute left-108.5 top-12">
+                <AnimatedLetters
+                  className="font-display text-[55px] font-bold leading-15.5 tracking-[-0.06em]"
+                  segments={[
+                    { text: "¿Listo para" },
+                    { text: "comenzar?", className: "text-leaf" },
+                  ]}
+                />
+                <p className="mt-3 text-[20.3px] leading-6">
+                  Creá tu cuenta gratis y empezá a diseñar
+                  <br />
+                  la prótesis que tu perro necesita.
+                </p>
+              </div>
+              <Link
+                href="/login"
+                className="absolute left-266.75 top-18.25 flex h-13.75 w-66.5 items-center justify-center rounded-full bg-mint text-[16px] font-medium text-[#0d2a20] transition-all duration-300 hover:bg-white"
+              >
+                Crear cuenta
+              </Link>
+              <p className="absolute left-271.75 top-39.5 text-[15px] text-white/90">
+                ¿Ya tenés cuenta?{" "}
+                <Link
+                  href="/login"
+                  className="text-leaf underline underline-offset-2"
+                >
+                  Iniciá sesión
+                </Link>
+              </p>
+            </motion.div>
           </div>
         </div>
       </section>

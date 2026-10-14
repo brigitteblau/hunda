@@ -10,6 +10,9 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
+  --color-mint: #00e39a;
+  --color-leaf: #3fc07f;
+  --font-display: var(--font-poppins);
 }
 
 body {
@@ -66,4 +69,9 @@ html {
 
 .dark-popup .leaflet-popup-close-button {
   color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.dots {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.13) 1.3px, transparent 1.6px);
+  background-size: 27px 27px;
 }
