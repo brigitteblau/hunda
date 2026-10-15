@@ -8,13 +8,17 @@ import Paso1InfoPerro from "./paso1";
 import Paso2MiembroAfectado from "./paso2";
 import Paso3Confirmar from "./paso3";
 import ResultadoPaso from "./resultado";
-import SnakeLoader from "@/components/snake-loader";
+import SnakeLoader, { type GenerationStage } from "@/components/snake-loader";
 import type { ProtesisFormData } from "./types";
 import {
+  calculateSocketParameters,
   createProsthesisRequest,
   generateProsthesis,
   ProsthesisApiError,
+  wakeServer,
   type GenerateResult,
+  type ProsthesisRequestPayload,
+  type SocketParameters,
 } from "@/lib/prosthesis-api";
 
 const initialData: ProtesisFormData = {
@@ -81,7 +85,8 @@ export default function NuevaProtesisPage() {
   const [result, setResult] = useState<GenerateResult | null>(null);
   const [usedFallback, setUsedFallback] = useState(false);
   const [genError, setGenError] = useState<string | null>(null);
-  const [generating, setGenerating] = useState(false);
+  const [socketParams, setSocketParams] = useState<SocketParameters | null>(null);
+  const [stage, setStage] = useState<GenerationStage | null>(null);
 
   // Guarda el progreso en cada cambio, mientras estemos en los pasos del
   // formulario (el resultado del paso 4 no se persiste), así un refresh
@@ -161,29 +166,37 @@ export default function NuevaProtesisPage() {
       return;
     }
 
-    setGenerating(true);
+    const payload: ProsthesisRequestPayload = {
+      user_id: user.id,
+      dog_name: dogInfo.dogName,
+      dog_weight_kg: Number(dogInfo.weightKg),
+      dog_breed: dogInfo.breed || null,
+      dog_size: dogInfo.size,
+      limb_position: limb.position,
+      limb_side: limb.side,
+      stump_length_cm: Number(limb.stumpLengthCm),
+      proximal_circumference_cm: Number(limb.proximalCircumferenceCm),
+      distal_circumference_cm: Number(limb.distalCircumferenceCm),
+    };
+
+    setStage("waking");
     let requestId: string | undefined;
     try {
-      const { request_id } = await createProsthesisRequest({
-        user_id: user.id,
-        dog_name: dogInfo.dogName,
-        dog_weight_kg: Number(dogInfo.weightKg),
-        dog_breed: dogInfo.breed || null,
-        dog_size: dogInfo.size,
-        limb_position: limb.position,
-        limb_side: limb.side,
-        stump_length_cm: Number(limb.stumpLengthCm),
-        proximal_circumference_cm: Number(limb.proximalCircumferenceCm),
-        distal_circumference_cm: Number(limb.distalCircumferenceCm),
-      });
+      // Si el server de Render está dormido, esto lo despierta antes de mandar datos.
+      await wakeServer();
+
+      setStage("saving");
+      const { request_id } = await createProsthesisRequest(payload);
       requestId = request_id;
 
+      setStage("generating");
       const generated = await generateProsthesis(request_id);
 
       setResult(generated);
+      setSocketParams(generated.socket_parameters ?? null);
       setUsedFallback(false);
       setGenError(null);
-      setStep(4);
+      setStage("done");
       clearSavedProgress();
 
       await saveDog(supabase, user.id, dogInfo, {
@@ -197,26 +210,40 @@ export default function NuevaProtesisPage() {
       // 422 = medidas con error de sentido físico: el usuario lo puede corregir,
       // así que lo mandamos de vuelta al paso 2 en vez de mostrarle un resultado.
       if (err instanceof ProsthesisApiError && err.status === 422) {
+        setStage(null);
         setError(err.message);
         setStep(2);
         return;
       }
 
       // Cualquier otro error (backend caído, red, etc.) es un problema de
-      // infraestructura, no del usuario: mostramos el modelo de muestra.
+      // infraestructura, no del usuario. Intentamos al menos calcular la
+      // geometría con sus medidas para dibujar la prótesis real en el visor.
+      setStage("fallback");
+      let params: SocketParameters | null = null;
+      try {
+        params = await calculateSocketParameters(payload);
+      } catch (paramsErr) {
+        console.error("Tampoco se pudieron calcular los parámetros:", paramsErr);
+      }
+
       setResult(null);
+      setSocketParams(params);
       setUsedFallback(true);
       setGenError(err instanceof Error ? err.message : "Error desconocido");
-      setStep(4);
+      setStage("done");
       clearSavedProgress();
 
       await saveDog(supabase, user.id, dogInfo, {
         requestId,
         protesisGenerada: false,
       });
-    } finally {
-      setGenerating(false);
     }
+  };
+
+  const showResult = () => {
+    setStage(null);
+    setStep(4);
   };
 
   return (
@@ -228,7 +255,7 @@ export default function NuevaProtesisPage() {
         </p>
       </div>
 
-      {generating && <SnakeLoader />}
+      {stage && <SnakeLoader stage={stage} onFinish={showResult} />}
 
       <StepIndicator currentStep={step} />
 
@@ -242,6 +269,7 @@ export default function NuevaProtesisPage() {
         <ResultadoPaso
           dogName={formData.dogInfo.dogName}
           result={result}
+          socketParams={socketParams}
           usedFallback={usedFallback}
           errorMessage={genError}
         />
