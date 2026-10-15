@@ -1,20 +1,8 @@
 import Link from "next/link";
-import { PawPrint, Plus, MoreVertical } from "lucide-react";
-import Image from "next/image";
+import { PawPrint, Plus } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-
-interface Perro {
-  id: string;
-  nombre: string;
-  raza: string | null;
-  fotoUrl: string | null;
-  protesisAsociada: string | null;
-}
-
-const estadoBadge = (protesis: string | null) =>
-  protesis
-    ? "rounded-full bg-[#41C086]/15 px-3 py-1 text-xs font-medium text-[#41C086]"
-    : "rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-white/40";
+import PerroCard from "./perro-card";
+import { PERRO_COLUMNS, toPerro, type Perro, type PerroRow } from "./perro-data";
 
 export default async function MisPerrosPage() {
   const supabase = await createSupabaseServerClient();
@@ -25,18 +13,12 @@ export default async function MisPerrosPage() {
   const { data } = user
     ? await supabase
         .from("perros")
-        .select("id, nombre, raza, foto_url, protesis_generada")
+        .select(PERRO_COLUMNS)
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
     : { data: null };
 
-  const perros: Perro[] = (data ?? []).map((row) => ({
-    id: row.id,
-    nombre: row.nombre,
-    raza: row.raza,
-    fotoUrl: row.foto_url,
-    protesisAsociada: row.protesis_generada ? "Prótesis lista" : null,
-  }));
+  const perros: Perro[] = ((data ?? []) as PerroRow[]).map(toPerro);
 
   return (
     <div className="flex flex-col gap-8 p-4 sm:p-6 lg:p-12">
@@ -85,39 +67,7 @@ export default async function MisPerrosPage() {
       ) : (
         <div className="flex flex-col gap-4">
           {perros.map((perro) => (
-            <div
-              key={perro.id}
-              className="flex items-center justify-between rounded-2xl border border-white/8 bg-white/3 p-5"
-            >
-              <div className="flex items-center gap-4">
-                {perro.fotoUrl ? (
-                  <Image
-                    src={perro.fotoUrl}
-                    alt={perro.nombre}
-                    width={56}
-                    height={56}
-                    className="h-14 w-14 rounded-xl object-cover"
-                  />
-                ) : (
-                  <div className="h-14 w-14 rounded-xl bg-white/5 flex items-center justify-center">
-                    <PawPrint className="h-6 w-6 text-white/30" />
-                  </div>
-                )}
-                <div className="flex flex-col gap-1">
-                  <span className="font-medium text-white">{perro.nombre}</span>
-                  <span className="text-sm text-white/45">{perro.raza || "Raza sin especificar"}</span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-6">
-                <span className={estadoBadge(perro.protesisAsociada)}>
-                  {perro.protesisAsociada ?? "Sin prótesis"}
-                </span>
-                <button className="text-white/30 hover:text-white/70 transition-colors">
-                  <MoreVertical className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
+            <PerroCard key={perro.id} perro={perro} />
           ))}
         </div>
       )}

@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { TrackballControls } from "three/examples/jsm/controls/TrackballControls.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { toCreasedNormals } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { RotateCcw, Loader2, Move3d } from "lucide-react";
+import { RotateCcw, Loader2, Move3d, Pause, Play } from "lucide-react";
 import { buildSocketGeometry } from "@/lib/socket-geometry";
 import type { SocketParameters } from "@/lib/prosthesis-api";
 
@@ -20,35 +20,24 @@ interface StlViewerProps {
 }
 
 const CREASE_ANGLE = THREE.MathUtils.degToRad(35);
+const AUTO_ROTATE_SPEED = 0.5; // rad/s
 
-// Cada exportador usa un "arriba" distinto (Blender: Z, otros: Y). Un socket
-// siempre es más largo que ancho, así que ponemos el eje más largo vertical
-// y dejamos la boca (el extremo más ancho) hacia arriba.
+// Cada exportador usa un "arriba" distinto (Blender: Z, otros: Y). La pieza
+// es más alta que ancha, así que ponemos el eje más largo vertical. Para el
+// caso Blender, rotateX(-π/2) lleva +Z a +Y: la boca del socket queda arriba
+// y el pie abajo. (No adivinamos por el ancho: el pie de la bota es más ancho
+// que la boca y eso la daba vuelta.)
 function orientUpright(geometry: THREE.BufferGeometry) {
   geometry.computeBoundingBox();
   const size = geometry.boundingBox!.getSize(new THREE.Vector3());
   if (size.z >= size.x && size.z >= size.y) geometry.rotateX(-Math.PI / 2);
   else if (size.x >= size.y && size.x >= size.z) geometry.rotateZ(Math.PI / 2);
-
-  geometry.computeBoundingBox();
-  const box = geometry.boundingBox!;
-  const center = box.getCenter(new THREE.Vector3());
-  const h = box.max.y - box.min.y;
-  const pos = geometry.attributes.position;
-  let top = 0;
-  let bottom = 0;
-  for (let i = 0; i < pos.count; i++) {
-    const y = pos.getY(i);
-    const r = Math.hypot(pos.getX(i) - center.x, pos.getZ(i) - center.z);
-    if (y > box.max.y - h * 0.15) top = Math.max(top, r);
-    else if (y < box.min.y + h * 0.15) bottom = Math.max(bottom, r);
-  }
-  if (bottom > top * 1.05) geometry.rotateX(Math.PI);
 }
 
 export default function StlViewer({ source, className = "" }: StlViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const controlsRef = useRef<OrbitControls | null>(null);
+  const autoRotateRef = useRef(true);
+  const resetViewRef = useRef<() => void>(() => {});
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -106,17 +95,33 @@ export default function StlViewer({ source, className = "" }: StlViewerProps) {
     ground.receiveShadow = true;
     scene.add(ground);
 
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.08;
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 1.6;
-    controls.enablePan = false;
-    controls.maxPolarAngle = Math.PI * 0.62;
-    controlsRef.current = controls;
+    // Trackball: rota libre en todos los ejes (Orbit no deja pasar por arriba/abajo)
+    const controls = new TrackballControls(camera, renderer.domElement);
+    controls.rotateSpeed = 3;
+    controls.zoomSpeed = 1.2;
+    controls.panSpeed = 0.6;
+    controls.staticMoving = false;
+    controls.dynamicDampingFactor = 0.12;
+    autoRotateRef.current = true;
     setAutoRotate(true);
-    const onStart = () => setInteracted(true);
+
+    // La auto-rotación gira la pieza (no la cámara) y se pausa mientras arrastrás
+    let dragging = false;
+    const onStart = () => {
+      dragging = true;
+      setInteracted(true);
+    };
+    const onEnd = () => {
+      dragging = false;
+    };
     controls.addEventListener("start", onStart);
+    controls.addEventListener("end", onEnd);
+
+    const home = { target: new THREE.Vector3(), position: new THREE.Vector3() };
+
+    // Pivote en el centro de la pieza, para que gire sobre sí misma
+    const pivot = new THREE.Group();
+    scene.add(pivot);
 
     const material = new THREE.MeshPhysicalMaterial({
       color: 0xc9d4ce,
@@ -159,8 +164,11 @@ export default function StlViewer({ source, className = "" }: StlViewerProps) {
       camera.updateProjectionMatrix();
       controls.target.copy(target);
       controls.minDistance = radius * 1.2;
-      controls.maxDistance = distance * 3;
+      controls.maxDistance = radius * 6;
       controls.update();
+      // Guardamos esta vista como la de "resetear vista"
+      home.target.copy(controls.target);
+      home.position.copy(camera.position);
 
       key.position.set(radius * 2, radius * 4, radius * 2.5);
       key.target.position.copy(target);
@@ -176,8 +184,10 @@ export default function StlViewer({ source, className = "" }: StlViewerProps) {
 
       ground.scale.setScalar(radius * 10);
 
-      mesh.scale.setScalar(0.001);
-      scene.add(mesh);
+      pivot.position.copy(target);
+      mesh.position.set(0, -size.y / 2, 0);
+      pivot.scale.setScalar(0.001);
+      pivot.add(mesh);
       introStart = performance.now();
       setLoading(false);
     }
@@ -213,16 +223,35 @@ export default function StlViewer({ source, className = "" }: StlViewerProps) {
       camera.aspect = width() / height();
       camera.updateProjectionMatrix();
       renderer.setSize(width(), height());
+      controls.handleResize();
     });
     resizeObserver.observe(container);
 
+    resetViewRef.current = () => {
+      controls.target.copy(home.target);
+      camera.position.copy(home.position);
+      camera.up.set(0, 1, 0);
+      camera.lookAt(home.target);
+      pivot.rotation.set(0, 0, 0);
+      controls.update();
+    };
+    const onDoubleClick = () => resetViewRef.current();
+    renderer.domElement.addEventListener("dblclick", onDoubleClick);
+
+    let last = performance.now();
     function animate() {
       raf = requestAnimationFrame(animate);
+      const now = performance.now();
+      const dt = Math.min((now - last) / 1000, 0.1);
+      last = now;
       if (mesh && introStart) {
-        const t = Math.min((performance.now() - introStart) / 900, 1);
+        const t = Math.min((now - introStart) / 900, 1);
         const eased = 1 - Math.pow(1 - t, 3);
-        mesh.scale.setScalar(Math.max(eased, 0.001));
+        pivot.scale.setScalar(Math.max(eased, 0.001));
         mesh.rotation.y = (1 - eased) * -Math.PI * 0.6;
+      }
+      if (mesh && autoRotateRef.current && !dragging) {
+        pivot.rotation.y += AUTO_ROTATE_SPEED * dt;
       }
       controls.update();
       renderer.render(scene, camera);
@@ -234,6 +263,8 @@ export default function StlViewer({ source, className = "" }: StlViewerProps) {
       cancelAnimationFrame(raf);
       resizeObserver.disconnect();
       controls.removeEventListener("start", onStart);
+      controls.removeEventListener("end", onEnd);
+      renderer.domElement.removeEventListener("dblclick", onDoubleClick);
       controls.dispose();
       mesh?.geometry.dispose();
       material.dispose();
@@ -259,7 +290,7 @@ export default function StlViewer({ source, className = "" }: StlViewerProps) {
             "radial-gradient(ellipse 70% 60% at 50% 45%, rgba(65,192,134,0.14), transparent 70%)",
         }}
       />
-      <div ref={containerRef} className="relative h-full w-full cursor-grab active:cursor-grabbing" />
+      <div ref={containerRef} className="relative h-full w-full cursor-grab touch-none active:cursor-grabbing" />
 
       {loading && !error && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#0B0F0D]/80 text-sm text-white/45">
@@ -285,28 +316,37 @@ export default function StlViewer({ source, className = "" }: StlViewerProps) {
       {!loading && !error && !interacted && (
         <div className="pointer-events-none absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full border border-white/10 bg-black/30 px-3 py-1.5 text-[11px] text-white/55 backdrop-blur">
           <Move3d size={13} />
-          Arrastrá para rotar · scroll para zoom
+          Arrastrá para girar · doble click para resetear
         </div>
       )}
 
-      <button
-        type="button"
-        onClick={() => {
-          const controls = controlsRef.current;
-          if (!controls) return;
-          controls.autoRotate = !controls.autoRotate;
-          setAutoRotate(controls.autoRotate);
-        }}
-        title={autoRotate ? "Pausar rotación" : "Reanudar rotación"}
-        aria-pressed={autoRotate}
-        className={`absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full border backdrop-blur transition ${
-          autoRotate
-            ? "border-[#41C086]/40 bg-[#41C086]/15 text-[#41C086]"
-            : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
-        }`}
-      >
-        <RotateCcw size={15} />
-      </button>
+      <div className="absolute bottom-3 right-3 flex gap-2">
+        <button
+          type="button"
+          onClick={() => resetViewRef.current()}
+          title="Resetear vista (o doble click)"
+          aria-label="Resetear vista"
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 backdrop-blur transition hover:bg-white/10"
+        >
+          <RotateCcw size={15} />
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            autoRotateRef.current = !autoRotateRef.current;
+            setAutoRotate(autoRotateRef.current);
+          }}
+          title={autoRotate ? "Pausar rotación" : "Reanudar rotación"}
+          aria-pressed={autoRotate}
+          className={`flex h-9 w-9 items-center justify-center rounded-full border backdrop-blur transition ${
+            autoRotate
+              ? "border-[#41C086]/40 bg-[#41C086]/15 text-[#41C086]"
+              : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
+          }`}
+        >
+          {autoRotate ? <Pause size={15} /> : <Play size={15} />}
+        </button>
+      </div>
     </div>
   );
 }
