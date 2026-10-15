@@ -1,7 +1,11 @@
-const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "https://bbm-server-hfq1.onrender.com").replace(
+const BACKEND_URL = (process.env.NEXT_PUBLIC_API_URL ?? "https://bbm-server-hfq1.onrender.com").replace(
   /\/+$/,
   ""
 );
+
+// El back solo permite CORS desde localhost, así que el navegador siempre
+// pasa por nuestro proxy (app/api/bbm/[...path]/route.ts).
+const API_URL = "/api/bbm";
 
 // Render (plan free) duerme el server tras un rato sin tráfico y tarda ~1 min
 // en despertar. Los timeouts tienen que tolerar ese arranque en frío.
@@ -88,7 +92,10 @@ export async function wakeServer(): Promise<boolean> {
 
 /** El back puede devolver la URL relativa a su propio host; la hacemos absoluta. */
 export function resolveModelUrl(url: string): string {
-  if (/^https?:\/\//i.test(url) || url.startsWith("blob:")) return url;
+  if (url.startsWith("blob:")) return url;
+  // Archivos servidos por el back también tienen que ir por el proxy (CORS)
+  if (url.startsWith(BACKEND_URL)) url = url.slice(BACKEND_URL.length);
+  if (/^https?:\/\//i.test(url)) return url;
   return `${API_URL}${url.startsWith("/") ? "" : "/"}${url}`;
 }
 
