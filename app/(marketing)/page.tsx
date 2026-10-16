@@ -36,7 +36,7 @@ const features = [
 
 export default function LandingPage() {
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-[#2d4741] font-sans text-white selection:bg-[#41C086] selection:text-[#07100B]">
+    <main className="relative min-h-screen overflow-x-hidden  font-sans text-white selection:bg-[#41C086] selection:text-[#07100B]">
       {/* NAV (el de siempre: links, sesión, menú mobile) */}
       <div className="absolute left-0 top-0 z-50 w-full">
         <LandingNavbar />
@@ -545,9 +545,9 @@ export default function LandingPage() {
           <div className="relative mx-auto h-full max-w-360">
             <motion.div
               {...inView}
-              className="absolute left-5.25 right-4.25 top-28.75 h-60 rounded-lg bg-white/8.5"
+              className="absolute left-5.25 right-4.25 top-28.75 flex h-60 items-center justify-center gap-10 rounded-lg bg-white/8.5 px-8 lg:gap-24"
             >
-              <div className="absolute left-108.5 top-12">
+              <div>
                 <AnimatedLetters
                   className="font-display text-[55px] font-bold leading-15.5 tracking-[-0.06em]"
                   segments={[
@@ -561,13 +561,14 @@ export default function LandingPage() {
                   la prótesis que tu perro necesita.
                 </p>
               </div>
+              <div className="flex shrink-0 flex-col items-center gap-5">
               <Link
                 href="/login"
-                className="absolute left-266.75 top-18.25 flex h-13.75 w-66.5 items-center justify-center rounded-full bg-mint text-[16px] font-medium text-[#0d2a20] transition-all duration-300 hover:bg-white"
+                className="flex h-13.75 w-66.5 items-center justify-center rounded-full bg-mint text-[16px] font-medium text-[#0d2a20] transition-all duration-300 hover:bg-white"
               >
                 Crear cuenta
               </Link>
-              <p className="absolute left-271.75 top-39.5 text-[15px] text-white/90">
+              <p className="text-[15px] text-white/90">
                 ¿Ya tenés cuenta?{" "}
                 <Link
                   href="/login"
@@ -576,6 +577,7 @@ export default function LandingPage() {
                   Iniciá sesión
                 </Link>
               </p>
+              </div>
             </motion.div>
           </div>
         </div>

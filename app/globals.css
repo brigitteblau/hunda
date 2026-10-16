@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #2d4741;
+  --foreground: #ffffff;
 }
 
 @theme inline {
@@ -74,4 +74,14 @@ html {
 .dots {
   background-image: radial-gradient(rgba(255, 255, 255, 0.13) 1.3px, transparent 1.6px);
   background-size: 27px 27px;
+}
+
+
+html {
+  background-color: #2d4741;
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.13) 1.3px, transparent 1.6px),
+    linear-gradient(160deg, #2d4741 0%, #3b3a44 50%, #2c443f 100%);
+  background-size: 27px 27px, 100% 100%;
+  background-attachment: fixed;
 }

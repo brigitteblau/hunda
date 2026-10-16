@@ -31,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${inter.variable} ${geistMono.variable}`}>
-      <body className="min-h-screen flex flex-col font-sans antialiased bg-white text-[#171717]">
+      <body className="min-h-screen flex flex-col font-sans antialiased text-white">
         {children}
       </body>
     </html>
