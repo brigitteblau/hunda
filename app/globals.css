@@ -76,6 +76,16 @@ html {
   background-size: 27px 27px;
 }
 
+/* Fondo de la zona logueada (valores del Figma).
+   Los glows van arriba del linear-gradient para que se vean. */
+.app-bg {
+  background-color: #1c2f2a;
+  background-image:
+    radial-gradient(50% 50% at 85% 8%, rgba(65, 192, 134, 0.22) 0%, rgba(65, 192, 134, 0) 100%),
+    radial-gradient(50% 50% at 12% 92%, rgba(154, 97, 126, 0.14) 0%, rgba(154, 97, 126, 0) 100%),
+    linear-gradient(180deg, #2a4640 0%, #1c2f2a 100%);
+}
+
 
 html {
   background-color: #2d4741;

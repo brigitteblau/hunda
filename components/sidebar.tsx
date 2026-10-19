@@ -32,7 +32,7 @@ type NavItem = {
 };
 
 const mainItems: NavItem[] = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Home", href: "/dashboard", icon: LayoutDashboard },
   { label: "Nueva Prótesis", href: "/form", icon: PlusSquare },
   { label: "Mis perros", href: "/mis-perros", icon: PawPrint },
   { label: "Help", href: "/help", icon: HelpCircle },
@@ -83,7 +83,6 @@ export default function Sidebar({
           {/* Logo */}
           <div className="flex items-center justify-between px-2">
             <Link href="/" className="flex items-center gap-2">
-              <Image src="/logo2.svg" alt="hunda" width={32} height={32} />
               <span className="text-xl font-extrabold tracking-[-0.02em]">
                 hunda<span className="text-[#41C086]">.</span>
               </span>

@@ -114,7 +114,7 @@ export default function HelpPage() {
     "w-full h-11 bg-white/5 border border-white/10 px-3.5 text-sm text-white placeholder:text-white/30 outline-none rounded-lg focus:border-[#41C086] focus:ring-2 focus:ring-[#41C086]/20 transition-colors";
 
   return (
-    <div className="min-h-screen bg-[#0B0F0D]">
+    <div className="min-h-screen">
       {/* HERO */}
       <section className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-16 pb-24">
         <div className="flex flex-col gap-8 pb-20">
