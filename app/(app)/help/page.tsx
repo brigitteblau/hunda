@@ -1,241 +1,393 @@
-import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
-import { Sparkles, HeartPulse, Ruler, HeartHandshake, Mail } from "lucide-react";
+"use client";
 
-interface Faq {
-  question: string;
-  answer: string;
-}
+import { useState } from "react";
+import { ChevronDown, ArrowRight, Mail, MapPin, Heart, Check } from "lucide-react";
+import { Caveat } from "next/font/google";
+import { FaRegCircleQuestion, FaWhatsapp, FaInstagram } from "react-icons/fa6";
 
-interface FaqCategory {
-  title: string;
-  description: string;
-  icon: React.ElementType;
-  items: Faq[];
-}
+// Fuente manuscrita para "Leemos cada mensaje". Cambiá Caveat por otra de Google Fonts si querés.
+const script = Caveat({ subsets: ["latin"], weight: ["500", "600"] });
 
-const categories: FaqCategory[] = [
+/* ------------------------------------------------------------------ */
+/* Datos de contacto — editá acá si algo cambia                        */
+/* ------------------------------------------------------------------ */
+const CONTACT = {
+  email: "betterbm26@gmail.com",
+  whatsappLabel: "+54 9 11 7366 7824",
+  whatsappHref: "https://wa.me/5491173667824",
+  instagramLabel: "@hunda_ok",
+  instagramHref: "https://instagram.com/hunda_ok",
+  location: "ORT Belgrano, CABA",
+};
+
+const TOPICS = ["Consulta", "Quiero colaborar", "Auspiciar", "Prensa"] as const;
+
+/* ------------------------------------------------------------------ */
+/* FAQ — mismo orden que el diseño                                     */
+/* ------------------------------------------------------------------ */
+const faqs: { question: string; answer: string }[] = [
   {
-    title: "La plataforma",
-    description: "Qué es hunda. y qué podés hacer con ella.",
-    icon: Sparkles,
-    items: [
-      {
-        question: "¿Qué es hunda.?",
-        answer:
-          "hunda. es una plataforma que busca facilitar el acceso a órtesis y prótesis personalizadas para perros. Permite cargar los datos del animal, generar un modelo 3D adaptado y encontrar dónde imprimirlo.",
-      },
-      {
-        question: "¿Cómo puedo solicitar una evaluación?",
-        answer:
-          "Entrá a \"Nueva Prótesis\" desde el dashboard y cargá los datos de tu perro: fotos, medidas, peso, edad y tipo de lesión. Con eso generamos un modelo 3D personalizado en minutos.",
-      },
-      {
-        question: "¿Cómo puedo comunicarme con hunda.?",
-        answer:
-          "Podés escribirnos con el formulario de esta misma página, o desde la sección de Contacto. Respondemos en un plazo de hasta 72 horas.",
-      },
-    ],
+    question: "¿Qué es HUNDA?",
+    answer:
+      "HUNDA es una plataforma que busca facilitar el acceso a órtesis y prótesis personalizadas para perros. Permite cargar los datos del animal, generar un modelo 3D adaptado y encontrar dónde imprimirlo.",
   },
   {
-    title: "¿Es para mi perro?",
-    description: "Antes de empezar, esto es lo que conviene saber.",
-    icon: HeartPulse,
-    items: [
-      {
-        question: "¿Qué perros pueden usar una prótesis?",
-        answer:
-          "Está pensado principalmente para perros con problemas de movilidad, lesiones o amputaciones en alguna extremidad. En este MVP empezamos con órtesis simples: férulas, soportes y estabilizadores.",
-      },
-      {
-        question: "¿Cómo sé si mi perro necesita una prótesis?",
-        answer:
-          "Lo recomendable es consultar primero con un veterinario. Un profesional puede evaluar la lesión o la dificultad de movilidad y determinar qué tipo de solución conviene.",
-      },
-      {
-        question: "¿Las prótesis reemplazan el tratamiento veterinario?",
-        answer:
-          "No. hunda. no reemplaza la atención ni el tratamiento veterinario — busca facilitar el acceso a soluciones de movilidad, pero la evaluación de un profesional sigue siendo fundamental.",
-      },
-    ],
+    question: "¿Qué perros pueden usar una prótesis?",
+    answer:
+      "Está pensado principalmente para perros con problemas de movilidad, lesiones o amputaciones en alguna extremidad. En este MVP empezamos con órtesis simples: férulas, soportes y estabilizadores.",
   },
   {
-    title: "Medidas y fabricación",
-    description: "Cómo pasamos de tus datos a una pieza imprimible.",
-    icon: Ruler,
-    items: [
-      {
-        question: "¿Cómo toman las medidas?",
-        answer:
-          "Vos cargás las medidas del muñón (longitud y circunferencias) junto con el peso y otros datos del perro. Esas medidas ajustan los parámetros del modelo 3D antes de generarlo — te guiamos con un diagrama en cada paso.",
-      },
-      {
-        question: "¿Las prótesis son personalizadas?",
-        answer:
-          "Sí. Usamos las medidas, el peso y las características de la lesión para adaptar el modelo a cada perro en particular.",
-      },
-      {
-        question: "¿Cuánto tarda la fabricación?",
-        answer:
-          "Depende del modelo, sus medidas y la disponibilidad del punto de impresión que elijas. Podés hacer seguimiento del pedido desde tu dashboard.",
-      },
-      {
-        question: "¿Las prótesis son resistentes?",
-        answer:
-          "El diseño se ajusta al uso y las características del perro, pero la resistencia final también depende del material y el proceso de impresión de cada punto aliado.",
-      },
-      {
-        question: "¿Qué pasa si la prótesis necesita un ajuste?",
-        answer:
-          "Podés revisar las medidas cargadas y volver a generar el modelo con los valores corregidos antes de imprimir una nueva versión.",
-      },
-    ],
+    question: "¿Cómo sé si mi perro necesita una prótesis?",
+    answer:
+      "Lo recomendable es consultar primero con un veterinario. Un profesional puede evaluar la lesión o la dificultad de movilidad y determinar qué tipo de solución conviene.",
   },
   {
-    title: "Cuidado y adaptación",
-    description: "Qué esperar una vez que tu perro empieza a usarla.",
-    icon: HeartHandshake,
-    items: [
-      {
-        question: "¿Mi perro podrá correr y jugar?",
-        answer:
-          "Depende del tipo de lesión, la solución usada y la adaptación de cada perro. Seguí siempre la recomendación de un veterinario sobre qué actividades puede realizar.",
-      },
-      {
-        question: "¿Necesita un período de adaptación?",
-        answer:
-          "Sí, es normal que el perro necesite un tiempo para acostumbrarse. Ese período varía según el animal y el tipo de pieza.",
-      },
-    ],
+    question: "¿Las prótesis son personalizadas?",
+    answer:
+      "Sí. Usamos las medidas, el peso y las características de la lesión para adaptar el modelo a cada perro en particular.",
+  },
+  {
+    question: "¿Cómo toman las medidas?",
+    answer:
+      "Vos cargás las medidas del muñón (longitud y circunferencias) junto con el peso y otros datos del perro. Esas medidas ajustan los parámetros del modelo 3D antes de generarlo — te guiamos con un diagrama en cada paso.",
+  },
+  {
+    question: "¿Cuánto tarda la fabricación?",
+    answer:
+      "Depende del modelo, sus medidas y la disponibilidad del punto de impresión que elijas. Podés hacer seguimiento del pedido desde tu dashboard.",
+  },
+  {
+    question: "¿Las prótesis son resistentes?",
+    answer:
+      "El diseño se ajusta al uso y las características del perro, pero la resistencia final también depende del material y el proceso de impresión de cada punto aliado.",
+  },
+  {
+    question: "¿Mi perro podrá correr y jugar?",
+    answer:
+      "Depende del tipo de lesión, la solución usada y la adaptación de cada perro. Seguí siempre la recomendación de un veterinario sobre qué actividades puede realizar.",
+  },
+  {
+    question: "¿Necesita un período de adaptación?",
+    answer:
+      "Sí, es normal que el perro necesite un tiempo para acostumbrarse. Ese período varía según el animal y el tipo de pieza.",
+  },
+  {
+    question: "¿Cómo puedo solicitar una evaluación?",
+    answer:
+      "Entrá a \"Nueva Prótesis\" desde el dashboard y cargá los datos de tu perro: fotos, medidas, peso, edad y tipo de lesión. Con eso generamos un modelo 3D personalizado en minutos.",
+  },
+  {
+    question: "¿Qué pasa si la prótesis necesita un ajuste?",
+    answer:
+      "Podés revisar las medidas cargadas y volver a generar el modelo con los valores corregidos antes de imprimir una nueva versión.",
+  },
+  {
+    question: "¿Las prótesis reemplazan el tratamiento veterinario?",
+    answer:
+      "No. HUNDA no reemplaza la atención ni el tratamiento veterinario — busca facilitar el acceso a soluciones de movilidad, pero la evaluación de un profesional sigue siendo fundamental.",
+  },
+  {
+    question: "¿Cómo puedo comunicarme con HUNDA?",
+    answer:
+      "Podés escribirnos con el formulario de esta misma página o a nuestro email, WhatsApp e Instagram. Respondemos en un plazo de hasta 72 horas.",
   },
 ];
 
+/* ------------------------------------------------------------------ */
+/* Acordeón animado (grid-rows 0fr → 1fr, sin dependencias)            */
+/* ------------------------------------------------------------------ */
+function FaqItem({
+  id,
+  question,
+  answer,
+  open,
+  onToggle,
+}: {
+  id: string;
+  question: string;
+  answer: string;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <div
+      className={`rounded-2xl border backdrop-blur-sm transition-colors duration-300 ${
+        open
+          ? "border-[#41C086]/35 bg-white/6"
+          : "border-white/10 bg-white/3 hover:border-white/20 hover:bg-white/5"
+      }`}
+    >
+      <button
+        type="button"
+        id={`${id}-btn`}
+        aria-expanded={open}
+        aria-controls={`${id}-panel`}
+        onClick={onToggle}
+        className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-[13.5px] font-medium text-white outline-none focus-visible:ring-2 focus-visible:ring-[#41C086]/40 rounded-2xl"
+      >
+        <span className="flex items-center gap-3">
+          <FaRegCircleQuestion
+            className={`h-4 w-4 shrink-0 transition-colors duration-300 ${
+              open ? "text-[#41C086]" : "text-white/35"
+            }`}
+          />
+          {question}
+        </span>
+        <ChevronDown
+          className={`h-4 w-4 shrink-0 text-white/40 transition-transform duration-300 ease-out ${
+            open ? "rotate-180 text-[#41C086]" : ""
+          }`}
+        />
+      </button>
+
+      <div
+        id={`${id}-panel`}
+        role="region"
+        aria-labelledby={`${id}-btn`}
+        className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none ${
+          open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        }`}
+      >
+        <div className="overflow-hidden">
+          <p className="mx-5 mb-5 border-t border-white/10 pt-4 text-[13px] leading-6 text-white/55">
+            {answer}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Página                                                              */
+/* ------------------------------------------------------------------ */
 export default function HelpPage() {
-  const fieldClass =
-    "w-full h-11 bg-white/5 border border-white/10 px-3.5 text-sm text-white placeholder:text-white/30 outline-none rounded-lg focus:border-[#41C086] focus:ring-2 focus:ring-[#41C086]/20 transition-colors";
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [topic, setTopic] = useState<(typeof TOPICS)[number]>("Consulta");
+  const [message, setMessage] = useState("");
+  const [sent, setSent] = useState(false);
+
+  const fieldBase =
+    "w-full border border-white/10 bg-white/5 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-mint focus:ring-2 focus:ring-mint/20";
+  const inputClass = `${fieldBase} h-11 rounded-full px-5`;
+  const textareaClass = `${fieldBase} h-32 resize-none rounded-2xl px-5 py-4`;
+  const labelClass = "mb-2 block text-[12px] text-white/75";
+
+  // Todavía no hay endpoint propio: se abre el cliente de mail con el mensaje armado.
+  // Cuando exista una API/route, reemplazar el cuerpo de esta función.
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const subject = encodeURIComponent(`[${topic}] Mensaje de ${name}`);
+    const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
+    window.location.href = `mailto:${CONTACT.email}?subject=${subject}&body=${body}`;
+    setSent(true);
+  };
+
+  const contactRows = [
+    { icon: Mail, label: "Email", value: CONTACT.email, href: `mailto:${CONTACT.email}` },
+    { icon: FaWhatsapp, label: "WhatsApp", value: CONTACT.whatsappLabel, href: CONTACT.whatsappHref },
+    { icon: FaInstagram, label: "Instagram", value: CONTACT.instagramLabel, href: CONTACT.instagramHref },
+    { icon: MapPin, label: "Ubicación", value: CONTACT.location, href: undefined },
+  ];
 
   return (
     <div className="min-h-screen">
-      {/* HERO */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-16 pb-24">
-        <div className="flex flex-col gap-8 pb-20">
-          <h1 className="text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold tracking-[-0.03em] leading-tight text-white">
-            Ayudarte es nuestra{" "}
-            <span className="text-[#41C086]">prioridad.</span>
+      <div className="mx-auto w-full max-w-5xl px-4 pb-20 pt-10 sm:px-8 lg:px-12 lg:pt-14">
+        {/* HERO */}
+        <header className="mb-10">
+          <h1 className="font-display text-[clamp(1.9rem,5vw,2.8rem)] font-semibold leading-tight tracking-[-0.03em] text-white">
+            Ayudarte es <span className="text-[#41C086]">nuestra prioridad.</span>
           </h1>
-
-          <p className="text-[16px] leading-7 text-white/50 max-w-155">
-            Agrupamos las preguntas más frecuentes por tema para que sea más
-            fácil encontrar lo que buscás. Si no encontrás tu respuesta,
-            escribinos con el formulario de acá abajo.
+          <p className="mt-3 max-w-xl text-[13.5px] leading-6 text-white/55">
+            Te dejamos una serie de preguntas frecuentes para poder ayudarte. Si
+            creés de necesitar ayuda personalizada, contactanos a través de
+            nuestro formulario.
           </p>
-        </div>
+        </header>
 
-        {/* Formulario */}
-        <div className="w-full rounded-[28px] border border-white/8 bg-white/3 p-6 sm:p-12">
-          <div className="flex flex-col gap-4 pb-14">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-[#41C086] flex items-center justify-center shrink-0">
-                <IoChatbubbleEllipsesOutline className="w-5 h-5 text-[#0B0F0D]" />
-              </div>
-              <h2 className="text-[20px] font-semibold text-white">
-                Envíanos un mensaje
+        {/* FAQ */}
+        <section aria-labelledby="faq-title" className="mb-16">
+          <div className="mb-5 flex items-center gap-3">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#41C086]/15 text-[#41C086]">
+              <FaRegCircleQuestion className="h-4 w-4" />
+            </span>
+            <h2 id="faq-title" className="text-lg font-semibold text-white">
+              Preguntas frecuentes
+            </h2>
+          </div>
+
+          <div className="flex flex-col gap-2.5">
+            {faqs.map((faq, i) => (
+              <FaqItem
+                key={faq.question}
+                id={`faq-${i}`}
+                question={faq.question}
+                answer={faq.answer}
+                open={openIndex === i}
+                onToggle={() => setOpenIndex(openIndex === i ? null : i)}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* CONTACTO */}
+        <section
+          aria-labelledby="contact-title"
+          className="rounded-[28px] border border-white/10 bg-white/3 p-6 backdrop-blur-sm sm:p-10"
+        >
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-14">
+            {/* Info */}
+            <div>
+              <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/35">
+                Contactanos
+              </p>
+              <h2
+                id="contact-title"
+                className="font-display text-[clamp(1.8rem,4vw,2.4rem)] font-semibold leading-none tracking-[-0.03em] text-[#41C086]"
+              >
+                Hablemos.
               </h2>
+              <p className="mt-4 max-w-sm text-[13.5px] leading-6 text-white/55">
+                ¿Tenés una consulta, querés colaborar o contarnos la historia de
+                tu perro? Te respondemos en menos de 72 h.
+              </p>
+
+              <ul className="mt-8 flex flex-col gap-4">
+                {contactRows.map(({ icon: Icon, label, value, href }) => {
+                  const content = (
+                    <>
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition-colors group-hover:text-[#41C086]">
+                        <Icon className="h-4 w-4" />
+                      </span>
+                      <span className="min-w-0 leading-tight">
+                        <span className="block text-[10px] uppercase tracking-wider text-white/35">
+                          {label}
+                        </span>
+                        <span className="block truncate text-[13px] text-white/80">{value}</span>
+                      </span>
+                    </>
+                  );
+                  return (
+                    <li key={label}>
+                      {href ? (
+                        <a
+                          href={href}
+                          target={href.startsWith("http") ? "_blank" : undefined}
+                          rel="noreferrer"
+                          className="group flex items-center gap-3"
+                        >
+                          {content}
+                        </a>
+                      ) : (
+                        <div className="group flex items-center gap-3">{content}</div>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
-            <p className="text-[12px] text-white/40 ml-12">
-              Trataremos de contestarte lo antes posible. Las respuestas
-              tardan hasta 72 horas.
-            </p>
-          </div>
 
-          <div className="flex flex-col gap-10">
-            <div className="grid sm:grid-cols-2 gap-6 sm:gap-10">
-              <div>
-                <label className="block text-[14px] mb-3 text-white/60">Nombre</label>
-                <input type="text" className={fieldClass} />
-              </div>
-              <div>
-                <label className="block text-[14px] mb-3 text-white/60">
-                  Correo electrónico
-                </label>
-                <input type="email" className={fieldClass} />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-[14px] mb-3 text-white/60">Asunto</label>
-              <input type="text" className={fieldClass} />
-            </div>
-
-            <div>
-              <label className="block text-[14px] mb-3 text-white/60">Mensaje</label>
-              <textarea className={`${fieldClass} h-40 resize-none py-3`} />
-            </div>
-
-            <div className="flex justify-end">
-              <button className="rounded-full bg-[#41C086] hover:bg-white transition-colors px-6 py-2.5 text-[13px] font-semibold text-[#0B0F0D]">
-                Enviar mensaje
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-4 pb-16">
-        <h2 className="text-[22px] font-bold text-white mb-2">Preguntas frecuentes</h2>
-        <p className="text-sm text-white/45 mb-10">Organizadas por tema.</p>
-
-        <div className="flex flex-col gap-14">
-          {categories.map((category) => (
-            <div key={category.title} className="grid md:grid-cols-[220px_1fr] gap-6 md:gap-10">
-              <div className="flex md:flex-col items-center md:items-start gap-3 md:gap-3">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#41C086]/12 text-[#41C086]">
-                  <category.icon size={18} />
-                </span>
+            {/* Formulario */}
+            <form onSubmit={handleSubmit}>
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <h3 className="text-base font-bold text-white">{category.title}</h3>
-                  <p className="text-xs text-white/40 mt-1 max-w-55">{category.description}</p>
+                  <label htmlFor="hp-name" className={labelClass}>
+                    Nombre
+                  </label>
+                  <input
+                    id="hp-name"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Tu nombre"
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="hp-email" className={labelClass}>
+                    Email
+                  </label>
+                  <input
+                    id="hp-email"
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="tu@email.com"
+                    className={inputClass}
+                  />
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3">
-                {category.items.map((faq) => (
-                  <details
-                    key={faq.question}
-                    className="group rounded-2xl border border-white/8 bg-white/3 open:border-[#41C086]/30"
-                  >
-                    <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 text-sm font-medium text-white">
-                      {faq.question}
-                      <span className="shrink-0 text-white/40 transition-transform group-open:rotate-180">
-                        ⌄
-                      </span>
-                    </summary>
+              <fieldset className="mt-4">
+                <legend className="mb-2 text-[12px] text-white/75">Motivo</legend>
+                <div className="flex flex-wrap gap-2">
+                  {TOPICS.map((t) => {
+                    const active = topic === t;
+                    return (
+                      <button
+                        key={t}
+                        type="button"
+                        aria-pressed={active}
+                        onClick={() => setTopic(t)}
+                        className={`rounded-full border px-4 py-2 text-[12px] transition-all duration-200 ${
+                          active
+                            ? "border-mint bg-mint/10 font-semibold text-mint"
+                            : "border-white/20 bg-transparent text-white/80 hover:border-white/40 hover:text-white"
+                        }`}
+                      >
+                        {t}
+                      </button>
+                    );
+                  })}
+                </div>
+              </fieldset>
 
-                    <div className="mx-6 mb-5 pt-4 border-t border-white/8">
-                      <p className="text-[13.5px] leading-6 text-white/50">
-                        {faq.answer}
-                      </p>
-                    </div>
-                  </details>
-                ))}
+              <div className="mt-4">
+                <label htmlFor="hp-msg" className={labelClass}>
+                  Mensaje
+                </label>
+                <textarea
+                  id="hp-msg"
+                  required
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Contanos en qué te podemos ayudar..."
+                  className={textareaClass}
+                />
               </div>
-            </div>
-          ))}
-        </div>
 
-        <div className="mt-16 flex items-center gap-3 rounded-2xl border border-white/8 bg-white/3 px-6 py-5">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/5 text-white/50">
-            <Mail size={16} />
-          </span>
-          <p className="text-sm text-white/60">
-            ¿No encontraste lo que buscabas?{" "}
-            <a href="/contact" className="text-[#41C086] font-medium hover:text-white transition-colors">
-              Escribinos directamente
-            </a>{" "}
-            y te ayudamos.
-          </p>
-        </div>
-      </section>
+              <div className="mt-6 flex items-center justify-between gap-3">
+                <span
+                  className={`${script.className} flex items-center gap-2 text-[19px] leading-none text-mint`}
+                >
+                  <Heart className="h-4 w-4 shrink-0" />
+                  Leemos cada mensaje
+                </span>
+
+                <button
+                  type="submit"
+                  className="group flex shrink-0 items-center gap-2.5 rounded-full bg-mint px-7 py-3.5 text-[13px] font-semibold text-[#0B0F0D] transition-colors hover:bg-white"
+                >
+                  {sent ? (
+                    <>
+                      Enviado <Check className="h-4 w-4" />
+                    </>
+                  ) : (
+                    <>
+                      Enviar mensaje
+                      <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
     </div>
   );
 }
