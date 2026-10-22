@@ -81,9 +81,11 @@ html {
 .app-bg {
   background-color: #1c2f2a;
   background-image:
+    radial-gradient(rgba(255, 255, 255, 0.13) 1.3px, transparent 1.6px),
     radial-gradient(50% 50% at 85% 8%, rgba(65, 192, 134, 0.22) 0%, rgba(65, 192, 134, 0) 100%),
     radial-gradient(50% 50% at 12% 92%, rgba(154, 97, 126, 0.14) 0%, rgba(154, 97, 126, 0) 100%),
     linear-gradient(180deg, #2a4640 0%, #1c2f2a 100%);
+  background-size: 27px 27px, 100% 100%, 100% 100%, 100% 100%;
 }
 
 

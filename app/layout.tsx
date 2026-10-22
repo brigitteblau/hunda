@@ -30,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${inter.variable} ${geistMono.variable}`}>
+    <html lang="es" className={`${inter.variable} ${geistMono.variable} ${poppins.variable}`}>
       <body className="min-h-screen flex flex-col font-sans antialiased text-white">
         {children}
       </body>
