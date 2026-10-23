@@ -31,7 +31,7 @@ const posts = [
 
 export default function BlogPage() {
   return (
-    <main className="w-full min-h-screen bg-[#0B0F0D]">
+    <main className="app-bg w-full min-h-screen">
       <LandingNavbar />
 
       <section className="px-5 sm:px-8 lg:px-16 pt-40 pb-28">
