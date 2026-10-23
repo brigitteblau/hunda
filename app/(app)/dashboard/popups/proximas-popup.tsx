@@ -36,7 +36,7 @@ export default function ProximasPopup({
                 <h3 className="text-[17px] font-semibold text-white">
                   {p.perro} · {p.nombre}
                 </h3>
-                <p className="text-sm text-white/55">{p.tipo}</p>
+                {p.raza && <p className="text-sm text-white/55">{p.raza}</p>}
               </div>
               <StatusBadge estado={p.estado} />
             </div>
@@ -72,12 +72,16 @@ export default function ProximasPopup({
                   <Info className="h-4 w-4 shrink-0" />
                   Todavía no elegiste dónde imprimirla.
                 </p>
-                <div>
+                <div className="flex flex-wrap items-center gap-3">
                   {/* TODO: llevar a la elección de punto de impresión */}
                   <button type="button" className={`${botonMint} h-11`}>
                     <MapPin className="h-4 w-4" />
                     Elegir dónde imprimir
                   </button>
+                  <Link href={p.href} className={botonFantasma}>
+                    Ver detalles
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
                 </div>
               </>
             )}

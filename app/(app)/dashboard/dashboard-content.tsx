@@ -3,14 +3,7 @@
 import { useCallback, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Box, Clock, PawPrint, Plus, Printer, type LucideIcon } from "lucide-react";
-import {
-  actividad,
-  perros,
-  protesis,
-  protesisEnProceso,
-  protesisListas,
-  proximasImpresiones,
-} from "./dashboard-data";
+import type { DashboardData } from "./dashboard-data";
 import { DogAvatar, StatusBadge, botonFantasma } from "./dashboard-ui";
 import ActividadPopup, { iconosActividad } from "./popups/actividad-popup";
 import CreadasPopup from "./popups/creadas-popup";
@@ -31,36 +24,61 @@ function unirNombres(nombres: string[]) {
   return `${nombres.slice(0, -1).join(", ")} y ${nombres[nombres.length - 1]}`;
 }
 
-function textoResumen() {
-  const proceso = protesisEnProceso.length;
-  const listas = protesisListas.length;
-
-  if (proceso === 0 && listas === 0) {
-    return ["Todavía no tenés prótesis en proceso.", "Creá la primera para empezar."];
-  }
-
-  const partes: string[] = [];
-  if (proceso > 0) partes.push(`${proceso} prótesis en proceso`);
-  if (listas > 0) partes.push(`${listas} ${listas === 1 ? "lista" : "listas"} para imprimir`);
-
-  return [
-    `Tenés ${partes.join(" y ")}.`,
-    `${unirNombres(perros.map((p) => p.nombre))} ${perros.length === 1 ? "está" : "están"} cada vez más cerca de volver a correr.`,
-  ];
+function nombresUnicos(nombres: string[]) {
+  return [...new Set(nombres)];
 }
 
-export default function DashboardContent({ nombre }: { nombre: string }) {
+export default function DashboardContent({
+  nombre,
+  datos,
+}: {
+  nombre: string;
+  datos: DashboardData;
+}) {
   const [popup, setPopup] = useState<PopupId>(null);
   const cerrar = useCallback(() => setPopup(null), []);
 
+  const { perros, protesis, actividad } = datos;
+  const enProceso = protesis.filter((p) => p.estado !== "Lista para imprimir");
+  const listas = protesis.filter((p) => p.estado === "Lista para imprimir");
+  // Hoy "próxima impresión" = prótesis con archivo listo (no hay turnos en la base todavía)
+  const proximas = listas;
+  // En el home: lo último de cada perro (máx. 3). El pop up muestra todo.
+  const perrosVistos = new Set<string>();
+  const resumenActividad = actividad
+    .filter((a) => {
+      if (perrosVistos.has(a.perroId)) return false;
+      perrosVistos.add(a.perroId);
+      return true;
+    })
+    .slice(0, 3);
+
   const stats: { id: Exclude<PopupId, null>; valor: number; etiqueta: string; icono: LucideIcon }[] = [
-    { id: "proceso", valor: protesisEnProceso.length, etiqueta: "Prótesis en proceso", icono: Clock },
-    { id: "lista", valor: protesisListas.length, etiqueta: "Lista para imprimir", icono: Printer },
+    { id: "proceso", valor: enProceso.length, etiqueta: "Prótesis en proceso", icono: Clock },
+    { id: "lista", valor: listas.length, etiqueta: "Lista para imprimir", icono: Printer },
     { id: "creadas", valor: protesis.length, etiqueta: "Prótesis creadas", icono: Box },
   ];
 
-  const resumenActividad = actividad.filter((a) => a.resumen);
-  const lineasResumen = textoResumen();
+  const lineasResumen = (() => {
+    if (perros.length === 0) {
+      return ["Todavía no cargaste ningún perro.", "Cargá a tu perro y creá su primera prótesis."];
+    }
+    if (protesis.length === 0) {
+      const nombres = unirNombres(nombresUnicos(perros.map((p) => p.nombre)));
+      return ["Todavía no creaste ninguna prótesis.", `Creá la primera para ${nombres}.`];
+    }
+
+    const partes: string[] = [];
+    if (enProceso.length > 0) partes.push(`${enProceso.length} prótesis en proceso`);
+    if (listas.length > 0) {
+      partes.push(`${listas.length} ${listas.length === 1 ? "lista" : "listas"} para imprimir`);
+    }
+    const conProtesis = nombresUnicos(protesis.map((p) => p.perro));
+    return [
+      `Tenés ${partes.join(" y ")}.`,
+      `${unirNombres(conProtesis)} ${conProtesis.length === 1 ? "está" : "están"} cada vez más cerca de volver a correr.`,
+    ];
+  })();
 
   return (
     <div className="flex flex-col gap-8 p-4 sm:p-6 lg:p-12">
@@ -92,10 +110,12 @@ export default function DashboardContent({ nombre }: { nombre: string }) {
                 {String(valor).padStart(2, "0")}
               </span>
               <span className="text-[15px] text-white/85">{etiqueta}</span>
-              <button type="button" onClick={() => setPopup(id)} className={linkVerde}>
-                Ver todas
-                <ArrowRight className="h-3.5 w-3.5" />
-              </button>
+              {valor > 0 && (
+                <button type="button" onClick={() => setPopup(id)} className={linkVerde}>
+                  Ver todas
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+              )}
             </div>
           </div>
         ))}
@@ -106,14 +126,19 @@ export default function DashboardContent({ nombre }: { nombre: string }) {
         <section className={`${tarjeta} flex flex-col gap-5 p-6`}>
           <h2 className="font-display text-[22px] font-medium text-white">Próximas impresiones</h2>
 
-          {proximasImpresiones.length === 0 ? (
+          {proximas.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-white/15 py-12 text-center">
               <PawPrint className="h-8 w-8 text-white/30" />
-              <span className="text-sm text-white/70">Todavía no tenés impresiones en curso</span>
+              <div className="flex flex-col gap-1">
+                <span className="text-sm font-medium text-white/70">
+                  Todavía no tenés impresiones en curso
+                </span>
+                <span className="text-xs text-white/40">Creá una nueva prótesis para empezar</span>
+              </div>
             </div>
           ) : (
             <ul className="flex flex-col gap-3">
-              {proximasImpresiones.map((p) => (
+              {proximas.slice(0, 2).map((p) => (
                 <li
                   key={p.id}
                   className="flex flex-wrap items-center gap-4 rounded-2xl border border-white/15 bg-white/[0.06] p-3.5"
@@ -121,7 +146,10 @@ export default function DashboardContent({ nombre }: { nombre: string }) {
                   <DogAvatar nombre={p.perro} fotoUrl={p.fotoUrl} size={68} />
                   <div className="flex min-w-0 flex-1 flex-col gap-1">
                     <span className="text-[17px] font-semibold text-white">{p.perro}</span>
-                    <span className="text-sm text-white/80">{p.nombre}</span>
+                    <span className="text-sm text-white/80">
+                      {p.nombre}
+                      {p.raza ? ` · ${p.raza}` : ""}
+                    </span>
                   </div>
                   <StatusBadge estado={p.estado} />
                   <Link href={p.href} className={`${botonFantasma} h-9`}>
@@ -133,19 +161,24 @@ export default function DashboardContent({ nombre }: { nombre: string }) {
             </ul>
           )}
 
-          <div className="flex justify-center pt-2">
-            <button type="button" onClick={() => setPopup("proximas")} className={linkVerde}>
-              Ver todas mis impresiones
-              <ArrowRight className="h-3.5 w-3.5" />
-            </button>
-          </div>
+          {proximas.length > 0 && (
+            <div className="flex justify-center pt-2">
+              <button type="button" onClick={() => setPopup("proximas")} className={linkVerde}>
+                Ver todas mis impresiones
+                <ArrowRight className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          )}
         </section>
 
         <section className={`${tarjeta} flex flex-col gap-5 p-6`}>
           <h2 className="font-display text-[22px] font-medium text-white">Actividad reciente</h2>
 
           {resumenActividad.length === 0 ? (
-            <p className="text-sm text-white/70">Todavía no hay actividad.</p>
+            <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-white/15 py-12 text-center">
+              <PawPrint className="h-8 w-8 text-white/30" />
+              <span className="text-sm font-medium text-white/70">Todavía no hay actividad</span>
+            </div>
           ) : (
             <ol className="flex flex-col">
               {resumenActividad.map((a, i) => {
@@ -164,7 +197,7 @@ export default function DashboardContent({ nombre }: { nombre: string }) {
                       )}
                     </div>
                     <div className={`flex flex-col gap-0.5 ${ultimo ? "" : "pb-5"}`}>
-                      <span className="text-sm text-mint">{a.resumen}</span>
+                      <span className="text-sm text-mint">{a.corto}</span>
                       <span className="text-sm text-white/90">{a.titulo}</span>
                     </div>
                   </li>
@@ -173,12 +206,14 @@ export default function DashboardContent({ nombre }: { nombre: string }) {
             </ol>
           )}
 
-          <div className="flex justify-center pt-2">
-            <button type="button" onClick={() => setPopup("actividad")} className={linkVerde}>
-              Ver toda la actividad
-              <ArrowRight className="h-3.5 w-3.5" />
-            </button>
-          </div>
+          {resumenActividad.length > 0 && (
+            <div className="flex justify-center pt-2">
+              <button type="button" onClick={() => setPopup("actividad")} className={linkVerde}>
+                Ver toda la actividad
+                <ArrowRight className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          )}
         </section>
       </div>
 
@@ -207,10 +242,10 @@ export default function DashboardContent({ nombre }: { nombre: string }) {
       </section>
 
       {/* Pop ups */}
-      <ActividadPopup open={popup === "actividad"} onClose={cerrar} actividad={actividad} />
-      <ProcesosPopup open={popup === "proceso"} onClose={cerrar} protesis={protesisEnProceso} />
-      <ListaImprimirPopup open={popup === "lista"} onClose={cerrar} protesis={protesisListas[0]} />
-      <ProximasPopup open={popup === "proximas"} onClose={cerrar} protesis={proximasImpresiones} />
+      <ActividadPopup open={popup === "actividad"} onClose={cerrar} actividad={actividad} perros={perros} />
+      <ProcesosPopup open={popup === "proceso"} onClose={cerrar} protesis={enProceso} />
+      <ListaImprimirPopup open={popup === "lista"} onClose={cerrar} protesis={listas} />
+      <ProximasPopup open={popup === "proximas"} onClose={cerrar} protesis={proximas} />
       <CreadasPopup open={popup === "creadas"} onClose={cerrar} protesis={protesis} />
     </div>
   );
