@@ -525,13 +525,13 @@ export default function LandingPage() {
               </p>
               <div className="mt-12.5 ml-2.5 flex gap-5.5">
                 <Link
-                  href="/contact"
+                  href="/trabaja-con-nosotros"
                   className="flex h-15 w-70.75 items-center justify-center rounded-full bg-mint text-[16px] font-medium text-[#0d2a20] shadow-[0_10px_26px_rgba(0,0,0,0.3)] transition-all duration-300 hover:bg-white"
                 >
                   Unite al equipo
                 </Link>
                 <Link
-                  href="/blog"
+                  href="/sobre-nosotros"
                   className="flex h-15 w-66.25 items-center justify-center rounded-full border border-leaf text-[15.5px] font-medium text-leaf transition-all duration-300 hover:bg-leaf hover:text-[#0d2a20]"
                 >
                   ¡Conocé más sobre nosotros!

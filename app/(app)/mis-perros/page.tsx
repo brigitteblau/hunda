@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PawPrint, Plus } from "lucide-react";
+import { CircleHelp, PawPrint, Plus } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import PerroCard from "./perro-card";
 import { PERRO_COLUMNS, toPerro, type Perro, type PerroRow } from "./perro-data";
@@ -23,21 +23,21 @@ export default async function MisPerrosPage() {
   return (
     <div className="flex flex-col gap-8 p-4 sm:p-6 lg:p-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-[-0.02em] text-white">
+          <h1 className="font-display text-4xl font-bold tracking-[-0.02em] text-white sm:text-5xl">
             Mis perros
           </h1>
-          <p className="text-white/45">
+          <p className="text-lg text-white/80">
             {perros.length === 0
               ? "Todavía no registraste ningún perro."
-              : `Tenés ${perros.length} ${perros.length === 1 ? "perro registrado" : "perros registrados"}.`}
+              : "Administrá a tus compañeros y sus prótesis"}
           </p>
         </div>
 
         <Link
           href="/form"
-          className="flex items-center justify-center gap-2 rounded-full bg-[#41C086] px-5 py-3 text-sm font-semibold text-[#0B0F0D] hover:bg-white transition-colors"
+          className="flex items-center justify-center gap-2 self-start rounded-full bg-mint px-8 py-3.5 text-sm font-semibold text-[#0B0F0D] transition-colors hover:bg-white sm:self-auto"
         >
           <Plus className="h-4 w-4" />
           Agregar perro
@@ -58,7 +58,7 @@ export default async function MisPerrosPage() {
           </div>
           <Link
             href="/form"
-            className="mt-2 flex items-center gap-2 rounded-full bg-[#41C086] px-5 py-2.5 text-sm font-semibold text-[#0B0F0D] hover:bg-white transition-colors"
+            className="flex items-center gap-2 rounded-full bg-mint px-5 py-2.5 text-sm font-semibold text-[#0B0F0D] hover:bg-white transition-colors"
           >
             <Plus className="h-4 w-4" />
             Agregar perro
@@ -71,6 +71,15 @@ export default async function MisPerrosPage() {
           ))}
         </div>
       )}
+
+      {/* Ayuda */}
+      <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 pt-4 text-center text-sm text-white/75">
+        <CircleHelp className="h-5 w-5 text-white/60" />
+        ¿Tenés dudas sobre las prótesis de tu perro?
+        <Link href="/contact" className="font-medium text-mint transition-colors hover:text-white">
+          Contactanos
+        </Link>
+      </p>
     </div>
   );
 }

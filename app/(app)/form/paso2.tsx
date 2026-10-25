@@ -1,58 +1,122 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, Wrench, Pencil, AlertTriangle } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  Check,
+  Ruler,
+} from "lucide-react";
 import type { LimbData } from "./types";
-import LegMeasurementDiagram from "@/components/leg-measurement-diagram";
+import {
+  IconoTarjeta,
+  Required,
+  botonPrimario,
+  botonSecundario,
+  inputClass,
+  labelClass,
+  tarjeta,
+} from "./form-ui";
 
 interface Paso2MiembroAfectadoProps {
   data: LimbData;
   onChange: (data: LimbData) => void;
   onContinue: () => void;
   onBack: () => void;
+  onVerGuia: () => void;
 }
 
-const inputClass =
-  "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#41C086] focus:ring-2 focus:ring-[#41C086]/20 transition-colors";
-
-const fieldLabelClass = "text-xs font-semibold text-white/45 uppercase tracking-wide";
-
-function Required() {
-  return <span className="text-[#41C086]">*</span>;
-}
-
-function OptionButton({
+function OptionCard({
   selected,
   onClick,
   icon,
   label,
-  reverse = false,
 }: {
   selected: boolean;
   onClick: () => void;
   icon: React.ReactNode;
   label: string;
-  reverse?: boolean;
 }) {
   return (
     <button
       type="button"
+      role="radio"
+      aria-checked={selected}
       onClick={onClick}
-      className={`flex items-center justify-center gap-2 rounded-xl border px-4 py-4 text-sm font-medium transition-colors ${
-        reverse ? "flex-row-reverse" : ""
-      } ${
+      className={`relative flex h-[104px] flex-col items-center justify-center gap-2 rounded-2xl border text-sm font-medium transition-colors ${
         selected
-          ? "border-[#41C086] bg-[#41C086]/10 text-white"
-          : "border-white/10 bg-white/5 text-white/50 hover:border-white/25"
+          ? "border-mint bg-mint/10 text-white"
+          : "border-white/12 bg-white/5 text-white/70 hover:border-white/30"
       }`}
     >
-      {icon}
+      {selected && (
+        <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-mint text-[#0B0F0D]">
+          <Check className="h-3 w-3" strokeWidth={3} />
+        </span>
+      )}
+      <span
+        className={`flex h-10 w-10 items-center justify-center rounded-full ${
+          selected ? "bg-mint/20 text-mint" : "bg-white/10 text-white/70"
+        }`}
+      >
+        {icon}
+      </span>
       {label}
     </button>
   );
 }
 
-export default function Paso2MiembroAfectado({ data, onChange, onContinue, onBack }: Paso2MiembroAfectadoProps) {
+function MedidaInput({
+  id,
+  label,
+  hint,
+  value,
+  onChange,
+  invalid = false,
+}: {
+  id: string;
+  label: string;
+  hint: string;
+  value: string;
+  onChange: (value: string) => void;
+  invalid?: boolean;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      <label htmlFor={id} className={labelClass}>
+        {label} <Required />
+      </label>
+      <div className="relative">
+        <input
+          id={id}
+          type="number"
+          min={0}
+          step="0.1"
+          className={`${inputClass} pr-12 ${invalid ? "border-red-400/60 focus:border-red-400" : ""}`}
+          placeholder="0,0"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          required
+        />
+        <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-white/50">
+          cm
+        </span>
+      </div>
+      <p className="text-xs text-white/50">{hint}</p>
+    </div>
+  );
+}
+
+export default function Paso2MiembroAfectado({
+  data,
+  onChange,
+  onContinue,
+  onBack,
+  onVerGuia,
+}: Paso2MiembroAfectadoProps) {
   const [touchError, setTouchError] = useState(false);
 
   function update<K extends keyof LimbData>(key: K, value: LimbData[K]) {
@@ -61,18 +125,12 @@ export default function Paso2MiembroAfectado({ data, onChange, onContinue, onBac
 
   const distal = parseFloat(data.distalCircumferenceCm);
   const proximal = parseFloat(data.proximalCircumferenceCm);
-  const measurementsInverted =
-    !Number.isNaN(distal) && !Number.isNaN(proximal) && distal > proximal;
+  const measurementsInverted = !Number.isNaN(distal) && !Number.isNaN(proximal) && distal > proximal;
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (!data.side || !data.position) {
-      setTouchError(true);
-      return;
-    }
-
-    if (measurementsInverted) {
+    if (!data.side || !data.position || measurementsInverted) {
       setTouchError(true);
       return;
     }
@@ -82,52 +140,55 @@ export default function Paso2MiembroAfectado({ data, onChange, onContinue, onBac
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex-1 flex flex-col gap-6 rounded-2xl border border-white/8 bg-white/3 p-8"
-    >
-      <div className="flex flex-col gap-1">
-        <h2 className="text-xl font-bold text-white">Miembro afectado</h2>
-        <p className="text-white/45 text-sm">Completá los datos técnicos para la generación de la prótesis</p>
+    <form onSubmit={handleSubmit} className={`${tarjeta} flex min-w-0 flex-1 flex-col gap-6 p-6 sm:p-8`}>
+      <div className="flex items-center gap-4 border-b border-white/10 pb-6">
+        <IconoTarjeta>
+          <Ruler className="h-5 w-5" />
+        </IconoTarjeta>
+        <div className="flex flex-col gap-1">
+          <h2 className="font-display text-xl font-semibold text-white">Miembro afectado</h2>
+          <p className="text-sm text-white/60">
+            Indicá qué pata necesita la prótesis y cargá las medidas del muñón.
+          </p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-8">
-        <div className="flex flex-col gap-2">
-          <label className={fieldLabelClass}>
-            Lado <Required />
-          </label>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="flex flex-col gap-3" role="radiogroup" aria-label="Lado">
+          <span className={labelClass}>
+            ¿De qué lado? <Required />
+          </span>
           <div className="grid grid-cols-2 gap-3">
-            <OptionButton
+            <OptionCard
               selected={data.side === "izquierda"}
               onClick={() => update("side", "izquierda")}
-              icon={<ArrowLeft size={16} />}
+              icon={<ArrowLeft className="h-5 w-5" />}
               label="Izquierda"
             />
-            <OptionButton
+            <OptionCard
               selected={data.side === "derecha"}
               onClick={() => update("side", "derecha")}
-              icon={<ArrowRight size={16} />}
+              icon={<ArrowRight className="h-5 w-5" />}
               label="Derecha"
-              reverse
             />
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <label className={fieldLabelClass}>
-            Tipo <Required />
-          </label>
+        <div className="flex flex-col gap-3" role="radiogroup" aria-label="Pata">
+          <span className={labelClass}>
+            ¿Qué pata? <Required />
+          </span>
           <div className="grid grid-cols-2 gap-3">
-            <OptionButton
+            <OptionCard
               selected={data.position === "delantera"}
               onClick={() => update("position", "delantera")}
-              icon={<Wrench size={16} />}
+              icon={<ArrowUp className="h-5 w-5" />}
               label="Delantera"
             />
-            <OptionButton
+            <OptionCard
               selected={data.position === "trasera"}
               onClick={() => update("position", "trasera")}
-              icon={<Wrench size={16} />}
+              icon={<ArrowDown className="h-5 w-5" />}
               label="Trasera"
             />
           </div>
@@ -135,103 +196,70 @@ export default function Paso2MiembroAfectado({ data, onChange, onContinue, onBac
       </div>
 
       {touchError && (!data.side || !data.position) && (
-        <p className="-mt-3 text-xs text-red-400">Elegí el lado y el tipo del miembro afectado.</p>
+        <p className="text-xs text-red-400">Elegí el lado y la pata del miembro afectado.</p>
       )}
 
-      <div className="flex flex-col md:flex-row gap-6 rounded-xl border border-white/8 bg-white/3 p-6">
-        <div className="flex flex-col gap-4 md:w-44 shrink-0">
-          <div className="flex items-center gap-2">
-            <Pencil size={14} className="text-white/40" />
-            <h3 className="text-sm font-semibold text-white">Medidas del muñón</h3>
+      <div className="flex flex-col gap-5 rounded-2xl border border-white/12 bg-white/[0.04] p-5 sm:p-6">
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex flex-col gap-1">
+            <h3 className="font-display text-base font-semibold text-white">Medidas del muñón</h3>
+            <p className="text-sm text-white/60">Ingresá los valores en centímetros</p>
           </div>
-          <p className="text-xs text-white/40">
-            Medí con una cinta métrica. El extremo <span className="text-white/70">proximal</span> es el
-            más cercano al cuerpo del perro (más ancho); el <span className="text-white/70">distal</span> es
-            la punta del muñón (más angosto).
-          </p>
-          <LegMeasurementDiagram />
+          <button
+            type="button"
+            onClick={onVerGuia}
+            className="inline-flex items-center gap-2 text-sm font-medium text-mint transition-colors hover:text-white"
+          >
+            <Ruler className="h-4 w-4" />
+            Ver guía de medición
+          </button>
         </div>
 
-        <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-4 content-start">
-          <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-white/55">
-              Longitud <Required />
-            </label>
-            <input
-              type="number"
-              min={0}
-              step="0.1"
-              className={inputClass}
-              placeholder="Escribí acá..."
-              value={data.stumpLengthCm}
-              onChange={(e) => update("stumpLengthCm", e.target.value)}
-              required
-            />
-            <p className="text-[11px] text-white/35">Largo total del muñón, de punta a punta.</p>
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-white/55">
-              Circunferencia proximal <Required />
-            </label>
-            <input
-              type="number"
-              min={0}
-              step="0.1"
-              className={inputClass}
-              placeholder="Escribí acá..."
-              value={data.proximalCircumferenceCm}
-              onChange={(e) => update("proximalCircumferenceCm", e.target.value)}
-              required
-            />
-            <p className="text-[11px] text-white/35">Contorno cerca del cuerpo (suele ser el valor más grande).</p>
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-white/55">
-              Circunferencia distal <Required />
-            </label>
-            <input
-              type="number"
-              min={0}
-              step="0.1"
-              className={`${inputClass} ${measurementsInverted ? "border-red-400/50 focus:border-red-400" : ""}`}
-              placeholder="Escribí acá..."
-              value={data.distalCircumferenceCm}
-              onChange={(e) => update("distalCircumferenceCm", e.target.value)}
-              required
-            />
-            <p className="text-[11px] text-white/35">Contorno en la punta del muñón (el valor más chico).</p>
-          </div>
-
-          {measurementsInverted && (
-            <div className="sm:col-span-3 flex items-start gap-2 rounded-lg border border-red-400/20 bg-red-400/10 px-3 py-2.5 text-xs text-red-300">
-              <AlertTriangle size={14} className="mt-0.5 shrink-0" />
-              <span>
-                La circunferencia distal ({data.distalCircumferenceCm} cm) es mayor que la proximal (
-                {data.proximalCircumferenceCm} cm). Revisá los valores: lo normal es que el extremo
-                cercano al cuerpo (proximal) sea más ancho que la punta (distal).
-              </span>
-            </div>
-          )}
+        <div className="grid gap-5 sm:grid-cols-3">
+          <MedidaInput
+            id="limb-length"
+            label="Longitud"
+            hint="Largo total del miembro"
+            value={data.stumpLengthCm}
+            onChange={(v) => update("stumpLengthCm", v)}
+          />
+          <MedidaInput
+            id="limb-distal"
+            label="Circunferencia distal"
+            hint="Parte inferior del muñón"
+            value={data.distalCircumferenceCm}
+            onChange={(v) => update("distalCircumferenceCm", v)}
+            invalid={measurementsInverted}
+          />
+          <MedidaInput
+            id="limb-proximal"
+            label="Circunferencia proximal"
+            hint="Parte superior del muñón"
+            value={data.proximalCircumferenceCm}
+            onChange={(v) => update("proximalCircumferenceCm", v)}
+          />
         </div>
+
+        {measurementsInverted && (
+          <div className="flex items-start gap-2 rounded-xl border border-red-400/25 bg-red-400/10 px-4 py-3 text-xs text-red-300">
+            <AlertTriangle size={14} className="shrink-0 pt-0.5" />
+            <span>
+              La circunferencia distal ({data.distalCircumferenceCm} cm) es mayor que la proximal (
+              {data.proximalCircumferenceCm} cm). Revisá los valores: lo normal es que el extremo cercano al
+              cuerpo (proximal) sea más ancho que la punta (distal).
+            </span>
+          </div>
+        )}
       </div>
 
-      <div className="flex justify-between">
-        <button
-          type="button"
-          onClick={onBack}
-          className="flex items-center gap-2 bg-white/5 hover:bg-white/10 transition-colors text-white/70 font-semibold rounded-xl px-6 py-3 text-sm"
-        >
-          <ArrowLeft size={16} />
-          Atrás
+      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <button type="button" onClick={onBack} className={botonSecundario}>
+          <ArrowLeft className="h-4 w-4" />
+          Volver
         </button>
-        <button
-          type="submit"
-          className="flex items-center gap-2 bg-[#41C086] hover:bg-white transition-colors text-[#0B0F0D] font-semibold rounded-xl px-6 py-3 text-sm"
-        >
-          Continuar
-          <ArrowRight size={16} />
+        <button type="submit" className={botonPrimario}>
+          Revisar y continuar
+          <ArrowRight className="h-4 w-4" />
         </button>
       </div>
     </form>
