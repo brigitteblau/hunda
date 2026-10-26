@@ -306,7 +306,7 @@ export default function TrabajaConNosotrosPage() {
               etiqueta="familia con su perro"
               className={FOTOS.comunidad ? "" : "aspect-[5/4] w-full"}
               redondeo="rounded-[64px]"
-              conMarco={false}
+              
             />
           </Reveal>
           <Reveal delay={0.1} className="flex flex-col gap-5">

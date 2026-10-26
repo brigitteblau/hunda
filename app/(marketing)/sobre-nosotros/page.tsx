@@ -34,11 +34,11 @@ export const metadata = {
 // Fotos de Figma: bajalas a /public/sobre-nosotros/ y completá la ruta
 // (ej. "/sobre-nosotros/equipo.jpg"). Mientras sea undefined se ve un recuadro.
 const FOTOS: Record<string, string | undefined> = {
-  equipo: undefined,
-  historia: undefined,
-  benja: undefined,
-  brigitte: undefined,
-  maite: undefined,
+  equipo: "/sobre-nosotros/equipo.png",
+  historia: "/sobre-nosotros/historia.png",
+  benja: "/sobre-nosotros/benja.png",
+  brigitte: "/sobre-nosotros/brigitte.png",
+  maite: "/sobre-nosotros/maite.png",
 };
 
 const EQUIPO = [
