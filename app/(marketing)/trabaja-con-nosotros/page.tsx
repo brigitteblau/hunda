@@ -35,9 +35,6 @@ export const metadata = {
 
 const FOTOS: Record<string, string | undefined> = {
   hero: "/trabaja-con-nosotros/hero.png",
-  heroChica1: "/trabaja-con-nosotros/hero-chica-1.png",
-  heroChica2: "/trabaja-con-nosotros/hero-chica-2.png",
-  heroChica3: "/trabaja-con-nosotros/hero-chica-3.png",
   comunidad: "/trabaja-con-nosotros/comunidad.png",
   toby: "/trabaja-con-nosotros/toby.png",
   kira: "/trabaja-con-nosotros/kira.png",
@@ -186,38 +183,12 @@ export default function TrabajaConNosotrosPage() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="relative w-full max-w-[460px] lg:ml-auto">
-              <FotoSlot
+            <div className="relative w-full max-w-[520px] lg:ml-auto">
+              <img
                 src={FOTOS.hero}
-                alt="Perro con prótesis corriendo"
-                etiqueta="perro principal (hero)"
-                className="aspect-square w-full"
-                redondeo="rounded-[58%_42%_52%_48%/46%_54%_46%_54%]"
+                alt="Perros con prótesis corriendo y jugando"
+                className="h-auto w-full"
               />
-              <FotoSlot
-                src={FOTOS.heroChica1}
-                alt="Perro con prótesis"
-                etiqueta="perro chico 1"
-                className="absolute -right-2 -top-6 h-24 w-24 bg-[#1f332d] sm:h-28 sm:w-28"
-                redondeo="rounded-full"
-              />
-              <FotoSlot
-                src={FOTOS.heroChica2}
-                alt="Perro con prótesis"
-                etiqueta="perro chico 2"
-                className="absolute -bottom-6 right-4 h-24 w-24 bg-[#1f332d] sm:h-28 sm:w-28"
-                redondeo="rounded-full"
-              />
-              <FotoSlot
-                src={FOTOS.heroChica3}
-                alt="Perro con prótesis"
-                etiqueta="perro chico 3"
-                className="absolute -left-6 bottom-8 h-24 w-24 bg-[#1f332d] sm:-left-10 sm:h-28 sm:w-28"
-                redondeo="rounded-full"
-              />
-              <span className={`${script.className} absolute -bottom-10 left-1/2 text-2xl text-mint`}>
-                más huellas en movimiento
-              </span>
             </div>
           </Reveal>
         </div>

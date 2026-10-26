@@ -95,10 +95,6 @@ export default function SobreNosotrosPage() {
                 alt="Benja, Brigitte y Maite con un perro"
                 className="aspect-[4/3] w-full"
               />
-              <span className={`${script.className} absolute -bottom-9 right-2 flex items-center gap-2 text-xl text-mint`}>
-                el equipo detrás de cada huella
-                <Heart className="h-4 w-4" />
-              </span>
             </Reveal>
           </div>
         </Seccion>
@@ -108,19 +104,11 @@ export default function SobreNosotrosPage() {
       <Seccion>
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <Reveal className="relative">
-            <FotoSlot
+            <img
               src={FOTOS.historia}
               alt="Perro con prótesis jugando con una pelota"
-              etiqueta="perro con prótesis"
               className="aspect-[4/5] w-full max-w-sm"
-              redondeo="rounded-[48px]"
             />
-            <span
-              className={`${script.className} absolute -bottom-4 left-6 flex items-center gap-2 rounded-full bg-[#0f1a16]/90 px-5 py-2 text-lg text-white/90`}
-            >
-              <Heart className="h-4 w-4 text-mint" />
-              todo empezó con una pregunta
-            </span>
           </Reveal>
 
           <Reveal delay={0.1} className="flex flex-col gap-5">
@@ -224,7 +212,7 @@ export default function SobreNosotrosPage() {
           <Titulo antes="Gracias a quienes " acento="confían en Hunda." />
         </Reveal>
 
-        {/* Reemplazar cada recuadro por el logo real cuando haya auspiciantes */}
+        
         <div className="grid grid-cols-2 gap-4 pt-12 lg:grid-cols-4">
           {Array.from({ length: 8 }, (_, i) => (
             <div
