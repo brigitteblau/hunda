@@ -77,35 +77,15 @@ html {
 }
 
 /* Fondo de la zona logueada (valores del Figma).
-   Los glows van arriba del linear-gradient para que se vean.
-   Se define una sola vez en variables y lo usan:
-   - .app-bg: todas las pantallas logueadas (AppShell) y las paginas de
-     marketing que no son la landing (blog, contacto, terminos, privacidad).
-   - .app-bg-drawer: el sidebar en mobile (cajon flotante). En desktop el
-     sidebar es transparente y se ve el fondo de AppShell, asi los puntitos
-     no se cortan en el borde. */
-:root {
-  --app-bg-color: #1c2f2a;
-  --app-bg-image:
+   Los glows van arriba del linear-gradient para que se vean. */
+.app-bg {
+  background-color: #1c2f2a;
+  background-image:
     radial-gradient(rgba(255, 255, 255, 0.13) 1.3px, transparent 1.6px),
     radial-gradient(50% 50% at 85% 8%, rgba(65, 192, 134, 0.22) 0%, rgba(65, 192, 134, 0) 100%),
     radial-gradient(50% 50% at 12% 92%, rgba(154, 97, 126, 0.14) 0%, rgba(154, 97, 126, 0) 100%),
     linear-gradient(180deg, #2a4640 0%, #1c2f2a 100%);
-  --app-bg-size: 27px 27px, 100% 100%, 100% 100%, 100% 100%;
-}
-
-.app-bg {
-  background-color: var(--app-bg-color);
-  background-image: var(--app-bg-image);
-  background-size: var(--app-bg-size);
-}
-
-@media (max-width: 1023px) {
-  .app-bg-drawer {
-    background-color: var(--app-bg-color);
-    background-image: var(--app-bg-image);
-    background-size: var(--app-bg-size);
-  }
+  background-size: 27px 27px, 100% 100%, 100% 100%, 100% 100%;
 }
 
 

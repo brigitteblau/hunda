@@ -35,14 +35,14 @@ export const metadata = {
 // Fotos de Figma: bajalas a /public/trabaja-con-nosotros/ y completá la ruta
 // (ej. "/trabaja-con-nosotros/hero.jpg"). Mientras sea undefined se ve un recuadro.
 const FOTOS: Record<string, string | undefined> = {
-  hero: undefined,
-  heroChica1: undefined,
-  heroChica2: undefined,
-  comunidad: undefined,
-  toby: undefined,
-  kira: undefined,
-  simon: undefined,
-  nala: undefined,
+  hero: "/trabaja-con-nosotros/perro-principal.png",
+  heroChica1: "/trabaja-con-nosotros/perro-chica1.png",
+  heroChica2: "/trabaja-con-nosotros/perro-chica2.png",
+  comunidad: "/trabaja-con-nosotros/comunidad.png",
+  toby: "/trabaja-con-nosotros/toby.png",
+  kira: "/trabaja-con-nosotros/kira.png",
+  simon: "/trabaja-con-nosotros/simon.png",
+  nala: "/trabaja-con-nosotros/nala.png",
 };
 
 const QUIENES = [
@@ -94,7 +94,7 @@ function MapaDemo() {
     { x: "88%", y: "74%" },
   ];
   return (
-    <div className="relative h-[360px] overflow-hidden rounded-3xl border border-white/15 bg-[#17231f]" aria-hidden>
+    <div className="relative h-[360px] overflow-hidden rounded-3xl border border-white/25 bg-[#17231f]" aria-hidden>
       <svg viewBox="0 0 400 360" className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
         <g stroke="rgba(255,255,255,0.08)" strokeWidth="6" fill="none">
           <path d="M0 80 L400 120" />
@@ -190,8 +190,8 @@ export default function TrabajaConNosotrosPage() {
               src={FOTOS.hero}
               alt="Perro con prótesis corriendo"
               etiqueta="perro principal (hero)"
-              className="aspect-[4/3] w-full"
-              redondeo="rounded-[56px]"
+              className="aspect-square w-full max-w-[460px] lg:ml-auto"
+              redondeo="rounded-[58%_42%_52%_48%/46%_54%_46%_54%]"
             />
             <FotoSlot
               src={FOTOS.heroChica1}
@@ -304,8 +304,9 @@ export default function TrabajaConNosotrosPage() {
               src={FOTOS.comunidad}
               alt="Una familia con su perro con prótesis"
               etiqueta="familia con su perro"
-              className="aspect-[5/4] w-full"
+              className={FOTOS.comunidad ? "" : "aspect-[5/4] w-full"}
               redondeo="rounded-[64px]"
+              conMarco={false}
             />
           </Reveal>
           <Reveal delay={0.1} className="flex flex-col gap-5">

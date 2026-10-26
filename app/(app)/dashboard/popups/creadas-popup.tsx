@@ -4,15 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Plus } from "lucide-react";
 import Modal from "@/components/modal";
-import type { Protesis } from "../dashboard-data";
-import {
-  DogAvatar,
-  StatusBadge,
-  botonFantasma,
-  botonMint,
-  subtituloProtesis,
-  tarjetaModal,
-} from "../dashboard-ui";
+import { fotoDePerro, perros, type Protesis } from "../dashboard-data";
+import { DogAvatar, StatusBadge, botonFantasma, botonMint, tarjetaModal } from "../dashboard-ui";
+
+function capitalizar(texto: string) {
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
 
 export default function CreadasPopup({
   open,
@@ -25,9 +22,9 @@ export default function CreadasPopup({
 }) {
   const [filtro, setFiltro] = useState<string>("todas");
 
-  // Solo los perros que tienen prótesis
-  const perros = protesis.map((p) => ({ id: p.perroId, nombre: p.perro, fotoUrl: p.fotoUrl }));
-  const visibles = filtro === "todas" ? protesis : protesis.filter((p) => p.perroId === filtro);
+  // Las más nuevas primero
+  const ordenadas = [...protesis].reverse();
+  const visibles = filtro === "todas" ? ordenadas : ordenadas.filter((p) => p.perro === filtro);
 
   const chip = (activo: boolean) =>
     `inline-flex h-10 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors ${
@@ -44,34 +41,32 @@ export default function CreadasPopup({
       acento="creadas"
       descripcion="Todas las prótesis que diseñaste en Hunda."
     >
-      {perros.length > 1 && (
-        <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          onClick={() => setFiltro("todas")}
+          aria-pressed={filtro === "todas"}
+          className={chip(filtro === "todas")}
+        >
+          Todas
+        </button>
+        {perros.map((perro) => (
           <button
+            key={perro.nombre}
             type="button"
-            onClick={() => setFiltro("todas")}
-            aria-pressed={filtro === "todas"}
-            className={chip(filtro === "todas")}
+            onClick={() => setFiltro(perro.nombre)}
+            aria-pressed={filtro === perro.nombre}
+            className={chip(filtro === perro.nombre)}
           >
-            Todas
+            <DogAvatar nombre={perro.nombre} fotoUrl={fotoDePerro(perro.nombre)} size={22} />
+            {perro.nombre}
           </button>
-          {perros.map((perro) => (
-            <button
-              key={perro.id}
-              type="button"
-              onClick={() => setFiltro(perro.id)}
-              aria-pressed={filtro === perro.id}
-              className={chip(filtro === perro.id)}
-            >
-              <DogAvatar nombre={perro.nombre} fotoUrl={perro.fotoUrl} size={22} />
-              {perro.nombre}
-            </button>
-          ))}
-        </div>
-      )}
+        ))}
+      </div>
 
       <div className="flex flex-col gap-3">
         {visibles.length === 0 && (
-          <p className="text-sm text-white/65">Todavía no creaste prótesis.</p>
+          <p className="text-sm text-white/65">Todavía no creaste prótesis para este perro.</p>
         )}
         {visibles.map((p) => (
           <article key={p.id} className={`${tarjetaModal} flex flex-wrap items-center gap-4 p-4`}>
@@ -80,7 +75,9 @@ export default function CreadasPopup({
               <h3 className="text-base font-semibold text-white">
                 {p.perro} · {p.nombre}
               </h3>
-              <p className="text-sm text-white/55">{subtituloProtesis(p)}</p>
+              <p className="text-sm text-white/55">
+                {capitalizar(p.creada)} · Versión {p.version}
+              </p>
             </div>
             <StatusBadge estado={p.estado} />
             <Link href={p.href} className={botonFantasma}>

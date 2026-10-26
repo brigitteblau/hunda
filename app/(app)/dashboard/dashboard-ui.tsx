@@ -1,7 +1,7 @@
 // Piezas chicas que comparten el home y los pop ups.
 
 import { Check } from "lucide-react";
-import { ETAPAS, type Etapa, type EstadoProtesis, type Protesis } from "./dashboard-data";
+import { ETAPAS, type Etapa, type EstadoProtesis } from "./dashboard-data";
 
 export const tarjetaModal = "rounded-2xl border border-white/10 bg-white/[0.04]";
 
@@ -10,15 +10,6 @@ export const botonFantasma =
 
 export const botonMint =
   "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-mint px-6 text-sm font-semibold text-[#0B0F0D] transition-colors hover:bg-white";
-
-export function capitalizar(texto: string) {
-  return texto.charAt(0).toUpperCase() + texto.slice(1);
-}
-
-/** "Golden Retriever · creada el 12 de agosto" (o solo la fecha si no hay raza) */
-export function subtituloProtesis(p: Pick<Protesis, "raza" | "creada">) {
-  return p.raza ? `${p.raza} · ${p.creada}` : capitalizar(p.creada);
-}
 
 export function DogAvatar({
   nombre,
@@ -35,10 +26,9 @@ export function DogAvatar({
       style={{ width: size, height: size, fontSize: size * 0.4 }}
     >
       {fotoUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element -- fotos de Supabase Storage (host variable)
         <img src={fotoUrl} alt={nombre} className="h-full w-full object-cover" />
       ) : (
-        nombre.charAt(0).toUpperCase()
+        nombre.charAt(0)
       )}
     </span>
   );
