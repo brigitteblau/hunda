@@ -63,7 +63,7 @@ const CONTACTO = [
   { icono: Mail, etiqueta: "Mail", valor: "betterbm26@gmail.com", href: "mailto:betterbm26@gmail.com" },
   { icono: MessageCircle, etiqueta: "WhatsApp", valor: "+54 9 11 7366 7824", href: "https://wa.me/5491173667824" },
   // TODO: reemplazar por el usuario real de Instagram de Hunda
-  { icono: AtSign, etiqueta: "Instagram", valor: "@tu_usuario", href: undefined },
+  { icono: AtSign, etiqueta: "Instagram", valor: "@hunda_ok", href: undefined },
   { icono: MapPin, etiqueta: "Dónde estamos", valor: "ORT Belgrano, CABA", href: undefined },
 ];
 
