@@ -91,12 +91,10 @@ export default function SobreNosotrosPage() {
             </Reveal>
 
             <Reveal delay={0.1} className="relative">
-              <FotoSlot
+              <img
                 src={FOTOS.equipo}
                 alt="Benja, Brigitte y Maite con un perro"
-                etiqueta="el equipo con un perro"
                 className="aspect-[4/3] w-full"
-                redondeo="rounded-[48px]"
               />
               <span className={`${script.className} absolute -bottom-9 right-2 flex items-center gap-2 text-xl text-mint`}>
                 el equipo detrás de cada huella
