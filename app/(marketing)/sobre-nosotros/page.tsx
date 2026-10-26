@@ -31,8 +31,7 @@ export const metadata = {
   description: "Somos Benja, Brigitte y Maite: tres estudiantes con una misión.",
 };
 
-// Fotos de Figma: bajalas a /public/sobre-nosotros/ y completá la ruta
-// (ej. "/sobre-nosotros/equipo.jpg"). Mientras sea undefined se ve un recuadro.
+
 const FOTOS: Record<string, string | undefined> = {
   equipo: "/sobre-nosotros/equipo.png",
   historia: "/sobre-nosotros/historia.png",

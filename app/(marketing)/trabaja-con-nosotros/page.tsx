@@ -32,8 +32,7 @@ export const metadata = {
   description: "Sumá tu impresora 3D a la red de puntos de impresión de Hunda.",
 };
 
-// Fotos de Figma: bajalas a /public/trabaja-con-nosotros/ y completá la ruta
-// (ej. "/trabaja-con-nosotros/hero.jpg"). Mientras sea undefined se ve un recuadro.
+
 const FOTOS: Record<string, string | undefined> = {
   hero: "/trabaja-con-nosotros/hero.png",
   heroChica1: "/trabaja-con-nosotros/hero-chica-1.png",
