@@ -10,10 +10,9 @@ import { SignupForm } from "./signup-form";
 
 export type { AuthMode };
 
-// Fotos del panel izquierdo (de Figma). Bajalas a /public/auth/ y completá la
-// ruta, ej. "/auth/login.jpg". Mientras sea undefined se ve un fondo verde.
-const FOTO_LOGIN: string | undefined = undefined;
-const FOTO_SIGNUP: string | undefined = undefined;
+
+const FOTO_LOGIN: string | undefined = "/public/foto login.png";
+const FOTO_SIGNUP: string | undefined = "/public/foto signup.png";
 
 function PanelFoto({ mode }: { mode: AuthMode }) {
   const src = mode === "login" ? FOTO_LOGIN : FOTO_SIGNUP;
@@ -25,7 +24,7 @@ function PanelFoto({ mode }: { mode: AuthMode }) {
       style={{ background: "linear-gradient(160deg,#2f5a4a 0%,#17302a 100%)" }}
     >
       {src && (
-        // eslint-disable-next-line @next/next/no-img-element -- foto estática de /public
+
         <img src={src} alt="" className="absolute inset-0 h-full w-full object-cover" />
       )}
       {!src && <PawPrint className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 text-white/10" />}

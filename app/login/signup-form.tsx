@@ -14,7 +14,7 @@ import {
   entrarConGoogle,
 } from "./auth-ui";
 
-/** 0 a 4 según largo, letras, números y mezcla/símbolos. */
+
 function fortaleza(password: string) {
   const largo = password.length >= 8;
   const letras = /[a-zA-Z]/.test(password);
@@ -93,13 +93,13 @@ export function SignupForm({
         return;
       }
 
-      // Supabase no avisa si el mail ya existe: devuelve un usuario sin identidades
+
       if (data.user && data.user.identities?.length === 0) {
         setError("Ese email ya tiene una cuenta. Probá iniciando sesión.");
         return;
       }
 
-      // Sin confirmación de mail obligatoria, ya viene con sesión
+
       if (data.session) {
         window.location.href = "/dashboard";
         return;
