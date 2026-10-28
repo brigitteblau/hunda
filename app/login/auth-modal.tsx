@@ -2,47 +2,27 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Heart, PawPrint, X } from "lucide-react";
-import { script } from "@/components/marketing/ui";
+import { X } from "lucide-react";
 import type { AuthMode } from "./auth-ui";
 import { LoginForm } from "./login-form";
 import { SignupForm } from "./signup-form";
 
 export type { AuthMode };
 
+const FOTO_LOGIN = "/auth/login.png";
+const FOTO_SIGNUP = "/auth/signup.png";
 
-const FOTO_LOGIN: string | undefined = "/public/foto login.png";
-const FOTO_SIGNUP: string | undefined = "/public/foto signup.png";
-
+// La imagen ya trae el logo, la frase y el lema: acá solo se muestra.
 function PanelFoto({ mode }: { mode: AuthMode }) {
   const src = mode === "login" ? FOTO_LOGIN : FOTO_SIGNUP;
-  const frase = mode === "login" ? "más momentos juntos" : "bienvenidos a la familia";
 
   return (
     <div
       className="relative hidden w-[400px] shrink-0 overflow-hidden md:block"
       style={{ background: "linear-gradient(160deg,#2f5a4a 0%,#17302a 100%)" }}
     >
-      {src && (
-
-        <img src={src} alt="" className="absolute inset-0 h-full w-full object-cover" />
-      )}
-      {!src && <PawPrint className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 text-white/10" />}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0f1d19]/90 via-transparent to-transparent" />
-
-      <span className="absolute left-9 top-9 text-[28px] font-extrabold tracking-[-0.04em] text-white">
-        hunda<span className="text-mint">.</span>
-      </span>
-
-      <div className="absolute inset-x-9 bottom-9 flex flex-col gap-5">
-        <p className={`${script.className} flex items-center gap-2 text-[32px] leading-none text-white`}>
-          {frase}
-          <Heart className="h-5 w-5 text-mint" />
-        </p>
-        <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/80">
-          Que ninguna huella se detenga
-        </p>
-      </div>
+      {/* eslint-disable-next-line @next/next/no-img-element -- imagen estática de /public */}
+      <img src={src} alt="" className="absolute inset-0 h-full w-full object-cover" />
     </div>
   );
 }
