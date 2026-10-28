@@ -1,37 +1,61 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
+import { ArrowRight, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook, FaApple } from "react-icons/fa";
-import { PawPrint } from "lucide-react";
+import {
+  Aviso,
+  BotonEnlace,
+  Campo,
+  Sociales,
+  botonPrincipal,
+  campo,
+  entrarConGoogle,
+} from "./auth-ui";
 
-export function LoginForm() {
+const REMEMBER_KEY = "hunda:remember-email";
+
+function guardarEmail(email: string | null) {
+  try {
+    if (email) localStorage.setItem(REMEMBER_KEY, email);
+    else localStorage.removeItem(REMEMBER_KEY);
+  } catch {
+    // localStorage no disponible: no pasa nada
+  }
+}
+
+function emailGuardado() {
+  try {
+    return localStorage.getItem(REMEMBER_KEY) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+export function LoginForm({
+  initialError,
+  initialNotice,
+  onCambiarModo,
+}: {
+  initialError?: string;
+  initialNotice?: string;
+  onCambiarModo: () => void;
+}) {
   const supabase = useMemo(() => createSupabaseBrowserClient(), []);
-
-  const [mode, setMode] = useState<"login" | "signup">("login");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(() => emailGuardado());
   const [password, setPassword] = useState("");
+  const [verPassword, setVerPassword] = useState(false);
+  const [recordar, setRecordar] = useState(() => emailGuardado() !== "");
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(initialError ?? null);
+  const [aviso, setAviso] = useState<string | null>(initialNotice ?? null);
 
   async function handleGoogle() {
     setBusy(true);
-
+    setError(null);
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
-        },
-      });
-
-      if (error) {
-        alert(error.message);
-        return;
-      }
-
-      if (data?.url) window.location.href = data.url;
+      const mensaje = await entrarConGoogle(supabase);
+      if (mensaje) setError(mensaje);
     } finally {
       setBusy(false);
     }
@@ -39,153 +63,114 @@ export function LoginForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
     if (!email || !password) return;
 
     setBusy(true);
-
+    setError(null);
+    setAviso(null);
     try {
-      if (mode === "login") {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-
-        if (error) {
-          alert(error.message);
-          return;
-        }
-
-        window.location.href = "/dashboard";
-      } else {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
-          },
-        });
-
-        if (error) {
-          alert(error.message);
-          return;
-        }
-
-        alert("Cuenta creada.");
-        setMode("login");
-        setPassword("");
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        setError(error.message);
+        return;
       }
+      guardarEmail(recordar ? email : null);
+      window.location.href = "/dashboard";
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleOlvide() {
+    setError(null);
+    setAviso(null);
+    if (!email) {
+      setError("Escribí tu email arriba y volvé a tocar “¿Olvidaste tu contraseña?”.");
+      return;
+    }
+    setBusy(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/callback?next=/configuracion`,
+      });
+      if (error) {
+        setError(error.message);
+        return;
+      }
+      setAviso(`Te mandamos un mail a ${email} para recuperar tu cuenta.`);
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <div className="relative mx-auto flex w-full max-w-100 flex-col gap-7 rounded-4xl border border-white/10 bg-white/4 px-8 py-10 backdrop-blur-xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]">
-      <div className="flex flex-col items-center gap-4">
-        <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#41C086]/15 text-[#41C086]">
-          <PawPrint size={18} />
-        </span>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      <Campo id="auth-email" label="Email o usuario" icono={<Mail className="h-4 w-4" />}>
+        <input
+          id="auth-email"
+          type="email"
+          autoComplete="email"
+          className={campo}
+          placeholder="tu@email.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </Campo>
 
-        <div className="flex flex-col items-center gap-1.5">
-          <h1 className="text-center text-[clamp(1.8rem,4vw,2.2rem)] leading-none tracking-[-0.04em] font-extrabold text-white">
-            {mode === "login" ? (
-              <>Bienvenido de <span className="text-[#41C086]">vuelta.</span></>
-            ) : (
-              <>Creá tu <span className="text-[#41C086]">cuenta.</span></>
-            )}
-          </h1>
-          <p className="text-sm text-white/45">
-            {mode === "login"
-              ? "Tu perro te está esperando."
-              : "Empecemos a diseñar su próximo paso."}
-          </p>
-        </div>
+      <Campo id="auth-password" label="Contraseña" icono={<Lock className="h-4 w-4" />}>
+        <input
+          id="auth-password"
+          type={verPassword ? "text" : "password"}
+          autoComplete="current-password"
+          className={`${campo} pr-12`}
+          placeholder="••••••••"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button
+          type="button"
+          onClick={() => setVerPassword((v) => !v)}
+          aria-label={verPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-white/55 transition-colors hover:text-white"
+        >
+          {verPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+        </button>
+      </Campo>
+
+      <div className="flex items-center justify-between gap-3 text-sm">
+        <label className="flex cursor-pointer items-center gap-2.5 text-white/85">
+          <input
+            type="checkbox"
+            checked={recordar}
+            onChange={(e) => setRecordar(e.target.checked)}
+            className="h-4 w-4 accent-[#00e39a]"
+          />
+          Recordarme
+        </label>
+        <button
+          type="button"
+          onClick={handleOlvide}
+          disabled={busy}
+          className="text-[13px] font-medium text-mint transition-colors hover:text-white disabled:opacity-50"
+        >
+          ¿Olvidaste tu contraseña?
+        </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div>
-          <label className="mb-2 block text-sm font-medium text-white/60">
-            E-mail o Usuario
-          </label>
+      {error && <Aviso tipo="error">{error}</Aviso>}
+      {aviso && <Aviso tipo="ok">{aviso}</Aviso>}
 
-          <input
-            type="email"
-            placeholder="Escribí acá..."
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="h-11 w-full rounded-full border border-white/10 bg-white/5 px-5 text-sm text-white outline-none placeholder:text-white/30 transition focus:border-[#41C086] focus:ring-2 focus:ring-[#41C086]/30"
-          />
-        </div>
+      <button type="submit" disabled={busy || !email || !password} className={botonPrincipal}>
+        {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+        Iniciar sesión
+        {!busy && <ArrowRight className="h-4 w-4" />}
+      </button>
 
-        <div>
-          <label className="mb-2 block text-sm font-medium text-white/60">
-            Contraseña
-          </label>
+      <Sociales onGoogle={handleGoogle} busy={busy} />
 
-          <input
-            type="password"
-            placeholder="Escribí acá..."
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="h-11 w-full rounded-full border border-white/10 bg-white/5 px-5 text-sm text-white outline-none placeholder:text-white/30 transition focus:border-[#41C086] focus:ring-2 focus:ring-[#41C086]/30"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={busy || !email || !password}
-          className="mt-1 h-11 w-full rounded-full bg-[#41C086] text-sm font-semibold text-[#0B0F0D] transition hover:bg-white disabled:opacity-50"
-        >
-          {mode === "login" ? "Iniciar sesión" : "Registrarme"}
-        </button>
-
-        <div className="flex items-center gap-3 py-1">
-          <span className="h-px flex-1 bg-white/10" />
-          <span className="text-xs uppercase tracking-[0.2em] text-white/25">o</span>
-          <span className="h-px flex-1 bg-white/10" />
-        </div>
-
-        <div className="flex justify-center gap-4">
-          <button
-            type="button"
-            onClick={handleGoogle}
-            disabled={busy}
-            title="Continuar con Google"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 transition hover:-translate-y-0.5 hover:bg-white/10 disabled:opacity-50"
-          >
-            <FcGoogle size={20} />
-          </button>
-
-          <button
-            type="button"
-            disabled
-            title="Próximamente"
-            className="flex h-11 w-11 cursor-not-allowed items-center justify-center rounded-full border border-white/10 bg-white/5 opacity-40"
-          >
-            <FaFacebook size={18} className="text-[#1877F2]" />
-          </button>
-
-          <button
-            type="button"
-            disabled
-            title="Próximamente"
-            className="flex h-11 w-11 cursor-not-allowed items-center justify-center rounded-full border border-white/10 bg-white/5 opacity-40"
-          >
-            <FaApple size={18} className="text-white" />
-          </button>
-        </div>
-      </form>
-
-      <p className="text-center text-sm text-white/45">
-        {mode === "login" ? "¿Sos nuevo? " : "¿Ya tenés cuenta? "}
-        <span
-          onClick={() => setMode(mode === "login" ? "signup" : "login")}
-          className="cursor-pointer font-medium text-[#41C086] underline underline-offset-4 hover:text-white transition"
-        >
-          {mode === "login" ? "Registrate" : "Iniciá sesión"}
-        </span>
+      <p className="text-sm text-white/75">
+        ¿Sos nuevo? <BotonEnlace onClick={onCambiarModo}>Creá tu cuenta</BotonEnlace>
       </p>
-    </div>
+    </form>
   );
 }

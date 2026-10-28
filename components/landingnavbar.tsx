@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useAuthModal } from "@/app/login/auth-modal-provider";
 
 // Los links de sección apuntan a "/#id" (no solo "#id") para que funcionen
 // también desde otras páginas del sitio (blog, contacto, legales), no solo
@@ -21,6 +22,7 @@ const sectionIds = navLinks
   .map((item) => item.href.slice(2));
 
 export default function LandingNavbar() {
+  const { openAuth } = useAuthModal();
   const pathname = usePathname();
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
@@ -89,19 +91,21 @@ export default function LandingNavbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <Link
-            href="/login"
+          <button
+            type="button"
+            onClick={() => openAuth("login")}
             className="text-[13px] font-medium text-white/70 hover:text-white transition-colors"
           >
             Iniciar sesión
-          </Link>
-          <Link
-            href="/login"
+          </button>
+          <button
+            type="button"
+            onClick={() => openAuth("signup")}
             className="flex items-center gap-1.5 rounded-full bg-[#41C086] px-4 py-2 text-[13px] font-semibold text-[#0B0F0D] transition-colors hover:bg-white"
           >
             Crear cuenta
             <span aria-hidden>→</span>
-          </Link>
+          </button>
         </div>
 
         <button
@@ -126,20 +130,26 @@ export default function LandingNavbar() {
             </Link>
           ))}
           <div className="flex flex-col gap-3 pt-2 border-t border-white/10">
-            <Link
-              href="/login"
-              onClick={() => setMobileOpen(false)}
-              className="text-sm font-medium text-white/70 hover:text-white"
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false);
+                openAuth("login");
+              }}
+              className="text-left text-sm font-medium text-white/70 hover:text-white"
             >
               Iniciar sesión
-            </Link>
-            <Link
-              href="/login"
-              onClick={() => setMobileOpen(false)}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false);
+                openAuth("signup");
+              }}
               className="flex items-center justify-center gap-1.5 rounded-full bg-[#41C086] px-4 py-2.5 text-sm font-semibold text-[#0B0F0D]"
             >
               Crear cuenta →
-            </Link>
+            </button>
           </div>
         </div>
       )}

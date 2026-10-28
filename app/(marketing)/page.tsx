@@ -5,6 +5,7 @@ import Link from "next/link";
 import LandingNavbar from "@/components/landingnavbar";
 import AnimatedLetters from "@/components/animated-letters";
 import BackToTop from "@/components/back-to-top";
+import { useAuthModal } from "@/app/login/auth-modal-provider";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -35,6 +36,8 @@ const features = [
 ];
 
 export default function LandingPage() {
+  const { openAuth } = useAuthModal();
+
   return (
     <main className="relative min-h-screen overflow-x-hidden  font-sans text-white selection:bg-[#41C086] selection:text-[#07100B]">
       {/* NAV (el de siempre: links, sesión, menú mobile) */}
@@ -94,12 +97,13 @@ export default function LandingPage() {
             transition={{ duration: 0.6, delay: 0.35 }}
             className="absolute left-22 top-120.5 flex gap-5.75"
           >
-            <Link
-              href="/login"
-              className="flex h-15 w-70.75 items-center justify-center rounded-full bg-mint text-[16px] font-medium text-[#0d2a20] transition-all duration-300 hover:bg-white"
-            >
+            <button
+                type="button"
+                onClick={() => openAuth("signup")}
+                className="flex h-15 w-70.75 items-center justify-center rounded-full bg-mint text-[16px] font-medium text-[#0d2a20] transition-all duration-300 hover:bg-white"
+              >
               Crear mi prótesis
-            </Link>
+            </button>
             <a
               href="#plataforma"
               className="flex h-15 w-60.75 items-center justify-center rounded-full border border-white/10 bg-[#3d4a2b]/55 text-[16px] text-white/70 backdrop-blur-sm transition-all duration-300 hover:bg-[#3d4a2b]/80 hover:text-white"
@@ -258,12 +262,13 @@ export default function LandingPage() {
                 </motion.li>
               ))}
             </motion.ul>
-            <Link
-              href="/login"
-              className="mt-10 -ml-1.5 flex h-15 w-70.75 items-center justify-center rounded-full bg-mint text-[15px] font-medium text-[#0d2a20] shadow-[0_8px_26px_rgba(0,227,154,0.35)] transition-all duration-300 hover:bg-white"
-            >
+            <button
+                type="button"
+                onClick={() => openAuth("login")}
+                className="mt-10 -ml-1.5 flex h-15 w-70.75 items-center justify-center rounded-full bg-mint text-[15px] font-medium text-[#0d2a20] shadow-[0_8px_26px_rgba(0,227,154,0.35)] transition-all duration-300 hover:bg-white"
+              >
               Ir a la plataforma
-            </Link>
+            </button>
           </motion.div>
 
           {/* Mockup del dashboard */}
@@ -279,12 +284,13 @@ export default function LandingPage() {
               <p className="absolute left-6 top-13.75 text-[11px] font-medium text-white/90">
                 Administrá a tus compañeros y sus prótesis
               </p>
-              <Link
-                href="/login"
+              <button
+                type="button"
+                onClick={() => openAuth("login")}
                 className="absolute left-155.25 top-13.25 flex h-9 w-43.5 items-center justify-center rounded-xs bg-[#00f5a0] text-[11px] font-semibold text-[#0d2a20] shadow-[0_4px_14px_rgba(0,245,160,0.3)] transition-all duration-300 hover:bg-white"
               >
                 + Agregar perro
-              </Link>
+              </button>
 
               {/* Milo */}
               <div className="absolute left-6.25 top-26.75 h-41.75 w-192.5 rounded-md bg-white/9">
@@ -310,10 +316,11 @@ export default function LandingPage() {
                 <span className="absolute left-99.25 top-26 flex h-6.5 w-19.5 items-center justify-center rounded-[3px] border border-white/10 bg-[#2a1f1d] text-[9px] font-semibold text-[#f5b52a]">
                   En proceso
                 </span>
-                <Link
-                  href="/login"
-                  className="absolute left-166 top-18.5 flex items-center gap-5.5 text-[10.5px] font-semibold text-leaf"
-                >
+                <button
+                type="button"
+                onClick={() => openAuth("login")}
+                className="absolute left-166 top-18.5 flex items-center gap-5.5 text-[10.5px] font-semibold text-leaf"
+              >
                   Ver perfil
                   <svg
                     className="h-4 w-4 text-white"
@@ -326,7 +333,7 @@ export default function LandingPage() {
                   >
                     <path d="M9 5l7 7-7 7" />
                   </svg>
-                </Link>
+                </button>
               </div>
 
               {/* Luna */}
@@ -350,10 +357,11 @@ export default function LandingPage() {
                 <p className="absolute left-53.75 top-29.75 text-[11px] text-white/50">
                   Todo en orden
                 </p>
-                <Link
-                  href="/login"
-                  className="absolute left-166 top-18.5 flex items-center gap-5.5 text-[10.5px] font-semibold text-leaf"
-                >
+                <button
+                type="button"
+                onClick={() => openAuth("login")}
+                className="absolute left-166 top-18.5 flex items-center gap-5.5 text-[10.5px] font-semibold text-leaf"
+              >
                   Ver perfil
                   <svg
                     className="h-4 w-4 text-white"
@@ -366,7 +374,7 @@ export default function LandingPage() {
                   >
                     <path d="M9 5l7 7-7 7" />
                   </svg>
-                </Link>
+                </button>
               </div>
 
               <p className="absolute inset-x-0 top-128.25 flex items-center justify-center gap-2 text-[11px] text-white/55">
@@ -562,20 +570,22 @@ export default function LandingPage() {
                 </p>
               </div>
               <div className="flex shrink-0 flex-col items-center gap-5">
-              <Link
-                href="/login"
+              <button
+                type="button"
+                onClick={() => openAuth("signup")}
                 className="flex h-13.75 w-66.5 items-center justify-center rounded-full bg-mint text-[16px] font-medium text-[#0d2a20] transition-all duration-300 hover:bg-white"
               >
                 Crear cuenta
-              </Link>
+              </button>
               <p className="text-[15px] text-white/90">
                 ¿Ya tenés cuenta?{" "}
-                <Link
-                  href="/login"
-                  className="text-leaf underline underline-offset-2"
-                >
+                <button
+                type="button"
+                onClick={() => openAuth("login")}
+                className="text-leaf underline underline-offset-2"
+              >
                   Iniciá sesión
-                </Link>
+                </button>
               </p>
               </div>
             </motion.div>
