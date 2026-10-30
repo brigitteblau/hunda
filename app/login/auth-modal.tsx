@@ -12,7 +12,7 @@ export type { AuthMode };
 const FOTO_LOGIN = "/auth/login.png";
 const FOTO_SIGNUP = "/auth/signup.png";
 
-// La imagen ya trae el logo, la frase y el lema: acá solo se muestra.
+
 function PanelFoto({ mode }: { mode: AuthMode }) {
   const src = mode === "login" ? FOTO_LOGIN : FOTO_SIGNUP;
 

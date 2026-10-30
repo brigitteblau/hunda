@@ -19,7 +19,7 @@ const stagger = {
   },
 };
 
-// Props reutilizables: el elemento aparece con fade + subida al entrar en pantalla
+
 const inView = {
   variants: fadeUp,
   initial: "hidden",
