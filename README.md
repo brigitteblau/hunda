@@ -16,5 +16,5 @@ recorrer todo
 mejorar la landing 
 ver porq no anda la conexion 
 subir un callback correcto aca 
-
+h
 
