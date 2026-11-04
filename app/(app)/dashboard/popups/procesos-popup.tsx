@@ -4,7 +4,14 @@ import Link from "next/link";
 import { ArrowRight, Info } from "lucide-react";
 import Modal from "@/components/modal";
 import type { Protesis } from "../dashboard-data";
-import { DogAvatar, StatusBadge, Stepper, botonFantasma, tarjetaModal } from "../dashboard-ui";
+import {
+  DogAvatar,
+  StatusBadge,
+  Stepper,
+  botonFantasma,
+  subtituloProtesis,
+  tarjetaModal,
+} from "../dashboard-ui";
 
 export default function ProcesosPopup({
   open,
@@ -33,9 +40,7 @@ export default function ProcesosPopup({
                 <h3 className="text-[17px] font-semibold text-white">
                   {p.perro} · {p.nombre}
                 </h3>
-                <p className="text-sm text-white/55">
-                  {p.tipo} · {p.creada}
-                </p>
+                <p className="text-sm text-white/55">{subtituloProtesis(p)}</p>
               </div>
               <StatusBadge estado={p.estado} />
             </div>
