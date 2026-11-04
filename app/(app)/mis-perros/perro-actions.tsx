@@ -7,7 +7,7 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { generateProsthesis } from "@/lib/prosthesis-api";
 import type { Perro } from "./perro-data";
 
-// ─── Acciones contra Supabase / API ────────────────────────────────────────
+
 
 export function usePerroActions() {
   const router = useRouter();
