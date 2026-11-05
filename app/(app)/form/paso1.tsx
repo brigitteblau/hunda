@@ -200,15 +200,15 @@ export default function Paso1InfoPerro({ data, onChange, onContinue }: Paso1Info
             </div>
           </div>
 
-          <fieldset className="flex flex-col gap-2">
+          <fieldset className="flex min-w-0 flex-col gap-2 sm:col-span-2">
             <legend className={`${labelClass} pb-2`}>Sexo</legend>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-wrap gap-3">
               {(["macho", "hembra"] as const).map((option) => {
                 const selected = data.sex === option;
                 return (
                   <label
                     key={option}
-                    className={`flex h-12 cursor-pointer items-center gap-2.5 rounded-xl border px-4 text-sm transition-colors ${
+                    className={`flex h-12 min-w-[124px] cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-xl border px-5 text-sm transition-colors ${
                       selected
                         ? "border-mint bg-mint/10 text-white"
                         : "border-white/12 bg-white/5 text-white/70 hover:border-white/25"
@@ -220,7 +220,7 @@ export default function Paso1InfoPerro({ data, onChange, onContinue }: Paso1Info
                       value={option}
                       checked={selected}
                       onChange={() => update("sex", option)}
-                      className="h-4 w-4 accent-[#00e39a]"
+                      className="h-4 w-4 shrink-0 accent-[#00e39a]"
                     />
                     {option === "macho" ? "Macho" : "Hembra"}
                   </label>
@@ -229,7 +229,7 @@ export default function Paso1InfoPerro({ data, onChange, onContinue }: Paso1Info
             </div>
           </fieldset>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 sm:col-span-2">
             <label htmlFor="dog-health" className={labelClass}>
               Estado de salud
             </label>
