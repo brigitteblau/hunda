@@ -112,8 +112,8 @@ export function SignupForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <div className="grid gap-4 sm:grid-cols-2">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+      <div className="grid gap-3 sm:grid-cols-2">
         <Campo id="auth-nombre" label="Nombre" icono={<User className="h-4 w-4" />}>
           <input
             id="auth-nombre"

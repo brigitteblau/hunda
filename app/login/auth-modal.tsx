@@ -73,7 +73,7 @@ export default function AuthModal({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[80] flex items-center justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-md"
+      className="fixed inset-0 z-[80] flex overflow-y-auto bg-black/60 p-4 backdrop-blur-md"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -84,11 +84,11 @@ export default function AuthModal({
         aria-modal="true"
         aria-labelledby={tituloId}
         tabIndex={-1}
-        className="relative flex w-full max-w-[960px] overflow-hidden rounded-[32px] border border-white/15 bg-[#14231f] shadow-[0_30px_90px_-20px_rgba(0,0,0,0.8)] outline-none"
+        className="relative m-auto flex w-full max-w-[960px] overflow-hidden rounded-[32px] border border-white/15 bg-[#14231f] shadow-[0_30px_90px_-20px_rgba(0,0,0,0.8)] outline-none"
       >
         <PanelFoto mode={mode} />
 
-        <div className="relative flex min-w-0 flex-1 flex-col justify-center gap-6 px-6 py-12 sm:px-12">
+        <div className="relative flex min-w-0 flex-1 flex-col justify-center gap-4 px-6 py-8 sm:px-10">
           <button
             type="button"
             onClick={onClose}
@@ -99,7 +99,7 @@ export default function AuthModal({
           </button>
 
           <div className="flex flex-col gap-2 pr-10">
-            <h2 id={tituloId} className="font-display text-[34px] font-bold leading-tight tracking-[-0.03em] text-white">
+            <h2 id={tituloId} className="font-display text-[30px] font-bold leading-tight tracking-[-0.03em] text-white">
               {esLogin ? (
                 <>
                   ¡Hola <span className="text-mint">de nuevo!</span>

@@ -22,7 +22,7 @@ export async function entrarConGoogle(
 }
 
 export const campo =
-  "h-[52px] w-full rounded-xl border border-white/12 bg-white/5 pl-11 pr-4 text-sm text-white outline-none transition-colors placeholder:text-white/35 focus:border-mint focus:ring-2 focus:ring-mint/20";
+  "h-12 w-full rounded-xl border border-white/12 bg-white/5 pl-11 pr-4 text-sm text-white outline-none transition-colors placeholder:text-white/35 focus:border-mint focus:ring-2 focus:ring-mint/20";
 export const etiqueta = "text-sm font-medium text-white";
 
 export function Campo({
@@ -37,7 +37,7 @@ export function Campo({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className={etiqueta}>
         {label}
       </label>
