@@ -255,9 +255,6 @@ export default function ConfiguracionForm({ inicial }: { inicial: ConfiguracionI
                   {perrosTexto} · Miembro desde {inicial.miembroDesde}
                 </span>
               </div>
-              <button type="button" disabled title="Próximamente" className={botonContorno}>
-                Cambiar foto
-              </button>
             </div>
 
             <form
