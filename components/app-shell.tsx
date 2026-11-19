@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Menu } from "lucide-react";
 import Sidebar, { SidebarUser } from "@/components/sidebar";
 import UserNav from "@/components/usernav";
-import AppFooter from "@/components/app-footer";
+import Footer from "@/components/footer";
 
 export default function AppShell({
   user,
@@ -16,25 +16,27 @@ export default function AppShell({
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="app-bg flex min-h-screen">
-      <Sidebar user={user} open={mobileOpen} onClose={() => setMobileOpen(false)} />
+    <div className="app-bg flex min-h-screen flex-col">
+      <div className="flex flex-1">
+        <Sidebar user={user} open={mobileOpen} onClose={() => setMobileOpen(false)} />
 
-      <div className="flex-1 flex flex-col min-w-0">
-        <header className="w-full h-16 lg:h-[88px] flex items-center justify-between lg:justify-end gap-4 px-4 sm:px-6 lg:px-12 border-b border-white/5">
-          <button
-            onClick={() => setMobileOpen(true)}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-white/70 lg:hidden"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
+        <div className="flex-1 flex flex-col min-w-0">
+          <header className="w-full h-16 lg:h-[88px] flex items-center justify-between lg:justify-end gap-4 px-4 sm:px-6 lg:px-12 border-b border-white/5">
+            <button
+              onClick={() => setMobileOpen(true)}
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-white/70 lg:hidden"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
 
-          <UserNav user={user} />
-        </header>
+            <UserNav user={user} />
+          </header>
 
-        <main className="flex-1 min-w-0">{children}</main>
-
-        <AppFooter />
+          <main className="flex-1 min-w-0">{children}</main>
+        </div>
       </div>
+
+      <Footer />
     </div>
   );
 }
